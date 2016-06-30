@@ -45,14 +45,11 @@ function test (done) {
 
   gulp.src(source)
     .pipe(plumber())
-    .pipe(iife())
     .pipe(compileES2015())
+    .pipe(iife())
+    .pipe(gulp.dest('tmp/'))
     .pipe(jasmine())
     .on('jasmineDone', done)
-    .on('error', function (err) {
-      console.error(err.message)
-      done()
-    })
 }
 
 function lint (done) {
@@ -120,5 +117,5 @@ gulp.task('concat-browser', concatBrowser)
 gulp.task('dist-server', distServer)
 
 function compileES2015 () {
-  return babel({ presets: ['es2015'] })
+  return babel({ presets: ['react'] })
 }

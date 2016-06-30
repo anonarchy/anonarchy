@@ -1,8 +1,10 @@
-const $ = require('jquery')
+var ReactDOM = require('react-dom')
+var React = require('react')
 
-window.addEventListener('load', function () {
-  $.get('/user')
-    .then(user => {
-      document.body.innerHTML = `Hello, ${user.name}`
-    })
-})
+
+var App = Yavanna.get('App')
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('container')
+)

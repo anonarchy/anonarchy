@@ -14,6 +14,7 @@ app.get('/', function (req, res) {
       <title>Best Website Ever!</title>
     </head>
     <body>
+      <div id="container"/>
       <script src="/assets/js/browser.js"></script>
     </body>
   </html>
