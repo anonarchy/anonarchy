@@ -1,121 +1,237 @@
 'use strict'
 
+var babel = require('gulp-babel')
+var browserify = require('browserify')
+var buffer = require('vinyl-buffer')
+var concat = require('gulp-concat')
+var del = require('del')
+var esLint = require('gulp-eslint')
+var file = require('gulp-file')
+var glob = require('glob')
 var gulp = require('gulp')
 var iife = require('gulp-iife')
-var concat = require('gulp-concat')
 var jasmine = require('gulp-jasmine')
-var browserify = require('browserify')
-var babel = require('gulp-babel')
+var pathUtils = require('path')
 var source = require('vinyl-source-stream')
-var buffer = require('vinyl-buffer')
 var sourceMaps = require('gulp-sourcemaps')
-var esLint = require('gulp-eslint')
-var plumber = require('gulp-plumber')
+var watch = require('gulp-sane-watch')
+var watchify = require('watchify')
+
+var browserifier = FastBrowserifier({
+  src: ['.build_tmp/manifest.js'],
+  dest: 'dist/public/js',
+  outputFilename: 'browser.js'
+})
+
+function allTasks () {
+  return gulp.series(
+    clean,
+    compile(),
+    test,
+    lint,
+    writeManifest,
+    browserifier.writeBundleWithoutWatching,
+    linkServer
+  )
+}
+
+var writeManifest = manifest({
+  outputFilename: '.build_tmp/manifest.js',
+  files: [
+    '.build_tmp/object/prelude.js',
+    '.build_tmp/object/app/browser/**/!(main).js',
+    '.build_tmp/object/app/shared/**/*.js',
+    '.build_tmp/object/app/browser/main.js'
+  ]
+})
+
+gulp.task('default', allTasks())
+
+gulp.task('check', gulp.series(compile(), test, lint))
+
+gulp.task('clean', clean)
 
 gulp.task('watch', function () {
-  return gulp.series(check, build, printDivider)(function () {
-    // beware!
-    // Due to a bug (?) in one of gulp's dependencies,
-    // `gulp.watch` will not notice created or deleted files
-    // in paths beginning with './'
-    gulp.watch(['src/**/*.js', 'gulpfile.js'],
-      gulp.series(check, build, printDivider))
+  gulp.series(
+    clean,
+    compile(),
+    test,
+    lint,
+    writeManifest,
+    browserifier.writeBundle,
+    linkServer
+  )(function () {
+    var handleFileChange = function (filepath) {
+      var whatChanged = 'src/' + filepath
+      gulp.series(compile(whatChanged), test, lint)(printDivider)
+    }
 
-    gulp.watch(['spec/**/*.js'],
-      gulp.series(check, printDivider))
+    watch(['src/**/*.js'], {
+      onChange: handleFileChange,
+      onAdd: handleFileChange,
+      onDelete: function (filepath) {
+        gulp.series(deleteObjectFile(filepath), test, lint)(printDivider)
+      },
+      debounce: 50
+    })
+
+    watch(['.build_tmp/object/app/**/*.js'], function () {
+      gulp.series(writeManifest, browserifier.writeBundle, linkServer)()
+    })
   })
 })
 
-function printDivider (done) {
+function printDivider () {
   var time = new Date().toTimeString().slice(0, 8)
   var message = '==[finished at ' + time + ']'
 
   console.log(message + Array(80 - message.length).fill('=').join(''))
-  done()
 }
 
-var check = gulp.series(test, lint)
-
-function test (done) {
-  var source = [
-    'src/shared/prelude.js',
-    'src/*/lib/**/*.js',
-    'spec/**/*.js'
+function test () {
+  var ofiles = [
+    '.build_tmp/object/prelude.js',
+    '.build_tmp/object/app/**/!(main).js',
+    '.build_tmp/object/spec/**/*.js'
   ]
 
-  gulp.src(source)
-    .pipe(plumber())
-    .pipe(compileES2015())
-    .pipe(iife())
-    .pipe(gulp.dest('tmp/'))
-    .pipe(jasmine())
-    .on('jasmineDone', done)
+  return gulp.src(ofiles).pipe(jasmine())
 }
 
-function lint (done) {
-  return gulp.src(['@(src|spec)/**/*.js', '*.js'])
-    .pipe(plumber())
+function clean () {
+  return del('.build_tmp/*')
+}
+
+function compile (sources) {
+  sources = sources || ['src/**/*.js']
+
+  return function () {
+    return gulp.src(sources, { base: 'src' })
+      .pipe(prelude())
+      .pipe(sourceMaps.init())
+        .pipe(compileES2015())
+        .pipe(iife())
+      .pipe(sourceMaps.write())
+      .pipe(gulp.dest('.build_tmp/object'))
+  }
+}
+
+function deleteObjectFile (pathRelativeToSrc) {
+  return function () {
+    return del('.build_tmp/object/' + pathRelativeToSrc)
+  }
+}
+
+function linkServer () {
+  var ofiles = [
+    '.build_tmp/object/prelude.js',
+    '.build_tmp/object/app/@(shared|server)/**/!(main).js',
+    '.build_tmp/object/app/server/main.js'
+  ]
+
+  return gulp.src(ofiles)
+    .pipe(sourceMaps.init())
+      .pipe(concat('server.js'))
+    .pipe(sourceMaps.write())
+    .pipe(gulp.dest('dist/'))
+}
+
+function lint () {
+  return gulp.src(['src/**/*.js', '*.js'])
     .pipe(esLint())
     .pipe(esLint.format('stylish', process.stdout))
+    .pipe(esLint.failAfterError())
 }
-
-var build = gulp.series(concatBrowser, distBrowser, distServer)
-
-function distBrowser (done) {
-  browserify('tmp/browser.js', { debug: true })
-    .bundle()
-    .pipe(source('browser.js'))
-    .pipe(buffer())
-    .pipe(gulp.dest('dist/public/js'))
-    .on('end', done)
-}
-
-function concatBrowser (done) {
-  var source = [
-    'src/shared/prelude.js',
-    'src/@(browser|shared)/lib/**/*.js',
-    'src/browser/main.js'
-  ]
-
-  return gulp.src(source, { base: 'src' })
-    .pipe(plumber())
-    .pipe(sourceMaps.init())
-      .pipe(compileES2015())
-      .pipe(iife())
-      .pipe(concat('browser.js'))
-    .pipe(sourceMaps.write())
-    .pipe(gulp.dest('tmp/'))
-    .on('end', done)
-}
-
-function distServer (done) {
-  var source = [
-    'src/shared/prelude.js',
-    'src/@(server/shared)/lib/**/*.js',
-    'src/server/main.js'
-  ]
-
-  return gulp.src(source, { base: 'src' })
-    .pipe(plumber())
-    .pipe(iife())
-    .pipe(concat('server.js'))
-    .pipe(compileES2015())
-    .pipe(gulp.dest('dist'))
-    .on('end', done)
-}
-
-gulp.task('build', gulp.series(check, build))
-
-gulp.task('check', check)
-
-gulp.task('test', test)
-
-gulp.task('lint', lint)
-
-gulp.task('concat-browser', concatBrowser)
-
-gulp.task('dist-server', distServer)
 
 function compileES2015 () {
   return babel({ presets: ['react'] })
+}
+
+function prelude () {
+  var contents =
+    "var Yavanna = require('@benchristel/yavanna')()\n" +
+    "if (typeof window === 'object') window.Yavanna = Yavanna\n" +
+    "if (typeof global === 'object') global.Yavanna = Yavanna\n"
+
+  return file('prelude.js', contents)
+}
+
+function FastBrowserifier (options) {
+  /* see: https://github.com/gulpjs/gulp/blob/master/docs/recipes/fast-browserify-builds-with-watchify.md */
+
+  var src = options.src
+  var dest = options.dest
+  var filename = options.outputFilename
+
+  var self = {
+    writeBundle: writeBundle,
+    writeBundleWithoutWatching: writeBundleWithoutWatching
+  }
+
+  var browserifier = function () {
+    return browserify({
+      /* entry point for Browserify; files `require`d in the manifest
+       * will be included in the bundle */
+      entries: src,
+      /* the debug: true option makes browserify generate sourcemaps */
+      debug: true,
+      cache: {}, packageCache: {} // TODO: are these needed?
+    })
+  }
+
+  var watch = watchify(browserifier())
+
+  watch.on('log', function (message) {
+    console.log(message)
+  })
+
+  function writeBundle () {
+    return watch.bundle()
+      .on('error', function (message) {
+        console.log(message)
+      })
+      .pipe(source(filename))
+      .pipe(buffer())
+      .pipe(gulp.dest(dest))
+  }
+
+  function writeBundleWithoutWatching () {
+    return browserifier().bundle()
+      .on('error', function (message) {
+        console.log(message)
+      })
+      .pipe(source(filename))
+      .pipe(buffer())
+      .pipe(gulp.dest(dest))
+  }
+
+  return self
+}
+
+function manifest (options) {
+  var files = options.files
+  var outputFilename = options.outputFilename
+
+  return function () {
+    var contents = expandGlobs(files)
+      .map(pathRelativeToManifest)
+      .map(wrapInRequireCall).join('\n')
+
+    return file(pathUtils.basename(outputFilename), contents, { src: true })
+      .pipe(gulp.dest(pathUtils.dirname(outputFilename)))
+  }
+
+  function expandGlobs (globs) {
+    return globs
+      .map(function (g) { return glob.sync(g) })
+      .reduce(function (a, b) { return a.concat(b) })
+  }
+
+  function wrapInRequireCall (path) {
+    return "require('./" + path + "')"
+  }
+
+  function pathRelativeToManifest (path) {
+    return pathUtils.relative(pathUtils.dirname(outputFilename), path)
+  }
 }
