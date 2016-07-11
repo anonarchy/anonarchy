@@ -144,7 +144,7 @@ function lint () {
 }
 
 function compileES2015 () {
-  return babel({ presets: ['react'] })
+  return babel({ presets: ['es2015', 'react'] })
 }
 
 function prelude () {
