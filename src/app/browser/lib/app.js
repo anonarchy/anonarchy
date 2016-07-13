@@ -3,10 +3,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { Router, Route, Link, browserHistory } from 'react-router'
 import AppBar from 'material-ui/AppBar'
 
-
 console.log('in app')
 
-Yavanna.provide('App', ({PostList, Post, Comments}) => {
+Yavanna.provide('App', ({PostList, CreatePost, Comments}) => {
   return React.createClass({
     render: function () {
       return (
@@ -18,8 +17,8 @@ Yavanna.provide('App', ({PostList, Post, Comments}) => {
             />
             <Router history={browserHistory}>
               <Route path="/" component={PostList}/>
-              <Route path="/new" component={Post}/>
-              <Route path="/comments/:postId" component={Comments}/>
+              <Route path="comments/:postID" component={Comments}/>
+              <Route path="/new" component={CreatePost}/>
             </Router>
           </div>
         </MuiThemeProvider>

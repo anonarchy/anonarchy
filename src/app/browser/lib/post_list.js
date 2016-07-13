@@ -38,7 +38,12 @@ Yavanna.provide('PostList', () => {
       this.serverRequest.abort();
     },
 
-    addPost (){
+    viewComments(id) {
+      console.log("view comments " +id)
+      browserHistory.push('comments/' + id)
+    },
+
+    addPost () {
       browserHistory.push('/new')
     },
     // propTypes: {posts: React.PropTypes.array.isRequired},
@@ -46,7 +51,7 @@ Yavanna.provide('PostList', () => {
       var createPost = function (post) {
         return (
           <li style={{ marginTop: 10 }} >
-            <Card >
+            <Card onTouchTap={() => this.viewComments(post.id)}>
               <CardTitle
                 title={post.title}
                 subtitle={post.author}
@@ -67,8 +72,8 @@ Yavanna.provide('PostList', () => {
       }
       return (
         <div>
-          <ul style={ulStyle} >{this.state.posts.map(createPost)}</ul>
-          <FloatingActionButton
+          <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
+          <FloatingActionButton style={{position: 'absolute', right: 24, bottom: 24}}
             onTouchTap={this.addPost}
           >
             <ContentAdd />

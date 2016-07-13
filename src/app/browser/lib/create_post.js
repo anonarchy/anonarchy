@@ -11,7 +11,7 @@ function on_response(er, response, body) {
   console.log(response)
 }
 
-Yavanna.provide('Post', () => {
+Yavanna.provide('CreatePost', () => {
 
   return React.createClass({
 

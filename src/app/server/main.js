@@ -1,17 +1,18 @@
 const express = require('express')
 const path = require('path')
 var bodyParser = require('body-parser');
-// var bookshelf = require('./bookshelf');
+var _ = require('underscore')
 
 const app = express()
 
 console.log(path.join(__dirname, 'public'))
 
-
 app.use('/assets', express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.json())
 
-var posts = [{title: 'Oh baby', body: 'Food is nice', author: 'ILikeFood'}, {title: 'Suck it', body: 'ILikeFood is a dumbdumb!', author: 'Trollolol'}]
+var posts = [{id: 1, title: 'Oh baby', body: 'Food is nice', author: 'ILikeFood'}, {id: 2, title: 'Suck it', body: 'ILikeFood is a dumbdumb!', author: 'Trollolol'}]
+var comments = [{body: 'What the hell is this guy on?'}, {body: 'poop there it is!'}]
+
 
 app.get('/posts', function (req, res) {
   console.log(posts)
@@ -19,7 +20,11 @@ app.get('/posts', function (req, res) {
 })
 
 app.get('/post/:id', function (req, res) {
-  res.send({body: 'sdbc', author: 'julius', title: 'fd'})
+  console.log(req.params.id)
+  var post = _.findWhere(posts, {id: parseInt(req.params.id)})
+  var ret = {post: post, comments: comments}
+  console.log(ret)
+  res.send(ret)
 })
 
 
