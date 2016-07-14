@@ -28,11 +28,11 @@ Yavanna.provide('Comments', () => {
     },
 
     render () {
-      console.log(this.props.params._id)
+      console.log(this.props.params.postID)
 
       return (
         <div>
-          <p>postID: {this.props.params._id}!</p>
+          <p>postID: {this.props.params.postID}!</p>
           <p>{JSON.stringify(this.state.post)}</p>
           <p>{JSON.stringify(this.state.comments)}</p>
         </div>

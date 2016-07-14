@@ -51,7 +51,7 @@ Yavanna.provide('PostList', () => {
       var createPost = function (post) {
         return (
           <li style={{ marginTop: 10 }} >
-            <Card onTouchTap={() => this.viewComments(post.id)}>
+            <Card onTouchTap={() => this.viewComments(post._id)}>
               <CardTitle
                 title={post.title}
                 subtitle={post.author}
