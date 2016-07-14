@@ -21,19 +21,31 @@ Yavanna.provide('CreatePost', () => {
 
     submit(){
       console.log(this.state.postTitle)
-      request({method:'POST', url:'/api/posts', json:{title: this.state.postTitle, author: this.state.author, body: this.state.body}}, on_response)
+      var date = new Date()
+      request({method:'POST', url:'/api/posts', json:{title: this.state.postTitle, author: this.state.author, body: this.state.body, loc: {long: long, lat: lat}}}, on_response)
       browserHistory.push('/')
     },
 
-    updateText(event, value){
+    updateTitle(event, value){
       this.setState({postTitle: value})
+    },
+
+    updateText(event, value){
+      this.setState({body: value})
     },
 
     render () {
       return (
         <div style={{margin: 24 }}>
           <TextField
-             floatingLabelText="New Self Post"
+             floatingLabelText="Title"
+             multiLine={true}
+             floatingLabelFixed={true}
+             fullWidth={true}
+             onChange={this.updateTitle}
+           />
+          <TextField
+             floatingLabelText="Text"
              multiLine={true}
              floatingLabelFixed={true}
              rows={4}

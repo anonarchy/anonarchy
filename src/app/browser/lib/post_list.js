@@ -16,6 +16,24 @@ var ulStyle = {
   padding: 0
 }
 
+function dateReviver(key, value) {
+  if (typeof value === 'string') {
+    var a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+    if (a) {
+      return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4], +a[5], +a[6]));
+    }
+  }
+  return value;
+};
+
+function getLocation(func) {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(func)
+    } else {
+        console.log("Geolocation is not supported by this browser.")
+    }
+}
+
 Yavanna.provide('PostList', () => {
 
   return React.createClass({
@@ -25,8 +43,15 @@ Yavanna.provide('PostList', () => {
     },
 
     componentDidMount: function() {
-      this.serverRequest = request('/api/posts', function (er, response, body) {
-        var post_list = JSON.parse(body)
+      getLocation(this.getPosts.bind(this))
+    },
+
+    getPosts(position){
+      var long = position.coords.longitude
+      var lat = position.coords.latitude
+      this.setState({long: long, lat: lat})
+      this.serverRequest = request('/api/posts/?long='+long+'&lat='+lat,  function (er, response, body) {
+        var post_list = JSON.parse(body, dateReviver)
         console.log(post_list)
         this.setState({
           posts: post_list
@@ -70,15 +95,19 @@ Yavanna.provide('PostList', () => {
       if (posts.length === 0) {
         return <p>There are no posts here</p>
       }
+      if (this.state.long === undefined){
+        return <p> getting location....</p>
+      }
       return (
-        <div>
-          <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
-          <FloatingActionButton style={{position: 'absolute', right: 24, bottom: 24}}
-            onTouchTap={this.addPost}
-          >
-            <ContentAdd />
-          </FloatingActionButton>
-        </div>
+          <div>
+            <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
+            <FloatingActionButton style={{position: 'absolute', right: 24, bottom: 24}}
+              onTouchTap={this.addPost}
+            >
+              <ContentAdd />
+            </FloatingActionButton>
+          </div>
+
       )
     }
   })

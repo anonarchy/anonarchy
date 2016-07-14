@@ -8,8 +8,18 @@ const app = express()
 
 console.log(path.join(__dirname, 'public'))
 
+function dateReviver(key, value) {
+  if (typeof value === 'string') {
+    var a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+    if (a) {
+      return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4], +a[5], +a[6]));
+    }
+  }
+  return value;
+};
+
 app.use('/assets', express.static(path.join(__dirname, 'public')))
-app.use(bodyParser.json())
+app.use(bodyParser.json({reviver: dateReviver}))
 
 // var posts = [{id: 1, title: 'Oh baby', body: 'Food is nice', author: 'ILikeFood'}, {id: 2, title: 'Suck it', body: 'ILikeFood is a dumbdumb!', author: 'Trollolol'}]
 // var comments = [{body: 'What the hell is this guy on?'}, {body: 'poop there it is!'}]
@@ -17,17 +27,16 @@ app.use(bodyParser.json())
 // db.exec('posts', 'insertOne', {title: 'Oh baby', body: 'Food is nice', author: 'ILikeFood'})
 
 Yavanna.provide('AppController', ({Odin}) => {
-  // app.get('/api/posts', async function (req, res) {
-  //   var posts = await Odin.getPosts(req.query)
-  //   console.log("RHINF")
-  //   console.log(posts)
-  //   res.send(posts)
-  // })
 
-  app.get('/api/posts', async function (req, res){
-    var long =-122.08072139999999
-    var lat = 37.3942957
-    var posts = await Odin.getPostsByLocation(long, lat)
+  app.get('/api/posts/', async function (req, res){
+    if (req.query.long !== undefined){
+      var long = Number(req.query.long)
+      var lat = Number(req.query.lat)
+      var posts = await Odin.getPostsByLocation(long, lat)
+    }else{
+      var posts = await Odin.getPosts(long, lat)
+    }
+
     console.log("RHINF")
     console.log(posts)
     res.send(posts)
