@@ -17,8 +17,17 @@ app.use(bodyParser.json())
 // db.exec('posts', 'insertOne', {title: 'Oh baby', body: 'Food is nice', author: 'ILikeFood'})
 
 Yavanna.provide('AppController', ({Odin}) => {
-  app.get('/api/posts', async function (req, res) {
-    var posts = await Odin.getPosts(req.query)
+  // app.get('/api/posts', async function (req, res) {
+  //   var posts = await Odin.getPosts(req.query)
+  //   console.log("RHINF")
+  //   console.log(posts)
+  //   res.send(posts)
+  // })
+
+  app.get('/api/posts', async function (req, res){
+    var long =-122.08072139999999
+    var lat = 37.3942957
+    var posts = await Odin.getPostsByLocation(long, lat)
     console.log("RHINF")
     console.log(posts)
     res.send(posts)

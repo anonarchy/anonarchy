@@ -6,6 +6,20 @@ Yavanna.provide('Odin', ({DB}) => {
       return await DB.exec('posts', 'find')
     },
 
+    getPostsByLocation: async function(long, lat){
+      return await DB.exec('posts', 'find', {
+        loc: {
+          $nearSphere: {
+             $geometry: {
+                type : "Point",
+                coordinates : [ long, lat ]
+             },
+             $maxDistance: 3000
+          }
+        }
+      })
+    },
+
     getPost: async function(id) {
       var o_id = new ObjectID(id)
       console.log(o_id)
