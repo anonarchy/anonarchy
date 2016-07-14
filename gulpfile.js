@@ -27,8 +27,6 @@ function allTasks () {
   return gulp.series(
     clean,
     compile(),
-    test,
-    lint,
     writeManifest,
     browserifier.writeBundleWithoutWatching,
     linkServer
@@ -51,11 +49,12 @@ gulp.task('check', gulp.series(compile(), test, lint))
 
 gulp.task('clean', clean)
 
+gulp.task('lint', lint)
+
 gulp.task('watch', function () {
   gulp.series(
     clean,
     compile(),
-    test,
     lint,
     writeManifest,
     browserifier.writeBundle,
@@ -63,14 +62,14 @@ gulp.task('watch', function () {
   )(function () {
     var handleFileChange = function (filepath) {
       var whatChanged = 'src/' + filepath
-      gulp.series(compile(whatChanged), test, lint)(printDivider)
+      gulp.series(compile(whatChanged), lint)(printDivider)
     }
 
     watch(['src/**/*.js'], {
       onChange: handleFileChange,
       onAdd: handleFileChange,
       onDelete: function (filepath) {
-        gulp.series(deleteObjectFile(filepath), test, lint)(printDivider)
+        gulp.series(deleteObjectFile(filepath), lint)(printDivider)
       },
       debounce: 50
     })
@@ -144,7 +143,7 @@ function lint () {
 }
 
 function compileES2015 () {
-  return babel({ presets: ['es2015', 'react'] })
+  return babel({ presets: ['es2015', 'react'], plugins: ['syntax-async-functions', 'transform-regenerator']})
 }
 
 function prelude () {

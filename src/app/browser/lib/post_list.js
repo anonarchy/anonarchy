@@ -25,7 +25,7 @@ Yavanna.provide('PostList', () => {
     },
 
     componentDidMount: function() {
-      this.serverRequest = request('/posts', function (er, response, body) {
+      this.serverRequest = request('/api/posts', function (er, response, body) {
         var post_list = JSON.parse(body)
         console.log(post_list)
         this.setState({

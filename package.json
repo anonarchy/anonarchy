@@ -6,6 +6,8 @@
   "main": "index.js",
   "dependencies": {
     "@benchristel/yavanna": "^0.1.0",
+    "babel-plugin-transform-regenerator": "^6.9.0",
+    "babel-polyfill": "^6.9.1",
     "body-parser": "^1.15.2",
     "bookshelf": "^0.10.0",
     "browser-request": "^0.3.3",
@@ -14,10 +16,12 @@
     "knex": "^0.11.7",
     "material-ui": "^0.15.2",
     "materialize-css": "^0.97.6",
+    "mongodb": "^2.2.1",
     "react": "^15.2.1",
     "react-dom": "^15.1.0",
     "react-router": "^2.5.2",
     "react-tap-event-plugin": "^1.0.0",
+    "regenerator-runtime": "^0.9.5",
     "webpack": "^1.13.1",
     "xmlhttprequest": "^1.7.0"
   },
