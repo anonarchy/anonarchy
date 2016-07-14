@@ -26,8 +26,9 @@ Yavanna.provide('AppController', ({Odin}) => {
 
   app.get('/api/post/:id/comments', async function (req, res) {
     console.log(req.params.id)
-    var post = Odin.getPost(req.params.id)
-    var comments = Odin.getCommments(req.params.id)
+    var post = await Odin.getPost(req.params.id)
+    console.log(post)
+    var comments = await Odin.getCommments(req.params.id)
     var ret = {post: post, comments: comments}
     // console.log(ret)
     res.send(ret)
@@ -50,8 +51,8 @@ Yavanna.provide('AppController', ({Odin}) => {
     res.send(html)
   })
 
-  app.post('/api/posts', function (req, res){
-    var new_post = Odin.createPost(req.body)
+  app.post('/api/posts', async function (req, res){
+    var new_post = await Odin.createPost(req.body)
     res.send(new_post)
   })
 

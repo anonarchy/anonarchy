@@ -6,6 +6,11 @@ Yavanna.provide('DB', () => {
     exec: async function (collection, operation, args) {
       let conn = await getConnection()
       return await conn.collection(collection)[operation](args).toArray();
+    },
+
+    execOne: async function (collection, operation, args) {
+      let conn = await getConnection()
+      return await conn.collection(collection)[operation](args);
     }
   }
 

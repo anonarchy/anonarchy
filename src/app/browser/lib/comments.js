@@ -13,7 +13,7 @@ Yavanna.provide('Comments', () => {
     componentDidMount () {
       console.log("Console mounted")
       var postID = this.props.params.postID
-      this.serverRequest = request('/api/'+ postID + '/comments/', function (er, response, body) {
+      this.serverRequest = request('/api/post/'+ postID + '/comments/', function (er, response, body) {
         var body = JSON.parse(body)
         console.log(body.post)
         this.setState({
