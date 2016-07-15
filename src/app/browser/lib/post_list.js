@@ -28,7 +28,7 @@ function dateReviver(key, value) {
 
 function getLocation(func) {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(func)
+        navigator.geolocation.getCurrentPosition(func, function(){}, {maximumAge: 100, enableHighAccuracy: true})
     } else {
         console.log("Geolocation is not supported by this browser.")
     }
@@ -43,8 +43,9 @@ Yavanna.provide('PostList', () => {
     },
 
     componentDidMount: function() {
-      getLocation(this.getPosts.bind(this))
+      getLocation(this.getPosts)
     },
+
 
     getPosts(position){
       var long = position.coords.longitude
@@ -101,7 +102,7 @@ Yavanna.provide('PostList', () => {
       return (
           <div>
             <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
-            <FloatingActionButton style={{position: 'absolute', right: 24, bottom: 24}}
+            <FloatingActionButton style={{position: 'fixed', right: 24, bottom: 24}}
               onTouchTap={this.addPost}
             >
               <ContentAdd />

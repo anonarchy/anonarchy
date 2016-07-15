@@ -11,18 +11,54 @@ function on_response(er, response, body) {
   console.log(response)
 }
 
+var watchID
+
+function watchLocation(func) {
+    console.log('watchLocation')
+    if (navigator.geolocation) {
+        watchID = navigator.geolocation.watchPosition(func, function(){}, {maximumAge: 0, enableHighAccuracy: true})
+    } else {
+        console.log("Geolocation is not supported by this browser.")
+    }
+}
+
+
+function getLocation(func) {
+    console.log("getting location")
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(func, function(){}, {enableHighAccuracy: true, maximumAge: 100})
+    } else {
+        console.log("Geolocation is not supported by this browser.")
+    }
+}
+
 Yavanna.provide('CreatePost', () => {
 
   return React.createClass({
 
     getInitialState(){
-      return {postTitle: "", author:"", body: ""}
+      return {postTitle: "", author:"", body: "", long: null, lat: null}
+    },
+
+    componentDidMount(){
+      // getLocation(this.setCoordinates)
+      watchLocation(this.setCoordinates)
+    },
+
+    componentWillUnmount(){
+      navigator.geolocation.clearWatch(watchID)
+      getLocation(function(){})
+    },
+
+    setCoordinates(position){
+      console.log("setting coordinates")
+      this.setState({long: position.coords.longitude, lat: position.coords.latitude})
     },
 
     submit(){
       console.log(this.state.postTitle)
       var date = new Date()
-      request({method:'POST', url:'/api/posts', json:{title: this.state.postTitle, author: this.state.author, body: this.state.body, loc: {long: long, lat: lat}}}, on_response)
+      request({method:'POST', url:'/api/posts', json:{title: this.state.postTitle, author: this.state.author, body: this.state.body, loc: {long: this.state.long, lat: this.state.lat}}}, on_response)
       browserHistory.push('/')
     },
 
