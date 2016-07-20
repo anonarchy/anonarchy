@@ -21,10 +21,13 @@ Yavanna.provide('Odin', ({DB}) => {
     },
 
     getPost: async function(id) {
+      // try{
+      //   var o_id = new ObjectID(id)
+      // }catch(error){
+      //   return error
+      // }
       var o_id = new ObjectID(id)
-      console.log(o_id)
-      // var posts = await DB.exec('posts', 'find', {author: 'ILikeFood'})
-      // console.log(posts[0]._id.equals(id))
+
       return await DB.execOne('posts', 'findOne', {_id: o_id})
     },
 
@@ -32,8 +35,12 @@ Yavanna.provide('Odin', ({DB}) => {
       return await DB.execOne('posts', 'insertOne', post)
     },
 
-    getCommments: async function() {
-      return await DB.exec('comments', 'find')
+    createComment: async function(comment) {
+      return await DB.execOne('comments', 'insertOne', comment)
+    },
+
+    getCommments: async function(postID) {
+      return await DB.exec('comments', 'find', {postID: postID})
     }
 
   }

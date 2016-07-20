@@ -29,27 +29,34 @@ app.use(bodyParser.json({reviver: dateReviver}))
 Yavanna.provide('AppController', ({Odin}) => {
 
   app.get('/api/posts/', async function (req, res){
-    if (req.query.long !== undefined){
-      var long = Number(req.query.long)
-      var lat = Number(req.query.lat)
-      var posts = await Odin.getPostsByLocation(long, lat)
-    }else{
-      var posts = await Odin.getPosts(long, lat)
+    try{
+      if (req.query.long !== undefined){
+        var long = Number(req.query.long)
+        var lat = Number(req.query.lat)
+        var posts = await Odin.getPostsByLocation(long, lat)
+      }else{
+        var posts = await Odin.getPosts(long, lat)
+      }
+      console.log(posts)
+      res.send(posts)
+    }catch(error){
+      res.send(error)
     }
-
-    console.log("RHINF")
-    console.log(posts)
-    res.send(posts)
   })
 
   app.get('/api/post/:id/comments', async function (req, res) {
     console.log(req.params.id)
-    var post = await Odin.getPost(req.params.id)
-    console.log(post)
-    var comments = await Odin.getCommments(req.params.id)
-    var ret = {post: post, comments: comments}
-    // console.log(ret)
-    res.send(ret)
+    try{
+      var post = await Odin.getPost(req.params.id)
+      console.log(post)
+      var comments = await Odin.getCommments(req.params.id)
+      var ret = {post: post, comments: comments}
+      // console.log(ret)
+      res.send(ret)
+    }catch(error){
+      console.log(error)
+      res.send(error)
+    }
   })
 
   app.get('*', function (req, res) {
@@ -74,8 +81,8 @@ Yavanna.provide('AppController', ({Odin}) => {
     res.send(new_post)
   })
 
-  app.post('/comment', function (req, res){
-    console.log(req.body)
+  app.post('/api/comment', async function (req, res){
+    var new_comment = await Odin.createComment(req.body)
     res.send(req.body)
   })
 })
