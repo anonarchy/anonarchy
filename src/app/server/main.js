@@ -28,14 +28,19 @@ app.use(bodyParser.json({reviver: dateReviver}))
 
 Yavanna.provide('AppController', ({Odin}) => {
 
-  app.post('/api/login', async function(req, res){
+  app.post('/api/signup', async function(req, res){
     var token = await Odin.createUser(req.body.username, req.body.password)
     res.send(token)
   })
 
-  app.get('/api/login/', async function(req, res){
-    var loginToken = await Odin.getLoginToken(req.query.username, req.query.password)
-    res.send(loginToken)
+  app.post('/api/login/', async function(req, res){
+    console.log(req.body)
+    var loginToken = await Odin.getLoginToken(req.body.username, req.body.password)
+    if(loginToken){
+      res.status(200).send({token: loginToken})
+    }else{
+      res.status(403).send("Invalid username or password")
+    }
   })
 
   app.get('/api/posts/', async function (req, res){
