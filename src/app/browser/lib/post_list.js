@@ -6,6 +6,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton'
 import { Router, Route, Link, browserHistory } from 'react-router'
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import request from 'browser-request'
+import FlatButton from 'material-ui/FlatButton'
 
 var posts = [{title: 'Oh baby', body: 'Food is nice', author: 'ILikeFood'}, {title: 'Suck it', body: 'ILikeFood is a dumbdumb!', author: 'Trollolol'}]
 
@@ -34,12 +35,13 @@ function getLocation(func) {
     }
 }
 
-Yavanna.provide('PostList', () => {
+Yavanna.provide('PostList', ({Login}) => {
 
   return React.createClass({
 
     getInitialState: function() {
-      return {posts: []}
+
+      return {posts: [], open: true}
     },
 
     componentDidMount: function() {
@@ -72,11 +74,12 @@ Yavanna.provide('PostList', () => {
     addPost () {
       browserHistory.push('/new')
     },
+
     // propTypes: {posts: React.PropTypes.array.isRequired},
     render () {
       var createPost = function (post) {
         return (
-          <li style={{ marginTop: 10 }} >
+          <li key= {post._id} style={{ marginTop: 10 }} >
             <Card onTouchTap={() => this.viewComments(post._id)}>
               <CardTitle
                 title={post.title}

@@ -28,6 +28,16 @@ app.use(bodyParser.json({reviver: dateReviver}))
 
 Yavanna.provide('AppController', ({Odin}) => {
 
+  app.post('/api/login', async function(req, res){
+    var token = await Odin.createUser(req.body.username, req.body.password)
+    res.send(token)
+  })
+
+  app.get('/api/login/', async function(req, res){
+    var loginToken = await Odin.getLoginToken(req.query.username, req.query.password)
+    res.send(loginToken)
+  })
+
   app.get('/api/posts/', async function (req, res){
     try{
       if (req.query.long !== undefined){
@@ -40,7 +50,7 @@ Yavanna.provide('AppController', ({Odin}) => {
       console.log(posts)
       res.send(posts)
     }catch(error){
-      res.send(error)
+      res.status(500).send(error)
     }
   })
 
@@ -55,7 +65,7 @@ Yavanna.provide('AppController', ({Odin}) => {
       res.send(ret)
     }catch(error){
       console.log(error)
-      res.send(error)
+      res.status(500).send(error)
     }
   })
 
@@ -77,13 +87,31 @@ Yavanna.provide('AppController', ({Odin}) => {
   })
 
   app.post('/api/posts', async function (req, res){
-    var new_post = await Odin.createPost(req.body)
-    res.send(new_post)
+    var token = await Odin.exchangeToken(req.body.token)
+    //get user too?
+    if (token){
+      var new_post = await Odin.createPost(req.body.post)
+      res.send(token)
+      // return post id? some other UUID?
+    }else{
+      res.send(null)
+    }
   })
 
   app.post('/api/comment', async function (req, res){
-    var new_comment = await Odin.createComment(req.body)
-    res.send(req.body)
+    var token = await Odin.exchangeToken(req.body.token)
+    //get user too?
+    if (token){
+      var new_comment = await Odin.createComment(req.body.comment)
+      res.send(token)
+      // return post id? some other UUID?
+    }else{
+      res.send(null)
+    }
+  })
+
+  app.post('/api/vote', async function (req, res){
+
   })
 })
 

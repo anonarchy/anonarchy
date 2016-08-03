@@ -45,7 +45,7 @@ var writeManifest = manifest({
 
 gulp.task('default', allTasks())
 
-gulp.task('check', gulp.series(compile(), test, lint))
+gulp.task('check', gulp.series(compile(), test))
 
 gulp.task('clean', clean)
 
@@ -55,21 +55,21 @@ gulp.task('watch', function () {
   gulp.series(
     clean,
     compile(),
-    lint,
+    test,
     writeManifest,
     browserifier.writeBundle,
     linkServer
   )(function () {
     var handleFileChange = function (filepath) {
       var whatChanged = 'src/' + filepath
-      gulp.series(compile(whatChanged), lint)(printDivider)
+      gulp.series(compile(whatChanged))(printDivider)
     }
 
     watch(['src/**/*.js'], {
       onChange: handleFileChange,
       onAdd: handleFileChange,
       onDelete: function (filepath) {
-        gulp.series(deleteObjectFile(filepath), lint)(printDivider)
+        gulp.series(deleteObjectFile(filepath))(printDivider)
       },
       debounce: 50
     })
@@ -90,7 +90,8 @@ function printDivider () {
 function test () {
   var ofiles = [
     '.build_tmp/object/prelude.js',
-    '.build_tmp/object/app/**/!(main).js',
+    // '.build_tmp/object/app/**/!(main).js',
+    '.build_tmp/object/@(server|shared)/*.js',
     '.build_tmp/object/spec/**/*.js'
   ]
 

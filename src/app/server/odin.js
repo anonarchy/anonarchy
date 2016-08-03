@@ -1,6 +1,9 @@
 var ObjectID = require('mongodb').ObjectID;
+var generateToken = require('secure-random-string')
+var bcrypt = require('bcrypt')
+let ONE_WEEK = 604800000
 
-Yavanna.provide('Odin', ({DB}) => {
+Yavanna.provide('Odin', ({DB, tokenIsExpired}) => {
   return {
     getPosts: async function() {
       return await DB.exec('posts', 'find')
@@ -41,7 +44,57 @@ Yavanna.provide('Odin', ({DB}) => {
 
     getCommments: async function(postID) {
       return await DB.exec('comments', 'find', {postID: postID})
+    },
+
+    createUser: async function(username, password) {
+      var user = await DB.execOne('users', 'findOne', {username, username})
+      console.log('got user')
+      if (user !== null){
+        console.log(user)
+        return null
+      }else{
+        var token = generateToken()
+        var hash = bcrypt.hashSync(myPlaintextPassword, saltRounds)
+        var time = new Date().getTime()
+        await DB.execOne('users', 'insertOne', {username: username, password: hash, activeToken: token, timestamp: time})
+        console.log('created User')
+        return token
+      }
+
+    },
+
+    getLoginToken: async function(username, password){
+      var user = await DB.execOne('users', 'findOne', {username: username})
+      if (user !== null){
+        if (bcrypt.compare(password, user.password)){
+          var newToken = generateToken()
+          var time = new Date().getTime()
+          await DB.execOne('users', 'updateOne', {username: username}, {$set: {activeToken: newToken, timestamp: time}})
+          return newToken
+        }else{
+          return null //wrong password
+        }
+      }else{
+        return null //could not find user
+      }
+    },
+
+    exchangeToken: async function(token){
+      var user = await DB.execOne('users', 'findOne', {activeToken: token})
+      if (user === null){
+        return false
+      }else{
+        var time = new Date().getTime()
+        if (!tokenIsExpired(user.timestamp, time)){
+          var newToken = generateToken()
+          await DB.execOne('users', 'updateOne', {activeToken: token}, {$set: {activeToken: newToken, timestamp: time}})
+          return newToken
+        }else{
+          return false
+        }
+      }
     }
+
 
   }
 })
