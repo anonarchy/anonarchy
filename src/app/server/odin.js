@@ -2,6 +2,7 @@ var ObjectID = require('mongodb').ObjectID;
 var generateToken = require('secure-random-string')
 var bcrypt = require('bcrypt')
 let ONE_WEEK = 604800000
+let SALTROUNDS = 10
 
 Yavanna.provide('Odin', ({DB, tokenIsExpired}) => {
   return {
@@ -48,13 +49,14 @@ Yavanna.provide('Odin', ({DB, tokenIsExpired}) => {
 
     createUser: async function(username, password) {
       var user = await DB.execOne('users', 'findOne', {username, username})
+      console.log(user)
       console.log('got user')
       if (user !== null){
         console.log(user)
         return null
       }else{
         var token = generateToken()
-        var hash = bcrypt.hashSync(myPlaintextPassword, saltRounds)
+        var hash = bcrypt.hashSync(password, SALTROUNDS)
         var time = new Date().getTime()
         await DB.execOne('users', 'insertOne', {username: username, password: hash, activeToken: token, timestamp: time})
         console.log('created User')
@@ -65,16 +67,23 @@ Yavanna.provide('Odin', ({DB, tokenIsExpired}) => {
 
     getLoginToken: async function(username, password){
       var user = await DB.execOne('users', 'findOne', {username: username})
+      console.log(user)
       if (user !== null){
-        if (bcrypt.compare(password, user.password)){
+        console.log(password)
+        // console.log(bcrypt.compareSync(password, user.password))
+        if (bcrypt.compareSync(password, user.password)){
+          console.log("new thing now")
           var newToken = generateToken()
           var time = new Date().getTime()
-          await DB.execOne('users', 'updateOne', {username: username}, {$set: {activeToken: newToken, timestamp: time}})
+          await DB.updateOne('users', {username: username}, {$set: {activeToken: newToken, timestamp: time}})
+          console.log("updated user")
           return newToken
         }else{
+          console.log("wrong password")
           return null //wrong password
         }
       }else{
+        console.log("Couldn't find user")
         return null //could not find user
       }
     },
@@ -87,7 +96,7 @@ Yavanna.provide('Odin', ({DB, tokenIsExpired}) => {
         var time = new Date().getTime()
         if (!tokenIsExpired(user.timestamp, time)){
           var newToken = generateToken()
-          await DB.execOne('users', 'updateOne', {activeToken: token}, {$set: {activeToken: newToken, timestamp: time}})
+          await DB.updateOne('users', {activeToken: token}, {$set: {activeToken: newToken, timestamp: time}})
           return newToken
         }else{
           return false

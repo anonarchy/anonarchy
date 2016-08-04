@@ -58,7 +58,7 @@ Yavanna.provide('CreatePost', () => {
     submit(){
       console.log(this.state.postTitle)
       var date = new Date()
-      request({method:'POST', url:'/api/posts', json:{title: this.state.postTitle, author: this.state.author, body: this.state.body, loc: {long: this.state.long, lat: this.state.lat}}}, on_response)
+      request({method:'POST', url:'/api/posts', json: {post: {title: this.state.postTitle, author: this.state.author, body: this.state.body, loc: {long: this.state.long, lat: this.state.lat}}}}, on_response)
       browserHistory.push('/')
     },
 

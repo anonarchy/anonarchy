@@ -7,6 +7,7 @@ import { Router, Route, Link, browserHistory } from 'react-router'
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import request from 'browser-request'
 import FlatButton from 'material-ui/FlatButton'
+var _ = require('underscore')
 
 var posts = [{title: 'Oh baby', body: 'Food is nice', author: 'ILikeFood'}, {title: 'Suck it', body: 'ILikeFood is a dumbdumb!', author: 'Trollolol'}]
 
@@ -56,9 +57,11 @@ Yavanna.provide('PostList', ({Login}) => {
       this.serverRequest = request('/api/posts/?long='+long+'&lat='+lat,  function (er, response, body) {
         var post_list = JSON.parse(body, dateReviver)
         console.log(post_list)
-        this.setState({
-          posts: post_list
-        });
+        if(!_.isEmpty(post_list)){
+          this.setState({
+            posts: post_list
+          });
+        }
       }.bind(this));
     },
 

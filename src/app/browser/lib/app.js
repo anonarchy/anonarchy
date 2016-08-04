@@ -5,18 +5,26 @@ import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
 console.log('in app')
 
-Yavanna.provide('App', ({PostList, CreatePost, Comments, Login}) => {
+Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
   return React.createClass({
     getInitialState: function(){
-      return {open: false, loggedIn: false}
+      return {login: false, loggedIn: false, signup: false}
     },
 
-    handleOpen(){
-      this.setState({open: true});
+    handleLoginOpen(){
+      this.setState({login: true});
     },
 
-    handleClose(){
-      this.setState({open: false});
+    handleLoginClose(){
+      this.setState({login: false});
+    },
+
+    handleSignupOpen(){
+      this.setState({signup: true});
+    },
+
+    handleSignupClose(){
+      this.setState({signup: false});
     },
 
     render: function () {
@@ -28,8 +36,8 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login}) => {
               style={{backgroundColor: 'black'}}
               iconElementRight={
                 <div>
-                  <FlatButton label="Login" onTouchTap={this.handleOpen} style={{color: 'white'}}/>
-                  <FlatButton label="Sign up" onTouchTap={this.handleOpen} style={{color: 'white'}}/>
+                  <FlatButton label="Login" onTouchTap={this.handleLoginOpen} style={{color: 'white'}}/>
+                  <FlatButton label="Sign up" onTouchTap={this.handleSignupOpen} style={{color: 'white'}}/>
                 </div>
                 }
             />
@@ -54,7 +62,8 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login}) => {
               <Route path="comments/:postID" component={Comments}/>
               <Route path="/new" component={CreatePost}/>
             </Router>
-            <Login open={this.state.open} handleClose={this.handleClose}/>
+            <Login open={this.state.login} handleClose={this.handleLoginClose}/>
+            <Signup open={this.state.signup} handleClose={this.handleSignupClose}/>
           </div>
         </MuiThemeProvider>
 

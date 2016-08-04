@@ -6,6 +6,7 @@ Yavanna.provide('DB', () => {
     exec: async function (collection, operation, args) {
       try{
         let conn = await getConnection()
+
         return await conn.collection(collection)[operation](args).toArray();
       }catch(error){
         console.log(error)
@@ -26,10 +27,19 @@ Yavanna.provide('DB', () => {
       //   return error
       // }
         let conn = await getConnection()
+        console.log(args)
         let result = await conn.collection(collection)[operation](args);
+        console.log("successful!")
         return result
+    },
 
-
+    updateOne: async function (collection, args, set) {
+        var operation = 'updateOne'
+        let conn = await getConnection()
+        console.log(args)
+        let result = await conn.collection(collection)[operation](args, set);
+        console.log("successful!")
+        return result
     }
   }
 

@@ -30,13 +30,18 @@ Yavanna.provide('AppController', ({Odin}) => {
 
   app.post('/api/signup', async function(req, res){
     var token = await Odin.createUser(req.body.username, req.body.password)
-    res.send(token)
+    if(token){
+      res.status(200).send({token: token})
+    }else{
+      res.status(400).send("User already exists")
+    }
   })
 
   app.post('/api/login/', async function(req, res){
     console.log(req.body)
     var loginToken = await Odin.getLoginToken(req.body.username, req.body.password)
     if(loginToken){
+      console.log(loginToken)
       res.status(200).send({token: loginToken})
     }else{
       res.status(403).send("Invalid username or password")
@@ -50,7 +55,7 @@ Yavanna.provide('AppController', ({Odin}) => {
         var lat = Number(req.query.lat)
         var posts = await Odin.getPostsByLocation(long, lat)
       }else{
-        var posts = await Odin.getPosts(long, lat)
+        var posts = await Odin.getPosts()
       }
       console.log(posts)
       res.send(posts)
@@ -92,14 +97,20 @@ Yavanna.provide('AppController', ({Odin}) => {
   })
 
   app.post('/api/posts', async function (req, res){
-    var token = await Odin.exchangeToken(req.body.token)
-    //get user too?
-    if (token){
-      var new_post = await Odin.createPost(req.body.post)
-      res.send(token)
-      // return post id? some other UUID?
-    }else{
-      res.send(null)
+    try{
+      // var token = await Odin.exchangeToken(req.body.token)
+      //get user too?
+      var token = true
+      if (token){
+        var new_post = await Odin.createPost(req.body.post)
+        res.send(token)
+        // return post id? some other UUID?
+      }else{
+        res.send(null)
+      }
+    }catch(error){
+      console.log(error)
+      res.status(500).send(null)
     }
   })
 
