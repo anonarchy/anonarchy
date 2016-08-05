@@ -9,7 +9,7 @@ Yavanna.provide('Signup', () => {
   return React.createClass({
 //            floatingLabelFixed={true}
     getInitialState: function() {
-      return {username: "", password: ""}
+      return {username: "", password: "", confirmedPassword: ""}
     },
 
     onResponse(err, res, body){
@@ -36,8 +36,14 @@ Yavanna.provide('Signup', () => {
       this.setState({password: value})
     },
 
-    isValid(){
-      if (this.state.username === "" || this.state.password === ""){
+
+    updateConfirmedPassword(event, value){
+      this.setState({confirmedPassword: value})
+    },
+
+
+    isNotValid(){
+      if (this.state.username === "" || this.state.password === "" || this.state.password !== this.state.confirmedPassword){
         return true
       }
       return false
@@ -54,7 +60,7 @@ Yavanna.provide('Signup', () => {
         <FlatButton
           label="Submit"
           primary={true}
-          disabled={this.isValid()}
+          disabled={this.isNotValid()}
           onTouchTap={this.submit}
         />,
       ];
@@ -78,6 +84,12 @@ Yavanna.provide('Signup', () => {
               floatingLabelText="Password"
               type="password"
               onChange={this.updatePassword}
+            />
+            <TextField
+              hintText="Password"
+              floatingLabelText="Confirm Password"
+              type="password"
+              onChange={this.updateConfirmedPassword}
             />
             <br />
           </Dialog>
