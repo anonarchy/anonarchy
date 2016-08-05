@@ -115,14 +115,21 @@ Yavanna.provide('AppController', ({Odin}) => {
   })
 
   app.post('/api/comment', async function (req, res){
-    var token = await Odin.exchangeToken(req.body.token)
+    // var token = await Odin.exchangeToken(req.body.token)
     //get user too?
-    if (token){
-      var new_comment = await Odin.createComment(req.body.comment)
-      res.send(token)
-      // return post id? some other UUID?
-    }else{
-      res.send(null)
+    try{
+      var token = true
+      if (token){
+        var new_comment = await Odin.createComment(req.body.comment)
+        console.log(new_comment)
+        res.send(token)
+        // return post id? some other UUID?
+      }else{
+        res.send(null)
+      }
+    }catch(error){
+      console.log(error)
+      res.status(500).send(null)
     }
   })
 

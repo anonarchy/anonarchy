@@ -68,6 +68,7 @@ Yavanna.provide('Login', () => {
           >
             <TextField
               hintText="Username"
+              floatingLabelFixed={true}
               floatingLabelText="Username"
               // fullWidth={true}
               onChange={this.updateUsername}
@@ -75,6 +76,7 @@ Yavanna.provide('Login', () => {
             <br />
             <TextField
               hintText="Password"
+              floatingLabelFixed={true}
               floatingLabelText="Password"
               type="password"
               onChange={this.updatePassword}
