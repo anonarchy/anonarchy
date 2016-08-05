@@ -149,16 +149,15 @@ Yavanna.provide('AppController', ({Odin}) => {
     }
   })
 
-  app.post('/api/vote', async function (req, res){
+  app.delete('/api/vote/:postID', async function (req, res){
     try{
-      var voteKey = await Odin.getUserVoteKey(req.body.token)
-      var result = await Odin.deleteVote(req.body.postID, voteKey)
+      var voteKey = await Odin.getUserVoteKey(req.params.token)
+      var result = await Odin.deleteVote(req.params.postID, voteKey)
       if (result){
         res.status(200).send()
       }else{
-        res.status(403).send("Already voted")
+        res.status(403).send("Vote not there")
       }
-
     }catch(error){
       console.log(error)
       res.status(500).send(null)

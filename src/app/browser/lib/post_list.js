@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, CardTitle, CardText} from 'material-ui/Card'
+import {Card, CardTitle, CardText, CardActions} from 'material-ui/Card'
 import Divider from 'material-ui/Divider'
 import AppBar from 'material-ui/AppBar'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
@@ -7,6 +7,8 @@ import { Router, Route, Link, browserHistory } from 'react-router'
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import request from 'browser-request'
 import FlatButton from 'material-ui/FlatButton'
+import FontAwesome from 'react-fontawesome';
+
 var _ = require('underscore')
 
 var posts = [{title: 'Oh baby', body: 'Food is nice', author: 'ILikeFood'}, {title: 'Suck it', body: 'ILikeFood is a dumbdumb!', author: 'Trollolol'}]
@@ -77,23 +79,33 @@ Yavanna.provide('PostList', ({Login}) => {
     addPost () {
       browserHistory.push('/new')
     },
-
+//            <Card onTouchTap={() => this.viewComments(post._id)}>
+// <CardActions>
+//   <button label="Comments" style={{float: 'right', position: 'relative'}}/>
+// </CardActions>
     // propTypes: {posts: React.PropTypes.array.isRequired},
     render () {
       var createPost = function (post) {
         return (
           <li key= {post._id} style={{ marginTop: 10 }} >
-            <Card onTouchTap={() => this.viewComments(post._id)}>
+            <Card>
               <CardTitle
                 title={post.title}
                 subtitle={post.author}
-                actAsExpander={true}
+                actAsExpander={post.body !== ""}
                 titleStyle={{fontSize: 17, margin: 0, padding: 0}}
                 subtitleStyle={{fontSize: 12}}
-              />
+              >
+              </CardTitle>
               <Divider />
               <CardText expandable={true}>
                 {post.body}
+              </CardText>
+              <Divider />
+              <CardText style={{fontSize: 10, textTransform: 'uppercase', padding:8, paddingLeft: 16}}>
+                <div>
+                  <p  style={{margin: 0, cursor: 'pointer'}} onTouchTap={()=> this.viewComments(post._id)}> Comments </p>
+                </div>
               </CardText>
             </Card>
           </li>
