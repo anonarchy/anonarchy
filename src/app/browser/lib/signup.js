@@ -85,8 +85,9 @@ Yavanna.provide('Signup', () => {
               type="password"
               onChange={this.updatePassword}
             />
+            <br />
             <TextField
-              hintText="Password"
+              hintText="Confirm Password"
               floatingLabelText="Confirm Password"
               type="password"
               onChange={this.updateConfirmedPassword}
