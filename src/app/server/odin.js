@@ -48,13 +48,19 @@ Yavanna.provide('Odin', ({DB, tokenIsExpired}) => {
     },
 
     createVote: async function(vote, userVoteKey){
-      var voteKey = voteKey//merge userVoteKey, secretKey
+      var voteKey = userVoteKey//merge userVoteKey, secretKey
       var vote = await DB.execOne('votes', 'findAndModify', {
         query: {postID: vote.postID, voteKey: voteKey},
         update: {value: vote.value}, //might need to do $setOnInsert and or $set
         upsert: true,
         new: true
       })
+      return vote
+    },
+
+    deleteVote: async function(vote, userVoteKey){
+      var voteKey = userVoteKey//merge userVoteKey, secretKey
+      var vote = await DB.execOne('votes', 'findAndDelete', {postID: vote.postID, voteKey: voteKey})
       return vote
     },
 
