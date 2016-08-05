@@ -56,7 +56,7 @@ Yavanna.provide('Comments', ({CreateComment}) => {
 //           <p>{JSON.stringify(this.state.comments)}</p>
 
       return (
-        <div style={{margin: 24}}>
+        <div style={{margin: 1.66 + '%'}}>
           <Card>
             <CardTitle
               title={this.state.post.title}

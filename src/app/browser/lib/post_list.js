@@ -14,7 +14,7 @@ var posts = [{title: 'Oh baby', body: 'Food is nice', author: 'ILikeFood'}, {tit
 var ulStyle = {
   listStyle: 'none',
   margin: 'auto',
-  width: 90 + '%',
+  width: 96.77 + '%',
   padding: 0
 }
 
