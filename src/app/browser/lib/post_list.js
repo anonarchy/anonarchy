@@ -97,9 +97,10 @@ Yavanna.provide('PostList', ({Login, Vote}) => {
               <div style={{display: 'flex'}}>
                 <Vote value={1345} />
                 <CardTitle
+                  style={{display: 'table', height: 36}}
                   actAsExpander={post.body !== ""}
                   title={post.title}
-                  titleStyle={{fontSize: 17, lineHeight: 22 + 'px', margin: 0, padding: 0}}
+                  titleStyle={{fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 0, display: 'table-cell', verticalAlign: 'middle'}}
                 />
               </div>
               <Divider />

@@ -47,9 +47,11 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
           <li key= {comment._id}>
             <Paper style={{marginBottom: 10, display: 'flex'}}>
               <Vote value='1345' />
-              <p style={{margin: 0, padding: 20, paddingLeft: 0, flex: 1, wordWrap: 'break-word'}}>
-                {comment.body}
-              </p>
+              <div style={{display: 'table', height: 36}}>
+                <p style={{margin: 0, padding: 16, paddingLeft: 0, flex: 1, wordWrap: 'break-word', height: 36, display: 'table-cell', verticalAlign: 'middle'}}>
+                  {comment.body}
+                </p>
+              </div>
             </Paper>
           </li>
         )
@@ -62,9 +64,9 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
             <div style={{display: 'flex'}}>
               <Vote value='1345' />
               <CardTitle
-                style={{flex: 1, paddingLeft: 0}}
+                style={{flex: 1, paddingLeft: 0, display: 'table', height: 36}}
                 title={this.state.post.title}
-                titleStyle={{fontSize: 17, margin: 0, padding: 0, lineHeight: 22 + 'px'}}
+                titleStyle={{fontSize: 18, margin: 0, padding: 0, lineHeight: 22 + 'px', display: 'table-cell', verticalAlign: 'middle'}}
               />
             </div>
             <Divider />
