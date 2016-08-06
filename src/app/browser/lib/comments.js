@@ -62,7 +62,7 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
             <div style={{display: 'flex'}}>
               <Vote value='1345' />
               <CardTitle
-                style={{flex: 1}}
+                style={{flex: 1, paddingLeft: 0}}
                 title={this.state.post.title}
                 titleStyle={{fontSize: 17, margin: 0, padding: 0, lineHeight: 22 + 'px'}}
               />

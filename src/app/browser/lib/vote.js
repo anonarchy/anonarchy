@@ -50,7 +50,7 @@ Yavanna.provide('Vote', () => {
     render() {
 
       return (
-        <div style={{width: 68, height: 68}}>
+        <div style={{width: 68, height: 68, flexShrink: 0}}>
           <img src='https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-up-b-128.png' style={(this.state.vote === 1 ? upVoted : notUpVoted)} />
           <p style={{fontSize: 16, textAlign: 'center', marginTop: 1, marginBottom: 1}}> {this.state.voteTotal} </p>
           <img src='https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-down-b-128.png' style={(this.state.vote === 0 ? downVoted : notDownVoted)} />
