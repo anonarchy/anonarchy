@@ -11,7 +11,7 @@ var ulStyle = {
 }
 
 
-Yavanna.provide('Comments', ({CreateComment}) => {
+Yavanna.provide('Comments', ({CreateComment, Vote}) => {
 
   return React.createClass({
 
@@ -45,8 +45,9 @@ Yavanna.provide('Comments', ({CreateComment}) => {
       var commentElement = function(comment){
         return (
           <li key= {comment._id}>
-            <Paper>
-              <p style={{margin: 0, marginBottom: 10, padding: 20}}>
+            <Paper style={{marginBottom: 10, display: 'flex'}}>
+              <Vote value='1345' />
+              <p style={{margin: 0, padding: 20, paddingLeft: 0, flex: 1, wordWrap: 'break-word'}}>
                 {comment.body}
               </p>
             </Paper>
@@ -57,13 +58,14 @@ Yavanna.provide('Comments', ({CreateComment}) => {
 
       return (
         <div style={{margin: 1.66 + '%'}}>
-          <Card>
-            <CardTitle
-              title={this.state.post.title}
-              subtitle={this.state.post.author}
-              titleStyle={{fontSize: 17, margin: 0, padding: 0}}
-              subtitleStyle={{fontSize: 12}}
-            />
+          <Card >
+            <div style={{display: 'flex'}}>
+              <Vote value='1345' />
+              <CardTitle
+                title={this.state.post.title}
+                titleStyle={{fontSize: 17, margin: 0, padding: 0, lineHeight: 22 + 'px'}}
+              />
+            </div>
             <Divider />
             <CardText>
               {this.state.post.body}

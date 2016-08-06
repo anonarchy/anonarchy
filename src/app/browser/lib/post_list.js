@@ -38,7 +38,7 @@ function getLocation(func) {
     }
 }
 
-Yavanna.provide('PostList', ({Login}) => {
+Yavanna.provide('PostList', ({Login, Vote}) => {
 
   return React.createClass({
 
@@ -79,24 +79,29 @@ Yavanna.provide('PostList', ({Login}) => {
     addPost () {
       browserHistory.push('/new')
     },
+    // <FontAwesome name='rocket' style={{margin: 0, marginRight: 6, cursor: 'pointer', display: 'inline-block'}} onTouchTap={()=> this.viewComments(post._id)}/>
+
 //            <Card onTouchTap={() => this.viewComments(post._id)}>
 // <CardActions>
 //   <button label="Comments" style={{float: 'right', position: 'relative'}}/>
 // </CardActions>
     // propTypes: {posts: React.PropTypes.array.isRequired},
+    //                   style={{paddingLeft: 0, marginLeft: 0}}
+//                   actAsExpander={post.body !== ""}
+
     render () {
       var createPost = function (post) {
         return (
           <li key= {post._id} style={{ marginTop: 10 }} >
             <Card>
-              <CardTitle
-                title={post.title}
-                subtitle={post.author}
-                actAsExpander={post.body !== ""}
-                titleStyle={{fontSize: 17, margin: 0, padding: 0}}
-                subtitleStyle={{fontSize: 12}}
-              >
-              </CardTitle>
+              <div style={{display: 'flex'}}>
+                <Vote value={1345} />
+                <CardTitle
+                  actAsExpander={post.body !== ""}
+                  title={post.title}
+                  titleStyle={{fontSize: 17, lineHeight: 22 + 'px', margin: 0, padding: 0}}
+                />
+              </div>
               <Divider />
               <CardText expandable={true}>
                 {post.body}
@@ -104,7 +109,9 @@ Yavanna.provide('PostList', ({Login}) => {
               <Divider />
               <CardText style={{fontSize: 10, textTransform: 'uppercase', padding:8, paddingLeft: 16}}>
                 <div>
-                  <p  style={{margin: 0, cursor: 'pointer'}} onTouchTap={()=> this.viewComments(post._id)}> Comments </p>
+                  <div style={{margin: 0, cursor: 'pointer', display: 'inline-block'}} onTouchTap={()=> this.viewComments(post._id)}>
+                    Comments
+                  </div>
                 </div>
               </CardText>
             </Card>

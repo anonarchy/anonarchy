@@ -1,5 +1,6 @@
 import React from 'react'
 import request from 'browser-request'
+// var upvote = require('./upvote.png')
 
 Yavanna.provide('Vote', () => {
 
@@ -33,10 +34,10 @@ Yavanna.provide('Vote', () => {
     render() {
 
       return (
-        <div style={{width: 80}}>
-          <img src={require('../assets/upvote.png')} style={{width: 80}} />
-          {this.state.voteTotal}
-          <img src={require('../assets/downvote.png')} style={{width: 80}} />
+        <div style={{width: 68, height: 68}}>
+          <img src='https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-up-b-128.png' style={{height: 20, paddingTop: 5, display: 'block', margin: 'auto'}} />
+          <p style={{fontSize: 16, textAlign: 'center', marginTop: 1, marginBottom: 1}}> {this.state.voteTotal} </p>
+          <img src='https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-down-b-128.png' style={{height: 20, paddingBottom: 5, display: 'block', margin: 'auto' }} />
         </div>
       )
     }
