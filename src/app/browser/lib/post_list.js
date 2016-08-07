@@ -38,7 +38,7 @@ function getLocation(func) {
     }
 }
 
-Yavanna.provide('PostList', ({Login, Vote}) => {
+Yavanna.provide('PostList', ({Login, Post}) => {
 
   return React.createClass({
 
@@ -93,28 +93,7 @@ Yavanna.provide('PostList', ({Login, Vote}) => {
       var createPost = function (post) {
         return (
           <li key= {post._id} style={{ marginTop: 10 }} >
-            <Card>
-              <div style={{display: 'flex'}}>
-                <Vote value={1345} />
-                <CardTitle
-                  style={{display: 'table', height: 36, paddingLeft: 0}}
-                  actAsExpander={post.body !== ""}
-                  title={post.title}
-                  titleStyle={{fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 0, display: 'table-cell', verticalAlign: 'middle'}}
-                />
-              </div>
-              <Divider />
-              <CardText expandable={true}>
-                {post.body}
-              </CardText>
-              <Divider />
-                <div>
-                  <span className={"icon-plus-square-o"} style={{fontSize: 18, marginLeft: 68, fontFamily: 'Times New Roman', lineHeight: 1, height: 18}}/>
-                  <div style={{margin: 0, cursor: 'pointer', display: 'inline-block', fontSize: 12, textTransform: 'uppercase', padding:8}} onTouchTap={()=> this.viewComments(post._id)}>
-                    Comments
-                  </div>
-                </div>
-            </Card>
+            <Post post={post}/>
           </li>
         )
       }

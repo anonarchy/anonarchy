@@ -19,6 +19,15 @@ var ulStyle = {
   padding: 0
 }
 
+var expander = {
+  fontSize: 18,
+  paddingRight: 8,
+  display: 'inline-block',
+  position: 'relative',
+  top: 4,
+  cursor: 'pointer'
+}
+
 Yavanna.provide('Post', ({Vote}) => {
 
   return React.createClass({
@@ -42,40 +51,39 @@ Yavanna.provide('Post', ({Vote}) => {
 // onExpandChange={this.handleExpandChange}
     render () {
         var post = this.props.post
-        var showExpandCollapse = function(){
+        var showExpandCollapse = () => {
           if (post.body !== ""){
-            if (this.state.expanded){
-              return <span className={"icon-plus-square-o"} style={{fontSize: 18, marginLeft: 68}} onTouchTap={this.expand}/>
+            if (!this.state.expanded){
+              return <span className={"icon-plus-square-o"} style={expander} onTouchTap={this.expand}/>
             }else{
-              return <span className={"icon-minus-square-o"} style={{fontSize: 18, marginLeft: 68}} onTouchTap={this.collapse}/>
+              return <span className={"icon-minus-square-o"} style={expander} onTouchTap={this.collapse}/>
             }
           }
         }
 
         return (
-          <li key= {post._id} style={{ marginTop: 10 }} >
-            <Card expanded={this.state.expanded} >
-              <div style={{display: 'flex'}}>
-                <Vote value={1345} />
-                <CardTitle
-                  style={{display: 'table', height: 36, paddingLeft: 0}}
-                  title={post.title}
-                  titleStyle={{fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 0, display: 'table-cell', verticalAlign: 'middle'}}
-                />
-              </div>
-              <Divider />
-              <CardText expandable={true}>
-                {post.body}
-              </CardText>
-              <Divider />
-                <div>
-                  {showExpandCollapse()}
-                  <div style={{margin: 0, cursor: 'pointer', display: 'inline-block', fontSize: 12, textTransform: 'uppercase', padding:8}} onTouchTap={()=> this.viewComments(post._id)}>
-                    Comments
-                  </div>
+          <Card expanded={this.state.expanded} >
+            <div style={{display: 'flex'}}>
+              <Vote value={1345} />
+              <CardTitle
+                style={{display: 'table', height: 36, paddingLeft: 0}}
+                title={post.title}
+                titleStyle={{fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 0, display: 'table-cell', verticalAlign: 'middle'}}
+              />
+            </div>
+            <Divider style={{marginLeft: 68}}/>
+            <CardText expandable={true} style={{paddingLeft: 0}}>
+              <span style={{marginLeft: 68}}> {post.body} </span>
+            </CardText>
+            <Divider style={{marginLeft: 68}}/>
+              <div>
+                <span style={{marginLeft: 68}}/>
+                {showExpandCollapse()}
+                <div style={{margin: 0, cursor: 'pointer', display: 'inline-block', fontSize: 12, textTransform: 'uppercase', padding:8, paddingLeft: 0}} onTouchTap={()=> this.viewComments(post._id)}>
+                  Comments
                 </div>
-            </Card>
-          </li>
+              </div>
+          </Card>
         )
     }
   })
