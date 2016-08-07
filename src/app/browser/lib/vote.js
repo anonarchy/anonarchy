@@ -4,18 +4,20 @@ import _ from 'underscore'
 // var upvote = require('./upvote.png')
 
 var upVoted = {
-  height: 20,
+  fontSize: 18,
+  height: 14,
   display: 'block',
-  margin: 'auto',
+  textAlign: 'center',
   opacity: 1
 }
 var downVoted = _.clone(upVoted)
-downVoted.paddingBottom = 5
-upVoted.paddingTop = 5
+downVoted.paddingBottom = 10.5
+downVoted.marginTop= -2
+upVoted.paddingTop = 10.5
 var notUpVoted = _.clone(upVoted)
-notUpVoted.opacity = 0.5
+notUpVoted.opacity = 0.4
 var notDownVoted = _.clone(downVoted)
-notDownVoted.opacity = 0.5
+notDownVoted.opacity = 0.4
 
 
 Yavanna.provide('Vote', () => {
@@ -23,7 +25,7 @@ Yavanna.provide('Vote', () => {
   return React.createClass({
 //            floatingLabelFixed={true}
     getInitialState: function() {
-      return {voteTotal: this.props.value, vote: null}
+      return {voteTotal: this.props.value, vote: 0}
     },
 
     onResponse(err, res, body){
@@ -37,9 +39,16 @@ Yavanna.provide('Vote', () => {
       this.props.handleClose()
     },
 
-    submit(){
-      console.log(this.state.username)
-      request({method:'POST', url:'/api/login', json:{username: this.state.username, password: this.state.password}}, this.onResponse)
+
+    castVote(value){
+      if (this.state.vote === 0){
+        this.setState({vote: value, voteTotal: this.state.voteTotal + value})
+      }else if (this.state.vote !== value){
+        this.setState({vote: value, voteTotal: this.state.voteTotal + value*2})
+      }else{
+        this.setState({vote: 0, voteTotal: this.state.voteTotal - value})
+      }
+      // request({method:'POST', url:'/api/vote', json:{username: this.state.username, password: this.state.password}}, this.onResponse)
     },
 
     updateVoteTotal(event, value){
@@ -51,9 +60,9 @@ Yavanna.provide('Vote', () => {
 
       return (
         <div style={{width: 68, height: 68, flexShrink: 0}}>
-          <img src='https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-up-b-128.png' style={(this.state.vote === 1 ? upVoted : notUpVoted)} />
-          <p style={{fontSize: 16, textAlign: 'center', marginTop: 1, marginBottom: 1}}> {this.state.voteTotal} </p>
-          <img src='https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-arrow-down-b-128.png' style={(this.state.vote === 0 ? downVoted : notDownVoted)} />
+          <span className={"icon-upvote"} style={(this.state.vote === 1 ? upVoted : notUpVoted)}  onTouchTap={()=> this.castVote(1)} />
+          <p style={{fontSize: 15, textAlign: 'center', marginTop: 0, marginBottom: 0}}> {this.state.voteTotal} </p>
+          <span className={"icon-downvote"} style={(this.state.vote === -1 ? downVoted : notDownVoted)} onTouchTap={()=> this.castVote(-1)} />
         </div>
       )
     }

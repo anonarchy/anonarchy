@@ -97,7 +97,7 @@ Yavanna.provide('PostList', ({Login, Vote}) => {
               <div style={{display: 'flex'}}>
                 <Vote value={1345} />
                 <CardTitle
-                  style={{display: 'table', height: 36}}
+                  style={{display: 'table', height: 36, paddingLeft: 0}}
                   actAsExpander={post.body !== ""}
                   title={post.title}
                   titleStyle={{fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 0, display: 'table-cell', verticalAlign: 'middle'}}
@@ -108,13 +108,12 @@ Yavanna.provide('PostList', ({Login, Vote}) => {
                 {post.body}
               </CardText>
               <Divider />
-              <CardText style={{fontSize: 10, textTransform: 'uppercase', padding:8, paddingLeft: 16}}>
                 <div>
-                  <div style={{margin: 0, cursor: 'pointer', display: 'inline-block'}} onTouchTap={()=> this.viewComments(post._id)}>
+                  <span className={"icon-plus-square-o"} style={{fontSize: 18, marginLeft: 68, fontFamily: 'Times New Roman', lineHeight: 1, height: 18}}/>
+                  <div style={{margin: 0, cursor: 'pointer', display: 'inline-block', fontSize: 12, textTransform: 'uppercase', padding:8}} onTouchTap={()=> this.viewComments(post._id)}>
                     Comments
                   </div>
                 </div>
-              </CardText>
             </Card>
           </li>
         )
