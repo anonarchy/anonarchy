@@ -47,10 +47,10 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
           <li key= {comment._id}>
             <Paper style={{marginBottom: 10, display: 'flex'}}>
               <Vote value={10} />
-              <div style={{display: 'table', height: 36}}>
-                <p style={{margin: 0, padding: 16, paddingLeft: 0, flex: 1, wordWrap: 'break-word', height: 36, display: 'table-cell', verticalAlign: 'middle'}}>
+              <div>
+                <span style={{minHeight: 36, margin: 0, padding: 16, paddingLeft: 0, flex: 1, wordWrap: 'break-word', display: 'flex', alignItems: 'center'}}>
                   {comment.body}
-                </p>
+                </span>
               </div>
             </Paper>
           </li>

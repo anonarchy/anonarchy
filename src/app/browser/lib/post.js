@@ -66,14 +66,14 @@ Yavanna.provide('Post', ({Vote}) => {
             <div style={{display: 'flex'}}>
               <Vote value={1345} />
               <CardTitle
-                style={{display: 'table', height: 36, paddingLeft: 0}}
+                style={{paddingLeft: 0}}
                 title={post.title}
-                titleStyle={{fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 0, display: 'table-cell', verticalAlign: 'middle'}}
+                titleStyle={{ display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 0, alignItems: 'center'}}
               />
             </div>
             <Divider style={{marginLeft: 68}}/>
-            <CardText expandable={true} style={{paddingLeft: 0}}>
-              <span style={{marginLeft: 68}}> {post.body} </span>
+            <CardText expandable={true} style={{paddingLeft: 0, marginLeft: 68}}>
+              <span> {post.body} </span>
             </CardText>
             <Divider style={{marginLeft: 68}}/>
               <div>
