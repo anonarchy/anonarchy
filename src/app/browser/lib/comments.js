@@ -3,6 +3,7 @@ import request from 'browser-request'
 import {Card, CardTitle, CardText} from 'material-ui/Card'
 import Divider from 'material-ui/Divider'
 import Paper from 'material-ui/Paper'
+var ReactMarkdown = require('react-markdown');
 
 var ulStyle = {
   listStyle: 'none',
@@ -38,6 +39,10 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
     componentWillUnmount () {
       this.serverRequest.abort();
     },
+    //
+    // <span style={{minHeight: 36, margin: 0, padding: 16, paddingLeft: 0, flex: 1, wordWrap: 'break-word', display: 'flex', alignItems: 'center'}}>
+    //   {comment.body}
+    // </span>
 
     render () {
       console.log(this.props.params.postID)
@@ -47,10 +52,8 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
           <li key= {comment._id}>
             <Paper style={{marginBottom: 10, display: 'flex'}}>
               <Vote value={10} />
-              <div>
-                <span style={{minHeight: 36, margin: 0, padding: 16, paddingLeft: 0, flex: 1, wordWrap: 'break-word', display: 'flex', alignItems: 'center'}}>
-                  {comment.body}
-                </span>
+              <div style={{padding: 0, paddingRight:16}}>
+                <ReactMarkdown source={comment.body}/>
               </div>
             </Paper>
           </li>
@@ -71,7 +74,7 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
             </div>
             <Divider />
             <CardText>
-              {this.state.post.body}
+              <ReactMarkdown source={this.state.post.body}/>
             </CardText>
           </Card>
           <CreateComment postID={this.props.params.postID}/>

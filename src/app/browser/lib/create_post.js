@@ -96,7 +96,6 @@ Yavanna.provide('CreatePost', () => {
             <RaisedButton label="Submit" primary={true}
               onTouchTap={this.submit}
             />
-
           </div>
 
 

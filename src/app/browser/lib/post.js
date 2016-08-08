@@ -8,6 +8,19 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import request from 'browser-request'
 import FlatButton from 'material-ui/FlatButton'
 import FontAwesome from 'react-fontawesome';
+var ReactMarkdown = require('react-markdown');
+
+// var marked = require('marked');
+// marked.setOptions({
+//   renderer: new marked.Renderer(),
+//   gfm: true,
+//   tables: true,
+//   breaks: false,
+//   pedantic: false,
+//   sanitize: true,
+//   smartLists: true,
+//   smartypants: false
+// });
 
 var _ = require('underscore')
 
@@ -72,9 +85,9 @@ Yavanna.provide('Post', ({Vote}) => {
               />
             </div>
             <Divider style={{marginLeft: 68}}/>
-            <CardText expandable={true} style={{paddingLeft: 0, marginLeft: 68}}>
-              <span> {post.body} </span>
-            </CardText>
+            <div expandable={true} style={{padding: 0, paddingRight:16, marginLeft: 68}}>
+              <ReactMarkdown source={post.body} />
+            </div>
             <Divider style={{marginLeft: 68}}/>
               <div>
                 <span style={{marginLeft: 68}}/>
