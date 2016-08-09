@@ -39,10 +39,6 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
     componentWillUnmount () {
       this.serverRequest.abort();
     },
-    //
-    // <span style={{minHeight: 36, margin: 0, padding: 16, paddingLeft: 0, flex: 1, wordWrap: 'break-word', display: 'flex', alignItems: 'center'}}>
-    //   {comment.body}
-    // </span>
 
     render () {
       console.log(this.props.params.postID)
@@ -50,16 +46,15 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
       var commentElement = function(comment){
         return (
           <li key= {comment._id}>
-            <Paper style={{marginBottom: 10, display: 'flex'}}>
+            <Paper style={{marginBottom: 10, display: 'flex', alignItems: 'center'}}> //alignItems center allows for everything without alignSelf set to be centered.
               <Vote value={10} />
-              <div style={{padding: 0, paddingRight:16}}>
+              <div style={{padding: 0, paddingRight:16, flex: 1, minWidth: 0, minHeight: 36}}>
                 <ReactMarkdown source={comment.body}/>
               </div>
             </Paper>
           </li>
         )
       }
-//           <p>{JSON.stringify(this.state.comments)}</p>
 
       return (
         <div style={{margin: 1.66 + '%'}}>
@@ -73,7 +68,7 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
               />
             </div>
             <Divider />
-            <CardText>
+            <CardText style={{marginLeft: 36}}>
               <ReactMarkdown source={this.state.post.body}/>
             </CardText>
           </Card>

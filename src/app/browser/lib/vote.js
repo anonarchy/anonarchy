@@ -8,6 +8,7 @@ var upVoted = {
   height: 14,
   display: 'block',
   textAlign: 'center',
+  cursor: 'pointer',
   opacity: 1
 }
 var downVoted = _.clone(upVoted)
@@ -59,7 +60,7 @@ Yavanna.provide('Vote', () => {
     render() {
 
       return (
-        <div style={{width: 68, height: 68, flexShrink: 0}}>
+        <div style={{width: 68, height: 68, flexShrink: 0, alignSelf: 'baseline'}}> //alignSelf: baseline causes votes to stick to the top of the parent element
           <span className={"icon-upvote"} style={(this.state.vote === 1 ? upVoted : notUpVoted)}  onTouchTap={()=> this.castVote(1)} />
           <p style={{fontSize: 15, textAlign: 'center', marginTop: 0, marginBottom: 0}}> {this.state.voteTotal} </p>
           <span className={"icon-downvote"} style={(this.state.vote === -1 ? downVoted : notDownVoted)} onTouchTap={()=> this.castVote(-1)} />
