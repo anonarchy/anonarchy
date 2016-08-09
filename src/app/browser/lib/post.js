@@ -61,7 +61,7 @@ Yavanna.provide('Post', ({Vote}) => {
     collapse(){
       this.setState({expanded: false})
     },
-// onExpandChange={this.handleExpandChange}
+
     render () {
         var post = this.props.post
         var showExpandCollapse = () => {
@@ -74,15 +74,26 @@ Yavanna.provide('Post', ({Vote}) => {
           }
         }
 
+        var linkOrText = () => {
+          if (post.link !== ""){
+            return (<a href={post.link} style={{textDecoration: 'none'}}>{post.title}</a>)
+          }else{
+            return (<span style={{ display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 0, alignItems: 'center'}}>{post.title}</span>)
+          }
+        }
+
+        // <CardTitle
+        //   style={{paddingLeft: 0}}
+        //   title={post.title}
+        //   titleStyle={{ display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 0, alignItems: 'center'}}
+        // />
         return (
           <Card expanded={this.state.expanded} >
-            <div style={{display: 'flex'}}>
-              <Vote value={1345} />
-              <CardTitle
-                style={{paddingLeft: 0}}
-                title={post.title}
-                titleStyle={{ display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 0, alignItems: 'center'}}
-              />
+            <div style={{display: 'flex', alignItems: 'center'}}>
+              <Vote value={1345} ID={this.props.post._id}/>
+              <div style={{padding: 0, paddingRight:16, flex: 1, minWidth: 0, fontSize: 18}}>
+                {linkOrText()}
+              </div>
             </div>
             <Divider style={{marginLeft: 68}}/>
             <div expandable={true} style={{padding: 0, paddingRight:16, marginLeft: 68}}>

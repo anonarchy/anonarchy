@@ -37,7 +37,7 @@ Yavanna.provide('CreatePost', () => {
   return React.createClass({
 
     getInitialState(){
-      return {postTitle: "", author:"", body: "", long: null, lat: null}
+      return {postTitle: "", author:"", body: "", link:"", long: null, lat: null}
     },
 
     componentDidMount(){
@@ -58,7 +58,7 @@ Yavanna.provide('CreatePost', () => {
     submit(){
       console.log(this.state.postTitle)
       var date = new Date()
-      request({method:'POST', url:'/api/posts', json: {post: {title: this.state.postTitle, author: this.state.author, body: this.state.body, loc: {long: this.state.long, lat: this.state.lat}}}}, on_response)
+      request({method:'POST', url:'/api/posts', json: {post: {title: this.state.postTitle, author: this.state.author, body: this.state.body, link: this.state.link, loc: {long: this.state.long, lat: this.state.lat}}}}, on_response)
       browserHistory.push('/')
     },
 
@@ -70,6 +70,10 @@ Yavanna.provide('CreatePost', () => {
       this.setState({body: value})
     },
 
+    updateLink(event, value){
+      this.setState({link: value})
+    },
+
     render () {
       return (
         <div style={{margin: 24 }}>
@@ -79,7 +83,13 @@ Yavanna.provide('CreatePost', () => {
              floatingLabelFixed={true}
              fullWidth={true}
              onChange={this.updateTitle}
-           />
+          />
+          <TextField
+            floatingLabelText="Link"
+            floatingLabelFixed={true}
+            fullWidth={true}
+            onChange={this.updateLink}
+          />
           <TextField
              floatingLabelText="Text"
              multiLine={true}
@@ -87,13 +97,9 @@ Yavanna.provide('CreatePost', () => {
              rows={4}
              fullWidth={true}
              onChange={this.updateText}
-           />
-           <TextField
-              floatingLabelText="Link"
-              floatingLabelFixed={true}
-              fullWidth={true}
-            />
+          />
             <RaisedButton label="Submit" primary={true}
+              disabled={this.state.postTitle === ""}
               onTouchTap={this.submit}
             />
           </div>

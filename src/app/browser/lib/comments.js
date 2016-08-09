@@ -46,31 +46,37 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
       var commentElement = function(comment){
         return (
           <li key= {comment._id}>
-            <Paper style={{marginBottom: 10, display: 'flex', alignItems: 'center'}}> //alignItems center allows for everything without alignSelf set to be centered.
-              <Vote value={10} />
-              <div style={{padding: 0, paddingRight:16, flex: 1, minWidth: 0, minHeight: 36}}>
+            <Paper style={{marginBottom: 10, display: 'flex', alignItems: 'center'}}>
+              <Vote value={10} ID={comment._id} />
+              <div style={{padding: 0, paddingRight:16, flex: 1, minWidth: 0}}>
                 <ReactMarkdown source={comment.body}/>
               </div>
             </Paper>
           </li>
         )
       }
+      var post = this.state.post
+      var linkOrText = () => {
+        if (post.link !== ""){
+          return (<a href={post.link} style={{textDecoration: 'none'}}>{post.title}</a>)
+        }else{
+          return (<span style={{ display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 0, alignItems: 'center'}}>{post.title}</span>)
+        }
+      }
 
       return (
         <div style={{margin: 1.66 + '%'}}>
           <Card >
-            <div style={{display: 'flex'}}>
-              <Vote value={345} />
-              <CardTitle
-                style={{flex: 1, paddingLeft: 0, display: 'table', height: 36}}
-                title={this.state.post.title}
-                titleStyle={{fontSize: 18, margin: 0, padding: 0, lineHeight: 22 + 'px', display: 'table-cell', verticalAlign: 'middle'}}
-              />
+            <div style={{display: 'flex', alignItems: 'center'}}>
+              <Vote value={345} ID={this.props.params.postID} />
+              <div style={{padding: 0, paddingRight:16, flex: 1, minWidth: 0, fontSize: 18}}>
+                {linkOrText()}
+              </div>
             </div>
             <Divider />
-            <CardText style={{marginLeft: 36}}>
-              <ReactMarkdown source={this.state.post.body}/>
-            </CardText>
+            <div style={{padding: 0, paddingRight:16, paddingBottom: 1, marginLeft: 68, minHeight: 36}}>
+              <ReactMarkdown source={this.state.post.body} />
+            </div>
           </Card>
           <CreateComment postID={this.props.params.postID}/>
           <ul style={ulStyle} >{this.state.comments.map(commentElement.bind(this))}</ul>

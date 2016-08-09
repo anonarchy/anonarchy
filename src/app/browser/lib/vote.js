@@ -37,19 +37,20 @@ Yavanna.provide('Vote', () => {
           return
           // throw err;
       }
-      this.props.handleClose()
     },
 
 
     castVote(value){
       if (this.state.vote === 0){
         this.setState({vote: value, voteTotal: this.state.voteTotal + value})
+        // request({method:'POST', url:'/api/vote', json:{ID: this.props.ID, vote: value}}, this.onResponse)
       }else if (this.state.vote !== value){
         this.setState({vote: value, voteTotal: this.state.voteTotal + value*2})
+        // request({method:'UPDATE', url:'/api/vote', json:{ID: this.props.ID, vote: value}}, this.onResponse)
       }else{
         this.setState({vote: 0, voteTotal: this.state.voteTotal - value})
+        // request({method:'DELETE', url:'/api/vote', json:{ID: this.props.ID, vote: value}}, this.onResponse)
       }
-      // request({method:'POST', url:'/api/vote', json:{username: this.state.username, password: this.state.password}}, this.onResponse)
     },
 
     updateVoteTotal(event, value){
@@ -60,7 +61,7 @@ Yavanna.provide('Vote', () => {
     render() {
 
       return (
-        <div style={{width: 68, height: 68, flexShrink: 0, alignSelf: 'baseline'}}> //alignSelf: baseline causes votes to stick to the top of the parent element
+        <div style={{width: 68, height: 68, flexShrink: 0, alignSelf: 'baseline'}}>
           <span className={"icon-upvote"} style={(this.state.vote === 1 ? upVoted : notUpVoted)}  onTouchTap={()=> this.castVote(1)} />
           <p style={{fontSize: 15, textAlign: 'center', marginTop: 0, marginBottom: 0}}> {this.state.voteTotal} </p>
           <span className={"icon-downvote"} style={(this.state.vote === -1 ? downVoted : notDownVoted)} onTouchTap={()=> this.castVote(-1)} />
