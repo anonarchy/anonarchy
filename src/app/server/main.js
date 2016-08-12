@@ -104,12 +104,12 @@ Yavanna.provide('AppController', ({Odin}) => {
 
   app.post('/api/posts', async function (req, res){
     try{
-      // var token = await Odin.exchangeToken(req.body.token)
-      //get user too?
-      var token = true
+      console.log(req.cookies.session)
+      var token = await Odin.exchangeToken(req.cookies.session)
+      //get user too
       if (token){
         var new_post = await Odin.createPost(req.body.post)
-        res.send(token)
+        res.send()
         // return post id? some other UUID?
       }else{
         res.send(null)
@@ -121,14 +121,13 @@ Yavanna.provide('AppController', ({Odin}) => {
   })
 
   app.post('/api/comment', async function (req, res){
-    // var token = await Odin.exchangeToken(req.body.token)
+    var token = await Odin.exchangeToken(req.cookies.session)
     //get user too?
     try{
-      var token = true
       if (token){
         var new_comment = await Odin.createComment(req.body.comment)
         console.log(new_comment)
-        res.send(token)
+        res.send()
         // return post id? some other UUID?
       }else{
         res.send(null)
@@ -139,9 +138,12 @@ Yavanna.provide('AppController', ({Odin}) => {
     }
   })
 
+
+
   app.post('/api/vote', async function (req, res){
     try{
-      var voteKey = await Odin.getUserVoteKey(req.body.token)
+      var userVoteKey = await Odin.getUserVoteKey(req.cookies.session) + 
+      var voteKey = hash(process.env.SECRET_KEY. userVoteKey, req.body.postID)
       var result = await Odin.createVote(req.body.vote, voteKey)
       if (result){
         res.status(200).send()
@@ -157,7 +159,7 @@ Yavanna.provide('AppController', ({Odin}) => {
 
   app.delete('/api/vote/:postID', async function (req, res){
     try{
-      var voteKey = await Odin.getUserVoteKey(req.params.token)
+      var voteKey = await Odin.getUserVoteKey(req.cookies.session)
       var result = await Odin.deleteVote(req.params.postID, voteKey)
       if (result){
         res.status(200).send()
