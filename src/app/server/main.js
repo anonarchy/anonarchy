@@ -86,6 +86,7 @@ Yavanna.provide('AppController', ({Odin}) => {
         <title>AnonyPost</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://file.myfontastic.com/bt5cuS2P68mBfDW5734rq9/icons.css" rel="stylesheet">
+        <link href="assets/css/markdown.css" rel="stylesheet">
       </head>
       <body>
         <div id="container"/>

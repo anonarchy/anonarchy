@@ -18,7 +18,7 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
 
 // export default class Comments extends React.Component {
     getInitialState () {
-      return {post: {title: "", author: "", body: ""}, comments: []}
+      return {post: {title: "", author: "", body: "", link: ""}, comments: []}
     },
 
     componentDidMount () {
@@ -57,10 +57,12 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
       }
       var post = this.state.post
       var linkOrText = () => {
-        if (post.link !== ""){
-          return (<a href={post.link} style={{textDecoration: 'none'}}>{post.title}</a>)
+        console.log(post.link)
+        if (post.link === "" || post.link === undefined){
+          return (<span style={{ display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 16, paddingLeft: 0, alignItems: 'center'}}>{post.title}</span>)
         }else{
-          return (<span style={{ display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 0, alignItems: 'center'}}>{post.title}</span>)
+          return (<a href={post.link} style={{display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 16, paddingLeft: 0, alignItems: 'center', textDecoration: 'none'}}>{post.title}</a>)
+
         }
       }
 
@@ -74,7 +76,7 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
               </div>
             </div>
             <Divider />
-            <div style={{padding: 0, paddingRight:16, paddingBottom: 1, marginLeft: 68, minHeight: 36}}>
+            <div style={{padding: 0, paddingRight:16, paddingBottom: 1, marginLeft: 68, minHeight: 16}}>
               <ReactMarkdown source={this.state.post.body} />
             </div>
           </Card>

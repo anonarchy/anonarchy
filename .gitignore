@@ -1,4 +1,5 @@
 node_modules/
 tmp/
-dist/
+dist/public/js
+dist/server.js
 .build_tmp/

@@ -1,0 +1,18 @@
+blockquote {
+  color: #666;
+  margin: 0;
+  padding-left: 1em;
+  border-left: 4px #ddd solid;
+}
+
+a {
+  outline: 0;
+}
+
+a:hover, a:active, a:focus {
+  text-decoration: underline;
+}
+
+code {
+    white-space: pre-wrap;
+}
