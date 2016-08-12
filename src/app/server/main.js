@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 // require('babel-polyfill')
 var _ = require('underscore');
 var cookieParser = require('cookie-parser')
-
+var crypto = require('crypto')
 const app = express()
 
 console.log(path.join(__dirname, 'public'))
@@ -75,13 +75,31 @@ Yavanna.provide('AppController', ({Odin}) => {
       console.log(post)
       var comments = await Odin.getCommments(req.params.id)
       var ret = {post: post, comments: comments}
-      // console.log(ret)
+      console.log(ret)
       res.send(ret)
     }catch(error){
       console.log(error)
       res.status(500).send(error)
     }
   })
+
+  app.get('/api/post/:id/votes', async function (req, res) {
+    try{
+      var userVoteKey = await Odin.getUserVoteKey(req.cookies.session)
+      var voteKey = hash([userVoteKey, req.params.id])
+      console.log(voteKey)
+      var userVote = await Odin.getUserVoteValue(voteKey)
+      var voteCount = await Odin.getVoteCount(req.params.id)
+      console.log(voteCount)
+      var ret = {voteCount: voteCount, userVote: userVote}
+      console.log(ret)
+      res.status(200).send(ret)
+    }catch(error){
+      console.log(error)
+      res.status(500).send(error)
+    }
+  })
+
 
   app.get('*', function (req, res) {
     const html = `<!DOCTYPE html>
@@ -107,12 +125,13 @@ Yavanna.provide('AppController', ({Odin}) => {
       console.log(req.cookies.session)
       var token = await Odin.exchangeToken(req.cookies.session)
       //get user too
+      setSessionCookie(token, res)
       if (token){
         var new_post = await Odin.createPost(req.body.post)
-        res.send()
+        res.status(200).send()
         // return post id? some other UUID?
       }else{
-        res.send(null)
+        res.status(403).send(null)
       }
     }catch(error){
       console.log(error)
@@ -124,13 +143,14 @@ Yavanna.provide('AppController', ({Odin}) => {
     var token = await Odin.exchangeToken(req.cookies.session)
     //get user too?
     try{
+      setSessionCookie(token, res)
       if (token){
         var new_comment = await Odin.createComment(req.body.comment)
         console.log(new_comment)
-        res.send()
+        res.status(200).send()
         // return post id? some other UUID?
       }else{
-        res.send(null)
+        res.status(403).send(null)
       }
     }catch(error){
       console.log(error)
@@ -142,29 +162,38 @@ Yavanna.provide('AppController', ({Odin}) => {
 
   app.post('/api/vote', async function (req, res){
     try{
-      var userVoteKey = await Odin.getUserVoteKey(req.cookies.session) + 
-      var voteKey = hash(process.env.SECRET_KEY. userVoteKey, req.body.postID)
-      var result = await Odin.createVote(req.body.vote, voteKey)
-      if (result){
-        res.status(200).send()
+      var userVoteKey = await Odin.getUserVoteKey(req.cookies.session)
+      if(userVoteKey){
+        console.log(userVoteKey)
+        var voteKey = hash([userVoteKey, req.body.vote.ID])
+        var result = await Odin.createVote(req.body.vote, voteKey)
+        if (result){
+          res.status(200).send()
+        }else{
+          res.status(403).send("Already voted")
+        }
       }else{
-        res.status(403).send("Already voted")
+        res.status(403).send("No user found")
       }
-
     }catch(error){
       console.log(error)
       res.status(500).send(null)
     }
   })
 
-  app.delete('/api/vote/:postID', async function (req, res){
+  app.delete('/api/vote/', async function (req, res){
     try{
-      var voteKey = await Odin.getUserVoteKey(req.cookies.session)
-      var result = await Odin.deleteVote(req.params.postID, voteKey)
-      if (result){
-        res.status(200).send()
+      var userVoteKey = await Odin.getUserVoteKey(req.cookies.session)
+      if (userVoteKey){
+        var voteKey = hash([userVoteKey, req.body.vote.ID])
+        var result = await Odin.deleteVote(req.body.vote.ID, voteKey)
+        if (result){
+          res.status(200).send()
+        }else{
+          res.status(403).send("Vote not there")
+        }
       }else{
-        res.status(403).send("Vote not there")
+        res.status(403).send("No user found")
       }
     }catch(error){
       console.log(error)
@@ -183,6 +212,16 @@ function setSessionCookie(token, response) {
     console.log('error when setting session ', e)
   }
 
+}
+
+function hash(keys){
+  console.log(process.env.ANONYPOST_SECRET_KEY)
+  var h = crypto.createHmac('sha256', process.env.ANONYPOST_SECRET_KEY)
+  var arrayLength = keys.length;
+  for (var i = 0; i < arrayLength; i++) {
+    h.update(keys[i]);
+  }
+  return h.digest('hex')
 }
 
 Yavanna.get('AppController')

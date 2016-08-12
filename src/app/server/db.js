@@ -15,21 +15,11 @@ Yavanna.provide('DB', () => {
     },
 
     execOne: async function (collection, operation, args) {
-      // console.log("got here at all")
-      // try{
-      //   let conn = await getConnection()
-      //   console.log("getting collection")
-      //   let result = await conn.collection(collection)[operation](args);
-      //   console.log(result)
-      //   return result
-      // }catch(error){
-      //   console.log("error")
-      //   return error
-      // }
+
         let conn = await getConnection()
         console.log(args)
         let result = await conn.collection(collection)[operation](args);
-        console.log("successful!")
+        console.log("successfully executed once!")
         return result
     },
 
@@ -38,8 +28,18 @@ Yavanna.provide('DB', () => {
         let conn = await getConnection()
         console.log(args)
         let result = await conn.collection(collection)[operation](args, set);
-        console.log("successful!")
+        console.log("successfully updated!")
         return result
+    },
+
+    findAndModify: async function (collection, query, sort, update, options) {
+      var operation = 'findAndModify'
+      let conn = await getConnection()
+      let result = await conn.collection(collection)[operation](query, sort, update, options);
+      console.log("successfully found and Modified!")
+
+      return result
+
     }
   }
 

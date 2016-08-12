@@ -26,7 +26,25 @@ Yavanna.provide('Vote', () => {
   return React.createClass({
 //            floatingLabelFixed={true}
     getInitialState: function() {
-      return {voteTotal: this.props.value, vote: 0}
+      return {voteTotal: 0, vote: 0}
+    },
+
+    componentDidMount: function(){
+      var postID = this.props.ID
+      this.serverRequest = request('/api/post/'+ postID + '/votes/', function (er, response, body) {
+        var body = JSON.parse(body)
+        console.log("vote count: "+ body.voteCount)
+        console.log("user vote: " + body.userVote)
+
+        this.setState({
+          voteTotal: body.voteCount,
+          vote: body.userVote
+        });
+      }.bind(this));
+    },
+
+    componentWillUnmount () {
+      this.serverRequest.abort();
     },
 
     onResponse(err, res, body){
@@ -41,21 +59,17 @@ Yavanna.provide('Vote', () => {
 
 
     castVote(value){
+      console.log("casting a vote")
       if (this.state.vote === 0){
         this.setState({vote: value, voteTotal: this.state.voteTotal + value})
-        // request({method:'POST', url:'/api/vote', json:{ID: this.props.ID, vote: value}}, this.onResponse)
+        request({method:'POST', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value}}}, this.onResponse)
       }else if (this.state.vote !== value){
         this.setState({vote: value, voteTotal: this.state.voteTotal + value*2})
-        // request({method:'UPDATE', url:'/api/vote', json:{ID: this.props.ID, vote: value}}, this.onResponse)
+        request({method:'POST', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value}}}, this.onResponse)
       }else{
         this.setState({vote: 0, voteTotal: this.state.voteTotal - value})
-        // request({method:'DELETE', url:'/api/vote', json:{ID: this.props.ID, vote: value}}, this.onResponse)
+        request({method:'DELETE', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value}}}, this.onResponse)
       }
-    },
-
-    updateVoteTotal(event, value){
-      var voteTotal = this.state.voteTotal + value
-      this.setState({voteTotal: voteTotal })
     },
 
     render() {

@@ -77,7 +77,7 @@ Yavanna.provide('Post', ({Vote}) => {
         var linkOrText = () => {
           if (post.link === "" || post.link === undefined){
             return (<span style={{ display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 16, paddingLeft: 0, alignItems: 'center'}}>{post.title}</span>)
-          }else{            
+          }else{
             return (<a href={post.link} style={{display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 16, paddingLeft: 0, alignItems: 'center', textDecoration: 'none'}}>{post.title}</a>)
 
           }
