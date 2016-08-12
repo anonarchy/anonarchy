@@ -55,7 +55,6 @@ gulp.task('watch', function () {
   gulp.series(
     clean,
     compile(),
-    test,
     writeManifest,
     browserifier.writeBundle,
     linkServer

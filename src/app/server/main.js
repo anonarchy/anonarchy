@@ -3,6 +3,7 @@ const path = require('path')
 var bodyParser = require('body-parser');
 // require('babel-polyfill')
 var _ = require('underscore');
+var cookieParser = require('cookie-parser')
 
 const app = express()
 
@@ -20,6 +21,7 @@ function dateReviver(key, value) {
 
 app.use('/assets', express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.json({reviver: dateReviver}))
+app.use(cookieParser())
 
 // var posts = [{id: 1, title: 'Oh baby', body: 'Food is nice', author: 'ILikeFood'}, {id: 2, title: 'Suck it', body: 'ILikeFood is a dumbdumb!', author: 'Trollolol'}]
 // var comments = [{body: 'What the hell is this guy on?'}, {body: 'poop there it is!'}]
@@ -31,7 +33,10 @@ Yavanna.provide('AppController', ({Odin}) => {
   app.post('/api/signup', async function(req, res){
     var token = await Odin.createUser(req.body.username, req.body.password)
     if(token){
-      res.status(200).send({token: token})
+      let now = +(new Date())
+      let aYearFromNow = 365 * 24 * 3600 * 1000 + now
+      res.cookie('session', token, {expires: new Date(aYearFromNow)})
+      res.status(201).send({any: 'data'})
     }else{
       res.status(400).send("User already exists")
     }
@@ -166,6 +171,12 @@ Yavanna.provide('AppController', ({Odin}) => {
     }
   })
 })
+
+function setSessionCookie(token, response) {
+  let now = +(new Date())
+  let aWeekFromNow = 7 * 24 * 3600 * 1000 + now
+  reponse.cookie('session', token, {expires: aWeekFromNow})
+}
 
 Yavanna.get('AppController')
 
