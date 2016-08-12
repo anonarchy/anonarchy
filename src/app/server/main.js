@@ -33,9 +33,7 @@ Yavanna.provide('AppController', ({Odin}) => {
   app.post('/api/signup', async function(req, res){
     var token = await Odin.createUser(req.body.username, req.body.password)
     if(token){
-      let now = +(new Date())
-      let aYearFromNow = 365 * 24 * 3600 * 1000 + now
-      res.cookie('session', token, {expires: new Date(aYearFromNow)})
+      setSessionCookie(token, res)
       res.status(201).send({any: 'data'})
     }else{
       res.status(400).send("User already exists")
@@ -47,6 +45,7 @@ Yavanna.provide('AppController', ({Odin}) => {
     var loginToken = await Odin.getLoginToken(req.body.username, req.body.password)
     if(loginToken){
       console.log(loginToken)
+      setSessionCookie(loginToken, res)
       res.status(200).send({token: loginToken})
     }else{
       res.status(403).send("Invalid username or password")
@@ -173,9 +172,15 @@ Yavanna.provide('AppController', ({Odin}) => {
 })
 
 function setSessionCookie(token, response) {
-  let now = +(new Date())
-  let aWeekFromNow = 7 * 24 * 3600 * 1000 + now
-  reponse.cookie('session', token, {expires: aWeekFromNow})
+  try {
+    let now = +(new Date())
+    let aWeekFromNow = 7 * 24 * 3600 * 1000 + now
+    response.cookie('session', token, {expires: new Date(aWeekFromNow)})
+    console.log('set session cookie')
+  } catch (e) {
+    console.log('error when setting session ', e)
+  }
+
 }
 
 Yavanna.get('AppController')
