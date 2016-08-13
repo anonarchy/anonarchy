@@ -47,7 +47,7 @@ Yavanna.provide('DB', () => {
   var existingConnection
   async function getConnection () {
     if (existingConnection) return (new Promise).resolve(existingConnection)
-    return await MongoClient.connect('mongodb://localhost:27017/anonypost')
-    // return existingConnection
+    existingConnection = await MongoClient.connect('mongodb://localhost:27017/anonypost')
+    return existingConnection
   }
 })

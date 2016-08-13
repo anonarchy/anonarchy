@@ -8,6 +8,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import request from 'browser-request'
 import FlatButton from 'material-ui/FlatButton'
 import FontAwesome from 'react-fontawesome';
+import {Tabs, Tab} from 'material-ui/Tabs';
 
 var _ = require('underscore')
 
@@ -44,19 +45,26 @@ Yavanna.provide('PostList', ({Login, Post}) => {
 
     getInitialState: function() {
 
-      return {posts: [], open: true}
+      return {posts: [], open: true, tab: "hot"}
     },
 
     componentDidMount: function() {
-      getLocation(this.getPosts)
+      getLocation(this.setPosition)
     },
 
-
-    getPosts(position){
+    setPosition(position){
       var long = position.coords.longitude
       var lat = position.coords.latitude
       this.setState({long: long, lat: lat})
-      this.serverRequest = request('/api/posts/?long='+long+'&lat='+lat,  function (er, response, body) {
+      this.getPosts()
+    },
+
+
+    getPosts(){
+      var long = this.state.long
+      var lat = this.state.lat
+      this.setState({long: long, lat: lat})
+      this.serverRequest = request('/api/posts/?long='+long+'&lat='+lat+'&sort='+this.state.tab,  function (er, response, body) {
         var post_list = JSON.parse(body, dateReviver)
         console.log(post_list)
         if(!_.isEmpty(post_list)){
@@ -78,6 +86,11 @@ Yavanna.provide('PostList', ({Login, Post}) => {
 
     addPost () {
       browserHistory.push('/new')
+    },
+
+    handleTabChange(value){
+      this.setState({tab: value})
+      this.getPosts()
     },
     // <FontAwesome name='rocket' style={{margin: 0, marginRight: 6, cursor: 'pointer', display: 'inline-block'}} onTouchTap={()=> this.viewComments(post._id)}/>
 
@@ -105,7 +118,20 @@ Yavanna.provide('PostList', ({Login, Post}) => {
       }
       return (
           <div>
-            <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
+            <Tabs value={this.state.tab} onChange={this.handleTabChange} tabItemContainerStyle={{backgroundColor: 'black'}} inkBarStyle={{backgroundColor: 'white'}} >
+              <Tab label="Hot" value="hot">
+                <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
+              </Tab>
+              <Tab label="new" value="new">
+                <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
+              </Tab>
+              <Tab label="top" value="top">
+                <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
+              </Tab>
+              <Tab label="closest" value="closest">
+                <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
+              </Tab>
+            </Tabs>
             <FloatingActionButton style={{position: 'fixed', right: 24, bottom: 24}}
               onTouchTap={this.addPost}
             >
