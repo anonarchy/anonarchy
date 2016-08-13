@@ -10,6 +10,11 @@ function on_response(er, response, body) {
     throw er
   }
   console.log(response)
+  var comments = JSON.parse(localStorage.getItem('comments'));
+  comments = comments === null ? {} : comments
+  var ID = response.body.commentID
+  comments[ID] = response.body.ownerToken
+  localStorage.setItem('comments', JSON.stringify(comments));
   location.reload()
 }
 

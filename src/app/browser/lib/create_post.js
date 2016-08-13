@@ -9,6 +9,14 @@ function on_response(er, response, body) {
     throw er
   }
   console.log(response)
+  var posts = JSON.parse(localStorage.getItem('posts'));
+  posts = posts === null ? {} : posts
+  console.log(response)
+  var ID = response.body.postID
+  console.log(ID)
+  posts[ID] = response.body.ownerToken
+  console.log(posts)
+  localStorage.setItem('posts', JSON.stringify(posts));
 }
 
 var watchID
@@ -57,7 +65,6 @@ Yavanna.provide('CreatePost', () => {
 
     submit(){
       console.log(this.state.postTitle)
-      var date = new Date()
       request({method:'POST', url:'/api/posts', json: {post: {title: this.state.postTitle, author: this.state.author, body: this.state.body, link: this.state.link, loc: {long: this.state.long, lat: this.state.lat}}}}, on_response)
       browserHistory.push('/')
     },

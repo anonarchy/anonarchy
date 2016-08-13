@@ -21,6 +21,9 @@ Yavanna.provide('Odin', ({DB, tokenIsExpired}) => {
              $maxDistance: 3000
           }
         }
+      },
+      {
+        ownerToken: 0
       })
     },
 
@@ -36,11 +39,26 @@ Yavanna.provide('Odin', ({DB, tokenIsExpired}) => {
     },
 
     createPost: async function(post) {
-      return await DB.execOne('posts', 'insertOne', post)
+      var newToken = generateToken()
+      post.ownerToken = newToken
+      post.upvotes = 0
+      post.downvotes = 0
+      post.netVotes = 0
+      post.timestamp = (new Date()).getTime()
+      post = await DB.execOne('posts', 'insertOne', post)
+      return {postID: post.insertedId, ownerToken: newToken}
     },
 
     createComment: async function(comment) {
-      return await DB.execOne('comments', 'insertOne', comment)
+      var newToken = generateToken()
+      comment.ownerToken = newToken
+      comment.upvotes = 0
+      comment.downvotes = 0
+      comment.netVotes = 0
+      comment.timestamp = (new Date()).getTime()
+      comment = await DB.execOne('comments', 'insertOne', comment)
+      return {commentID: comment.insertedId, ownerToken: newToken}
+
     },
 
     getCommments: async function(postID) {
@@ -49,9 +67,9 @@ Yavanna.provide('Odin', ({DB, tokenIsExpired}) => {
 
     createVote: async function(vote, voteKey){
       var vote = await DB.findAndModify('votes',
-        {postID: vote.ID, voteKey: voteKey},
+        {postID: vote.ID, voteKey: voteKey, type: vote.type},
         [],
-        {$set: {value: vote.value}}, 
+        {$set: {value: vote.value}},
         {upsert: true, new: true}
       )
       return vote
@@ -65,6 +83,34 @@ Yavanna.provide('Odin', ({DB, tokenIsExpired}) => {
     deleteVote: async function(postID, voteKey){
       var vote = await DB.execOne('votes', 'findAndRemove', {postID: postID, voteKey: voteKey})
       return vote
+    },
+
+    // updatePostVote: async function(vote){
+    //   var o_id = new ObjectID(vote.ID)
+    //   var adjustment = vote.value
+    //   var upvote = 0
+    //   var downvotes = 0
+    //   if (vote.value === 1){
+    //     upvote = 1
+    //   }else{
+    //     downvote = 1
+    //   }
+    //   var post = await DB.updateOne('posts', {id: o_id}, {$inc : { netVotes: adjustment, upvotes: upvote, downvotes: downvote})
+    //   return post
+    // },
+
+
+    unvote: async function(vote, collection){
+      var o_id = new ObjectID(vote.ID)
+      var adjustment = -vote.value
+      var upvote = 0
+      var downvotes = 0
+      if (vote.value === 1){
+        upvote = -1
+      }else{
+        downvote = -1
+      }
+      return await DB.updateOne(collection, {id: o_id}, {$inc : { netVotes: adjustment, upvotes: upvote, downvotes: downvote}})
     },
 
     getVoteCount: async function(postID){

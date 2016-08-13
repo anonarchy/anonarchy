@@ -86,11 +86,13 @@ Yavanna.provide('AppController', ({Odin}) => {
   app.get('/api/post/:id/votes', async function (req, res) {
     try{
       var userVoteKey = await Odin.getUserVoteKey(req.cookies.session)
-      var voteKey = hash([userVoteKey, req.params.id])
-      console.log(voteKey)
-      var userVote = await Odin.getUserVoteValue(voteKey)
+      if (userVoteKey){
+        var voteKey = hash([userVoteKey, req.params.id])
+        var userVote = await Odin.getUserVoteValue(voteKey)
+      }else{
+        var userVote = 0
+      }
       var voteCount = await Odin.getVoteCount(req.params.id)
-      console.log(voteCount)
       var ret = {voteCount: voteCount, userVote: userVote}
       console.log(ret)
       res.status(200).send(ret)
@@ -128,7 +130,7 @@ Yavanna.provide('AppController', ({Odin}) => {
       setSessionCookie(token, res)
       if (token){
         var new_post = await Odin.createPost(req.body.post)
-        res.status(200).send()
+        res.status(200).send(new_post)
         // return post id? some other UUID?
       }else{
         res.status(403).send(null)
@@ -147,7 +149,8 @@ Yavanna.provide('AppController', ({Odin}) => {
       if (token){
         var new_comment = await Odin.createComment(req.body.comment)
         console.log(new_comment)
-        res.status(200).send()
+
+        res.status(200).send(new_comment)
         // return post id? some other UUID?
       }else{
         res.status(403).send(null)
@@ -168,6 +171,11 @@ Yavanna.provide('AppController', ({Odin}) => {
         var voteKey = hash([userVoteKey, req.body.vote.ID])
         var result = await Odin.createVote(req.body.vote, voteKey)
         if (result){
+          // if (req.body.vote.type === "comment"){
+          //     await Odin.updateCommentVoteTotal(vote)
+          // }else{
+          //     await Odin.updatePostVoteTotal(vote)
+          // }
           res.status(200).send()
         }else{
           res.status(403).send("Already voted")
@@ -188,6 +196,11 @@ Yavanna.provide('AppController', ({Odin}) => {
         var voteKey = hash([userVoteKey, req.body.vote.ID])
         var result = await Odin.deleteVote(req.body.vote.ID, voteKey)
         if (result){
+          // if (req.body.vote.type === "comment"){
+          //     await Odin.unvote(vote, 'comments')
+          // }else{
+          //     await Odin.unvote(vote, 'posts')
+          // }
           res.status(200).send()
         }else{
           res.status(403).send("Vote not there")
@@ -215,7 +228,6 @@ function setSessionCookie(token, response) {
 }
 
 function hash(keys){
-  console.log(process.env.ANONYPOST_SECRET_KEY)
   var h = crypto.createHmac('sha256', process.env.ANONYPOST_SECRET_KEY)
   var arrayLength = keys.length;
   for (var i = 0; i < arrayLength; i++) {

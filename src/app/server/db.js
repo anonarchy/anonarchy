@@ -3,22 +3,23 @@ var MongoClient = require('mongodb').MongoClient
 
 Yavanna.provide('DB', () => {
   return {
-    exec: async function (collection, operation, args) {
+    exec: async function (collection, operation, query, projection) {
       try{
         let conn = await getConnection()
-
-        return await conn.collection(collection)[operation](args).toArray();
+        if (projection === undefined){
+          console.log("projection undefined")
+          projection = {}
+        }
+        return await conn.collection(collection)[operation](query, projection).toArray();
       }catch(error){
         console.log(error)
         return error
       }
     },
 
-    execOne: async function (collection, operation, args) {
-
+    execOne: async function (collection, operation, query) {
         let conn = await getConnection()
-        console.log(args)
-        let result = await conn.collection(collection)[operation](args);
+        let result = await conn.collection(collection)[operation](query);
         console.log("successfully executed once!")
         return result
     },
@@ -46,7 +47,7 @@ Yavanna.provide('DB', () => {
 
   var existingConnection
   async function getConnection () {
-    if (existingConnection) return (new Promise).resolve(existingConnection)
+    if (existingConnection) return existingConnection
     existingConnection = await MongoClient.connect('mongodb://localhost:27017/anonypost')
     return existingConnection
   }
