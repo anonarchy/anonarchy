@@ -76,9 +76,9 @@ Yavanna.provide('Post', ({Vote}) => {
 
         var linkOrText = () => {
           if (post.link === "" || post.link === undefined){
-            return (<span style={{ display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 16, paddingLeft: 0, alignItems: 'center'}}>{post.title}</span>)
+            return (<span style={{ display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 16, paddingLeft: 0, alignItems: 'center', wordBreak: 'break-all' }}>{post.title}</span>)
           }else{
-            return (<a href={post.link} style={{display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 16, paddingLeft: 0, alignItems: 'center', outline: 'none'}}>{post.title}</a>)
+            return (<a href={post.link} style={{display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 16, paddingLeft: 0, alignItems: 'center', outline: 'none', wordBreak: 'break-all'}}>{post.title}</a>)
 
           }
         }

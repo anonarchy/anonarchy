@@ -41,7 +41,6 @@ Yavanna.provide('AppController', ({Odin}) => {
   })
 
   app.post('/api/login/', async function(req, res){
-    console.log(req.body)
     var loginToken = await Odin.getLoginToken(req.body.username, req.body.password)
     if(loginToken){
       console.log(loginToken)
@@ -61,7 +60,6 @@ Yavanna.provide('AppController', ({Odin}) => {
       }else{
         var posts = await Odin.getPosts()
       }
-      console.log(posts)
       res.send(posts)
     }catch(error){
       res.status(500).send(error)
