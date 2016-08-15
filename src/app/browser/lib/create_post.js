@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import {browserHistory} from 'react-router'
@@ -85,11 +86,13 @@ Yavanna.provide('CreatePost', () => {
       return (
         <div style={{margin: 24 }}>
           <TextField
-             floatingLabelText="Title"
-             multiLine={true}
-             floatingLabelFixed={true}
-             fullWidth={true}
-             onChange={this.updateTitle}
+            autoFocus={true}
+            ref="titleInput"
+            floatingLabelText="Title"
+            multiLine={true}
+            floatingLabelFixed={true}
+            fullWidth={true}
+            onChange={this.updateTitle}
           />
           <TextField
             floatingLabelText="Link"

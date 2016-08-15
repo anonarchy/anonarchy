@@ -73,6 +73,7 @@ Yavanna.provide('Signup', () => {
             actions={actions}
           >
             <TextField
+              autoFocus={true}
               hintText="Username"
               floatingLabelText="Username"
               // fullWidth={true}

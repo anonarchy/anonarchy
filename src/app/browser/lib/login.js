@@ -9,6 +9,7 @@ Yavanna.provide('Login', () => {
   return React.createClass({
 //            floatingLabelFixed={true}
     getInitialState: function() {
+      console.log('login!!!!!!!')
       return {username: "", password: ""}
     },
 
@@ -61,28 +62,33 @@ Yavanna.provide('Login', () => {
 
       return (
         <div>
-          <Dialog
-            open={this.props.open}
-            modal={true}
-            actions={actions}
-          >
-            <TextField
-              hintText="Username"
-              floatingLabelFixed={true}
-              floatingLabelText="Username"
-              // fullWidth={true}
-              onChange={this.updateUsername}
-             />
-            <br />
-            <TextField
-              hintText="Password"
-              floatingLabelFixed={true}
-              floatingLabelText="Password"
-              type="password"
-              onChange={this.updatePassword}
-            />
-            <br />
-          </Dialog>
+          <TextField
+            hintText="Username"
+            autoFocus={true}
+            floatingLabelFixed={true}
+            floatingLabelText="Username"
+            // fullWidth={true}
+            onChange={this.updateUsername}
+           />
+          <br />
+          <TextField
+            hintText="Password"
+            floatingLabelFixed={true}
+            floatingLabelText="Password"
+            type="password"
+            onChange={this.updatePassword}
+          />
+          <FlatButton
+            label="Cancel"
+            primary={true}
+            onTouchTap={this.props.handleClose}
+          />
+          <FlatButton
+            label="Submit"
+            primary={true}
+            disabled={this.isValid()}
+            onTouchTap={this.submit}
+          />
         </div>
       )
     }

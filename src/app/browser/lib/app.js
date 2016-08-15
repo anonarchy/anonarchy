@@ -3,6 +3,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { Router, Route, Link, browserHistory } from 'react-router'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 console.log('in app')
 
 Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
@@ -26,7 +30,9 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
     handleSignupClose(){
       this.setState({signup: false});
     },
-
+    // menuStyle={{position: 'absolute', top: 30, right: 0}}
+    // <Login open={this.state.login} handleClose={this.handleLoginClose}/>
+    // <Signup open={this.state.signup} handleClose={this.handleSignupClose}/>
     render: function () {
       var getAppBar = function(loggedIn){
         if (!loggedIn){
@@ -35,10 +41,16 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
               title="AnonyPost"
               style={{backgroundColor: 'black'}}
               iconElementRight={
-                <div>
-                  <FlatButton label="Login" onTouchTap={this.handleLoginOpen} style={{color: 'white'}}/>
-                  <FlatButton label="Sign up" onTouchTap={this.handleSignupOpen} style={{color: 'white'}}/>
-                </div>
+                <IconMenu
+                  iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                  anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                  targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                >
+                  <MenuItem primaryText="Login" href= '/login'/>
+                  <MenuItem primaryText="Sign Up" href='/signup' />
+                  <MenuItem primaryText="Contribute" href='https://github.com/AlexLerman/anonypost-js'/>
+                  <MenuItem primaryText="Report Bug" href='https://github.com/AlexLerman/anonypost-js/issues' />
+                </IconMenu>
                 }
             />
           )
@@ -61,9 +73,9 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
               <Route path="/" component={PostList}/>
               <Route path="comments/:postID" component={Comments}/>
               <Route path="/new" component={CreatePost}/>
+              <Route path="/login" component={Login}/>
+              <Route path="/signup" component={Signup}/>
             </Router>
-            <Login open={this.state.login} handleClose={this.handleLoginClose}/>
-            <Signup open={this.state.signup} handleClose={this.handleSignupClose}/>
           </div>
         </MuiThemeProvider>
 
