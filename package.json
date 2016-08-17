@@ -5,7 +5,7 @@
   "repository": "https://github.com/benchristel/test-nodejs",
   "main": "index.js",
   "dependencies": {
-    "@benchristel/yavanna": "^0.1.0",
+    "@benchristel/yavanna": "^0.4.0",
     "babel-plugin-transform-regenerator": "^6.9.0",
     "babel-polyfill": "^6.9.1",
     "bcrypt": "^0.8.7",

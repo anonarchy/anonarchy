@@ -27,6 +27,7 @@ function allTasks () {
   return gulp.series(
     clean,
     compile(),
+    test,
     writeManifest,
     browserifier.writeBundleWithoutWatching,
     linkServer
@@ -55,6 +56,7 @@ gulp.task('watch', function () {
   gulp.series(
     clean,
     compile(),
+    test,
     writeManifest,
     browserifier.writeBundle,
     linkServer
@@ -74,7 +76,7 @@ gulp.task('watch', function () {
     })
 
     watch(['.build_tmp/object/app/**/*.js'], function () {
-      gulp.series(writeManifest, browserifier.writeBundle, linkServer)()
+      gulp.series(test, writeManifest, browserifier.writeBundle, linkServer)()
     })
   })
 })
@@ -86,11 +88,13 @@ function printDivider () {
   console.log(message + Array(80 - message.length).fill('=').join(''))
 }
 
+gulp.task(test)
+
 function test () {
   var ofiles = [
     '.build_tmp/object/prelude.js',
     // '.build_tmp/object/app/**/!(main).js',
-    '.build_tmp/object/@(server|shared)/*.js',
+    '.build_tmp/object/app/@(server|shared)/**/!(main).js',
     '.build_tmp/object/spec/**/*.js'
   ]
 

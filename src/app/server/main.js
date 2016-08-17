@@ -170,13 +170,9 @@ Yavanna.provide('AppController', ({Odin}) => {
       if(userVoteKey){
         console.log(userVoteKey)
         var voteKey = hash([userVoteKey, req.body.vote.ID])
-        var result = await Odin.createVote(req.body.vote, voteKey)
+        var payload = req.body.vote
+        var result = await Odin.createVote(payload.ID, payload.value, voteKey, payload.type)
         if (result){
-          // if (req.body.vote.type === "comment"){
-          //     await Odin.updateCommentVoteTotal(vote)
-          // }else{
-          //     await Odin.updatePostVoteTotal(vote)
-          // }
           res.status(200).send()
         }else{
           res.status(403).send("Already voted")

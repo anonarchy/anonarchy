@@ -53,7 +53,7 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
                   targetOrigin={{horizontal: 'right', vertical: 'top'}}
                 >
                   <MenuItem primaryText="Login" href= '/login'/>
-                  <MenuItem primaryText="Sign Up" href='/signup' />
+                  <MenuItem primaryText="Sign Up" onTouchTap={this.handleSignupOpen} />
                   <MenuItem primaryText="Contribute" href='https://github.com/AlexLerman/anonypost-js'/>
                   <MenuItem primaryText="Report Bug" href='https://github.com/AlexLerman/anonypost-js/issues' />
                 </IconMenu>
@@ -94,6 +94,8 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
               <MenuItem primaryText="Contribute" href='https://github.com/AlexLerman/anonypost-js'/>
               <MenuItem primaryText="Report Bug" href='https://github.com/AlexLerman/anonypost-js/issues' />
             </Drawer>
+            <Signup open={this.state.signup} handleClose={this.handleSignupClose}/>
+
           </div>
         </MuiThemeProvider>
 

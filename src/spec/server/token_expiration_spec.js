@@ -1,5 +1,7 @@
 
-tokenIsExpired = Yavanna.get('tokenIsExpired')
+console.log("loaded tokenIsExpired TEST")
+
+var tokenIsExpired = Yavanna.get('tokenIsExpired')
 
 describe('token', () => {
   var dayInMillis = 24 * 60 * 60 * 1000;

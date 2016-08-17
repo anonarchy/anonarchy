@@ -4,7 +4,8 @@ var bcrypt = require('bcrypt')
 let ONE_WEEK = 604800000
 let SALTROUNDS = 10
 
-Yavanna.provide('Odin', ({DB, tokenIsExpired}) => {
+Yavanna.provide('Odin', ({DB, tokenIsExpired, PostCollection}) => {
+  
   return {
     getPosts: async function() {
       return await DB.exec('posts', 'find')
@@ -73,7 +74,20 @@ Yavanna.provide('Odin', ({DB, tokenIsExpired}) => {
       return await DB.exec('comments', 'find', {postID: postID})
     },
 
-    createVote: async function(vote, voteKey){
+    createVote: async function(votableId, value, type){
+      // PostCollection.recordVote(votableId, value)
+      var oldVote = await DB.execOne('votes', 'find', {postID: votableId, voteKey: voteKey})
+
+      if (oldVote) {
+        if (oldVote.value === value) {
+          return
+        }
+
+        if (type === 'comment') {
+          DB.updateOne('comments', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value * 2}})
+        }
+      }
+
       var vote = await DB.findAndModify('votes',
         {postID: vote.ID, voteKey: voteKey, type: vote.type},
         [],
