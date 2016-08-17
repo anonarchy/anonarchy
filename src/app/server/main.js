@@ -53,10 +53,13 @@ Yavanna.provide('AppController', ({Odin}) => {
 
   app.get('/api/posts/', async function (req, res){
     try{
+      console.log("got the request")
       if (req.query.long !== undefined){
         var long = Number(req.query.long)
         var lat = Number(req.query.lat)
-        var posts = await Odin.getPostsByLocation(long, lat)
+        console.log(req.query)
+        var sort = req.query.sort
+        var posts = await Odin.getPostsByLocation(long, lat, sort)
       }else{
         var posts = await Odin.getPosts()
       }

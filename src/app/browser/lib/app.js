@@ -44,7 +44,7 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
           return (
             <AppBar
               title="AnonyPost"
-              style={{backgroundColor: 'black'}}
+              style={{backgroundColor: 'black', position: 'fixed'}}
               onLeftIconButtonTouchTap={this.handleLeftButton}
               iconElementRight={
                 <IconMenu
@@ -75,6 +75,7 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
         <MuiThemeProvider>
           <div>
             {getAppBar.bind(this)(this.state.loggedIn)}
+            <div style={{height: 64}}/>
             <Router history={browserHistory}>
               <Route path="/" component={PostList}/>
               <Route path="comments/:postID" component={Comments}/>

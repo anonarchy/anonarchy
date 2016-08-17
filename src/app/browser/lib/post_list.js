@@ -44,8 +44,11 @@ Yavanna.provide('PostList', ({Login, Post}) => {
   return React.createClass({
 
     getInitialState: function() {
-
-      return {posts: [], open: true, tab: "hot"}
+      var tab = JSON.parse(localStorage.getItem('tab'));
+      if (tab === null){
+        tab = 'hot'
+      }
+      return {posts: [], open: true, tab: tab}
     },
 
     componentDidMount: function() {
@@ -56,15 +59,19 @@ Yavanna.provide('PostList', ({Login, Post}) => {
       var long = position.coords.longitude
       var lat = position.coords.latitude
       this.setState({long: long, lat: lat})
-      this.getPosts()
+      this.getPosts(this.state.tab)
     },
 
 
-    getPosts(){
+    getPosts(tab){
       var long = this.state.long
       var lat = this.state.lat
-      this.setState({long: long, lat: lat})
-      this.serverRequest = request('/api/posts/?long='+long+'&lat='+lat+'&sort='+this.state.tab,  function (er, response, body) {
+      console.log(tab)
+      console.log("Called getPosts")
+      // this.setState({long: long, lat: lat})
+      var query = '/api/posts/?long='+long+'&lat='+lat+'&sort='+tab
+      console.log(query)
+      this.serverRequest = request(query,  function (er, response, body) {
         var post_list = JSON.parse(body, dateReviver)
         console.log(post_list)
         if(!_.isEmpty(post_list)){
@@ -88,9 +95,15 @@ Yavanna.provide('PostList', ({Login, Post}) => {
       browserHistory.push('/new')
     },
 
-    handleTabChange(value){
+    saveTab(value){
+      localStorage.setItem('tab', JSON.stringify(value));
+    },
+
+    handleChange(value){
+      console.log(value)
       this.setState({tab: value})
-      this.getPosts()
+      this.getPosts(value)
+      this.saveTab(value)
     },
     // <FontAwesome name='rocket' style={{margin: 0, marginRight: 6, cursor: 'pointer', display: 'inline-block'}} onTouchTap={()=> this.viewComments(post._id)}/>
 
@@ -118,17 +131,17 @@ Yavanna.provide('PostList', ({Login, Post}) => {
       }
       return (
           <div>
-            <Tabs value={this.state.tab} onChange={this.handleTabChange} tabItemContainerStyle={{backgroundColor: 'black'}} inkBarStyle={{backgroundColor: 'white'}} >
-              <Tab label="Hot" value="hot">
+            <Tabs value={this.state.tab} onChange={this.handleChange} tabItemContainerStyle={{backgroundColor: 'black'}} inkBarStyle={{backgroundColor: 'white'}} >
+              <Tab label="Hot" value="hot" >
                 <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
               </Tab>
-              <Tab label="new" value="new">
+              <Tab label="new" value="new" >
                 <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
               </Tab>
-              <Tab label="top" value="top">
+              <Tab label="top" value="top" >
                 <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
               </Tab>
-              <Tab label="closest" value="closest">
+              <Tab label="closest" value="closest" >
                 <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
               </Tab>
             </Tabs>

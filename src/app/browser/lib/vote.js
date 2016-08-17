@@ -33,9 +33,6 @@ Yavanna.provide('Vote', () => {
       var postID = this.props.ID
       this.serverRequest = request('/api/post/'+ postID + '/votes/', function (er, response, body) {
         var body = JSON.parse(body)
-        console.log("vote count: "+ body.voteCount)
-        console.log("user vote: " + body.userVote)
-
         this.setState({
           voteTotal: body.voteCount,
           vote: body.userVote

@@ -3,14 +3,18 @@ var MongoClient = require('mongodb').MongoClient
 
 Yavanna.provide('DB', () => {
   return {
-    exec: async function (collection, operation, query, projection) {
+    exec: async function (collection, operation, query, projection, options) {
       try{
         let conn = await getConnection()
         if (projection === undefined){
           console.log("projection undefined")
           projection = {}
         }
-        return await conn.collection(collection)[operation](query, projection).toArray();
+        if (options === undefined){
+          console.log("optionss undefined")
+          options = {}
+        }
+        return await conn.collection(collection)[operation](query, projection, options).toArray();
       }catch(error){
         console.log(error)
         return error

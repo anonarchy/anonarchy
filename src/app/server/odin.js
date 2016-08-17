@@ -10,7 +10,13 @@ Yavanna.provide('Odin', ({DB, tokenIsExpired}) => {
       return await DB.exec('posts', 'find')
     },
 
-    getPostsByLocation: async function(long, lat){
+    getPostsByLocation: async function(long, lat, sort){
+      var options = {}
+      console.log(sort)
+      if (sort === 'new'){
+        console.log("new!!")
+        options = {"sort": [['timestamp','desc']]}
+      }
       return await DB.exec('posts', 'find', {
         loc: {
           $nearSphere: {
@@ -24,7 +30,9 @@ Yavanna.provide('Odin', ({DB, tokenIsExpired}) => {
       },
       {
         ownerToken: 0
-      })
+      },
+      options
+      )
     },
 
     getPost: async function(id) {

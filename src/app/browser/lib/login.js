@@ -61,34 +61,38 @@ Yavanna.provide('Login', () => {
       ];
 
       return (
-        <div>
-          <TextField
-            hintText="Username"
-            autoFocus={true}
-            floatingLabelFixed={true}
-            floatingLabelText="Username"
-            // fullWidth={true}
-            onChange={this.updateUsername}
-           />
-          <br />
-          <TextField
-            hintText="Password"
-            floatingLabelFixed={true}
-            floatingLabelText="Password"
-            type="password"
-            onChange={this.updatePassword}
-          />
-          <FlatButton
-            label="Cancel"
-            primary={true}
-            onTouchTap={this.props.handleClose}
-          />
-          <FlatButton
-            label="Submit"
-            primary={true}
-            disabled={this.isValid()}
-            onTouchTap={this.submit}
-          />
+        <div style={{textAlign: 'center', width: 100+ '%',height: 100 + '%' }}>
+          <div style={{marginTop: 100}}>
+            <TextField
+              hintText="Username"
+              autoFocus={true}
+              floatingLabelFixed={true}
+              floatingLabelText="Username"
+              // fullWidth={true}
+              onChange={this.updateUsername}
+             />
+            <br />
+            <TextField
+              hintText="Password"
+              floatingLabelFixed={true}
+              floatingLabelText="Password"
+              type="password"
+              onChange={this.updatePassword}
+            />
+            <br />
+            <br />
+            <FlatButton
+              label="Cancel"
+              primary={true}
+              onTouchTap={this.props.handleClose}
+            />
+            <FlatButton
+              label="Submit"
+              primary={true}
+              disabled={this.isValid()}
+              onTouchTap={this.submit}
+            />
+          </div>
         </div>
       )
     }
