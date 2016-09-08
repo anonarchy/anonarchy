@@ -4,8 +4,8 @@ var bcrypt = require('bcrypt')
 let ONE_WEEK = 604800000
 let SALTROUNDS = 10
 
-Yavanna.provide('Odin', ({DB, tokenIsExpired, PostCollection}) => {
-  
+Yavanna.provide('Odin', ({DB, tokenIsExpired, PostCollection, CommentCollection, VoteCollection}) => {
+
   return {
     getPosts: async function() {
       return await DB.exec('posts', 'find')
@@ -74,17 +74,42 @@ Yavanna.provide('Odin', ({DB, tokenIsExpired, PostCollection}) => {
       return await DB.exec('comments', 'find', {postID: postID})
     },
 
-    createVote: async function(votableId, value, type){
+    recordVote: async function(userVoteKey, votableId, value, type){
+      var voteKey = hash([userVoteKey, votableId])
+      var oldVoteValue, vote = VoteCollection.recordVote(votableId, voteKey, value)
+      if(type === 'comment'){
+        CommentCollection.recordVote(votableId, value)
+      }else{
+        PostCollection.recordVote(votableId, value)
+      }
+    },
+
+
+
+    createVote: async function(votableId, voteKey, value, type){
       // PostCollection.recordVote(votableId, value)
       var oldVote = await DB.execOne('votes', 'find', {postID: votableId, voteKey: voteKey})
-
+      var upvote = 0
+      var downvotes = 0
+      if (value === 1){
+        upvote = 1
+      }else{
+        downvote = 1
+      }
       if (oldVote) {
         if (oldVote.value === value) {
           return
         }
-
         if (type === 'comment') {
-          DB.updateOne('comments', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value * 2}})
+          DB.updateOne('comments', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value * 2, upvotes: value, downvotes: -value}})
+        }else{
+          DB.updateOne('posts', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value * 2, upvotes: value, downvotes: -value}})
+        }
+      }else{
+        if (type === 'comment') {
+          DB.updateOne('comments', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value, upvotes: upvote, downvotes: downvote}})
+        }else{
+          DB.updateOne('posts', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value, upvotes: upvote, downvotes: downvote}})
         }
       }
 
@@ -94,6 +119,7 @@ Yavanna.provide('Odin', ({DB, tokenIsExpired, PostCollection}) => {
         {$set: {value: vote.value}},
         {upsert: true, new: true}
       )
+
       return vote
     },
 
