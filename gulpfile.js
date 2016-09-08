@@ -88,8 +88,6 @@ function printDivider () {
   console.log(message + Array(80 - message.length).fill('=').join(''))
 }
 
-gulp.task(test)
-
 function test () {
   var ofiles = [
     '.build_tmp/object/prelude.js',

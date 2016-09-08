@@ -1,7 +1,11 @@
 require('babel-polyfill')
 var MongoClient = require('mongodb').MongoClient
 
-Yavanna.provide('DB', () => {
+Yavanna.provide('DB', ({env}) => {
+  if (!env.ANONYPOST_DATABASE) {
+    throw new Error('ANONYPOST_DATABASE env var must be set.')
+  }
+
   return {
     exec: async function (collection, operation, query, projection, options) {
       try{
@@ -45,6 +49,15 @@ Yavanna.provide('DB', () => {
 
       return result
 
+    },
+
+    armageddon: async function () {
+      let conn = await getConnection()
+      let collectionsToClear = ['votes', 'users']
+      for (let coll of collectionsToClear) {
+        await conn.collection(coll).deleteMany({})
+      }
+      return Promise.resolve(null)
     }
   }
 
@@ -52,7 +65,7 @@ Yavanna.provide('DB', () => {
   var existingConnection
   async function getConnection () {
     if (existingConnection) return existingConnection
-    existingConnection = await MongoClient.connect('mongodb://localhost:27017/anonypost')
+    existingConnection = await MongoClient.connect(env.ANONYPOST_DATABASE)
     return existingConnection
   }
 })

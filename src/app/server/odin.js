@@ -3,9 +3,16 @@ var generateToken = require('secure-random-string')
 var bcrypt = require('bcrypt')
 let ONE_WEEK = 604800000
 let SALTROUNDS = 10
+var crypto = require('crypto')
 
-Yavanna.provide('Odin', ({DB, tokenIsExpired, PostCollection, CommentCollection, VoteCollection}) => {
-
+Yavanna.provide('Odin', ({
+  DB,
+  tokenIsExpired,
+  PostCollection,
+  CommentCollection,
+  VoteCollection,
+  cryptoHash
+}) => {
   return {
     getPosts: async function() {
       return await DB.exec('posts', 'find')
@@ -74,13 +81,13 @@ Yavanna.provide('Odin', ({DB, tokenIsExpired, PostCollection, CommentCollection,
       return await DB.exec('comments', 'find', {postID: postID})
     },
 
-    recordVote: async function(userVoteKey, votableId, value, type){
-      var voteKey = hash([userVoteKey, votableId])
-      var oldVoteValue, vote = VoteCollection.recordVote(votableId, voteKey, value)
+    // TODO: rename this function and delete the old createVote
+    newCreateVote: async function(userVoteKey, votableId, value, type){
+      await VoteCollection.create(userVoteKey, votableId, value)
       if(type === 'comment'){
-        CommentCollection.recordVote(votableId, value)
+        return await CommentCollection.recordVote(votableId, value)
       }else{
-        PostCollection.recordVote(votableId, value)
+        return await PostCollection.recordVote(votableId, value)
       }
     },
 
