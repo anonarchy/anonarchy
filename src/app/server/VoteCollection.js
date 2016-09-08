@@ -1,14 +1,15 @@
-Yavanna.provide('VoteCollection', () => {
-  return 'placeholder'
-  // return {
-  //   recordVote: function(vote, voteKey){
-  //     var vote = await DB.findAndModify('votes',
-  //       {postID: vote.ID, voteKey: voteKey, type: vote.type},
-  //       [],
-  //       {$set: {value: vote.value}},
-  //       {upsert: true, new: true}
-  //     )
-  //     return vote
-  //   }
-  // }
+Yavanna.provide('VoteCollection', ({cryptoHash, DB}) => {
+  return {
+    create: async function(userVoteKey, votableId, value){
+      let voteKey = cryptoHash([userVoteKey, votableId])
+
+      var vote = await DB.findAndModify('votes',
+        {votableId: votableId, voteKey: voteKey},
+        [],
+        {$set: {value: value}},
+        {upsert: true, new: true}
+      )
+      return vote.value
+    }
+  }
 })
