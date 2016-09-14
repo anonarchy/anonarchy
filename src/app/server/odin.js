@@ -83,11 +83,15 @@ Yavanna.provide('Odin', ({
 
     // TODO: rename this function and delete the old createVote
     newCreateVote: async function(userVoteKey, votableId, value, type){
+      let existingVote = await VoteCollection.find(userVoteKey, votableId)
       await VoteCollection.create(userVoteKey, votableId, value)
+
+      let delta = value - (existingVote ? existingVote.value : 0)
+
       if(type === 'comment'){
-        return await CommentCollection.recordVote(votableId, value)
+        return await CommentCollection.recordVote(votableId, value, delta)
       }else{
-        return await PostCollection.recordVote(votableId, value)
+        return await PostCollection.recordVote(votableId, value, delta)
       }
     },
 
