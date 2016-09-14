@@ -68,6 +68,7 @@ describe('Odin', () => {
       expect((await PostCollection.findById(post.postID.toString())).netVotes).toEqual(1)
       expect((await PostCollection.findById(post.postID.toString())).upvotes).toEqual(1)
     })
+
     $it ('double downvotes post', async () => {
 
       let Odin = YavannaForTest.get('Odin')
@@ -81,6 +82,7 @@ describe('Odin', () => {
       expect((await PostCollection.findById(post.postID.toString())).netVotes).toEqual(-1)
       expect((await PostCollection.findById(post.postID.toString())).upvotes).toEqual(0)
     })
+
     $it ('double upvotes post', async () => {
 
       let Odin = YavannaForTest.get('Odin')
