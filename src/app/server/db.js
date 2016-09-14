@@ -48,7 +48,11 @@ Yavanna.provide('DB', ({env}) => {
       console.log("successfully found and Modified!")
 
       return result
+    },
 
+    count: async function (collection) {
+      let conn = await getConnection()
+      return await conn.collection(collection).count()
     },
 
     armageddon: async function () {

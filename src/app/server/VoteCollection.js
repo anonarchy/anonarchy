@@ -10,6 +10,15 @@ Yavanna.provide('VoteCollection', ({cryptoHash, DB}) => {
         {upsert: true, new: true}
       )
       return vote.value
+    },
+
+    count: async function() {
+      return await DB.count('votes')
+    },
+
+    find: async function(userVoteKey, votableId) {
+      let voteKey = cryptoHash([userVoteKey, votableId])
+      return await DB.execOne('votes', 'findOne', {voteKey: voteKey})
     }
   }
 })
