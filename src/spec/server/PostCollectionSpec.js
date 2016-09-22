@@ -44,6 +44,27 @@ describe('PostCollection', () => {
   })
 
   $it('ranks highly voted posts higher', async () => {
+    currentTimeMillis = 1
+    let post = await PostCollection.create({title: 'high', loc: {long: 0, lat: 0}})
+    let Odin = YavannaForTest.get('Odin')
+    await Odin.createVote('a-userVoteKey', post.postID.toString(), 1, 'post')
+    expect((await PostCollection.findById(post.postID.toString())).netVotes).toEqual(1)
+    currentTimeMillis = 1
+    await PostCollection.create({title: 'low', loc: {long: 0, lat: 0}})
+    let ranked = await PostCollection.findRanked(0, 0)
+    expect(ranked[0].title).toEqual('high')
+    expect(ranked[1].title).toEqual('low')
+    currentTimeMillis = 1
+
+    post = await PostCollection.create({title: 'high', loc: {long: 0, lat: 0}})
+    await Odin.createVote('a-userVoteKey', post.postID.toString(), -1, 'post')
+    expect((await PostCollection.findById(post.postID.toString())).netVotes).toEqual(-1)
+    currentTimeMillis = 1
+    await PostCollection.create({title: 'lowest', loc: {long: 0, lat: 0}})
+    ranked = await PostCollection.findRanked(0, 0)
+    expect(ranked[0].title).toEqual('high')
+    expect(ranked[1].title).toEqual('low')
+    expect(ranked[2].title).toEqual('lowest')
 
   })
 })
