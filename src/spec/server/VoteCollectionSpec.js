@@ -33,7 +33,7 @@ describe('VoteCollection', () => {
     expect(vote.value).toEqual(-1)
   })
 
-  it('does not allow duplicate votes', async () => {
+  $it('does not allow duplicate votes', async () => {
     await VoteCollection.create('user-vote-key', 'votable-id', 1)
     await VoteCollection.create('user-vote-key', 'votable-id', 1)
     expect(await VoteCollection.count()).toEqual(1)

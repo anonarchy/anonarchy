@@ -81,8 +81,7 @@ Yavanna.provide('Odin', ({
       return await DB.exec('comments', 'find', {postID: postID})
     },
 
-    // TODO: rename this function and delete the old createVote
-    newCreateVote: async function(userVoteKey, votableId, value, type){
+    createVote: async function(userVoteKey, votableId, value, type){
       let existingVote = await VoteCollection.find(userVoteKey, votableId)
       await VoteCollection.create(userVoteKey, votableId, value)
 
@@ -97,42 +96,42 @@ Yavanna.provide('Odin', ({
 
 
 
-    createVote: async function(votableId, voteKey, value, type){
-      // PostCollection.recordVote(votableId, value)
-      var oldVote = await DB.execOne('votes', 'find', {postID: votableId, voteKey: voteKey})
-      var upvote = 0
-      var downvotes = 0
-      if (value === 1){
-        upvote = 1
-      }else{
-        downvote = 1
-      }
-      if (oldVote) {
-        if (oldVote.value === value) {
-          return
-        }
-        if (type === 'comment') {
-          DB.updateOne('comments', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value * 2, upvotes: value, downvotes: -value}})
-        }else{
-          DB.updateOne('posts', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value * 2, upvotes: value, downvotes: -value}})
-        }
-      }else{
-        if (type === 'comment') {
-          DB.updateOne('comments', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value, upvotes: upvote, downvotes: downvote}})
-        }else{
-          DB.updateOne('posts', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value, upvotes: upvote, downvotes: downvote}})
-        }
-      }
-
-      var vote = await DB.findAndModify('votes',
-        {postID: vote.ID, voteKey: voteKey, type: vote.type},
-        [],
-        {$set: {value: vote.value}},
-        {upsert: true, new: true}
-      )
-
-      return vote
-    },
+    // createVote: async function(votableId, voteKey, value, type){
+    //   // PostCollection.recordVote(votableId, value)
+    //   var oldVote = await DB.execOne('votes', 'find', {postID: votableId, voteKey: voteKey})
+    //   var upvote = 0
+    //   var downvotes = 0
+    //   if (value === 1){
+    //     upvote = 1
+    //   }else{
+    //     downvote = 1
+    //   }
+    //   if (oldVote) {
+    //     if (oldVote.value === value) {
+    //       return
+    //     }
+    //     if (type === 'comment') {
+    //       DB.updateOne('comments', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value * 2, upvotes: value, downvotes: -value}})
+    //     }else{
+    //       DB.updateOne('posts', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value * 2, upvotes: value, downvotes: -value}})
+    //     }
+    //   }else{
+    //     if (type === 'comment') {
+    //       DB.updateOne('comments', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value, upvotes: upvote, downvotes: downvote}})
+    //     }else{
+    //       DB.updateOne('posts', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value, upvotes: upvote, downvotes: downvote}})
+    //     }
+    //   }
+    //
+    //   var vote = await DB.findAndModify('votes',
+    //     {postID: vote.ID, voteKey: voteKey, type: vote.type},
+    //     [],
+    //     {$set: {value: vote.value}},
+    //     {upsert: true, new: true}
+    //   )
+    //
+    //   return vote
+    // },
 
     // { _id: _id },     // query
     // [],               // represents a sort order if multiple matches
@@ -173,8 +172,8 @@ Yavanna.provide('Odin', ({
     },
 
     getVoteCount: async function(postID){
-      var upVotes = await DB.execOne('votes', 'count', {postID: postID, value: 1})
-      var downVotes = await DB.execOne('votes', 'count', {postID: postID, value: -1})
+      var upVotes = await DB.execOne('votes', 'count', {votableId: postID, value: 1})
+      var downVotes = await DB.execOne('votes', 'count', {votableId: postID, value: -1})
       var voteCount = upVotes - downVotes // replace with formula
       return voteCount
 
