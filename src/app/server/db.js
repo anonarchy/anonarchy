@@ -53,7 +53,7 @@ Yavanna.provide('DB', ({env}) => {
 
     armageddon: async function () {
       let conn = await getConnection()
-      let collectionsToClear = ['votes', 'users']
+      let collectionsToClear = ['posts','votes', 'users', 'comments']
       for (let coll of collectionsToClear) {
         await conn.collection(coll).deleteMany({})
       }

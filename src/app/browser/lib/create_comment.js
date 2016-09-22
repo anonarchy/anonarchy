@@ -9,7 +9,6 @@ function on_response(er, response, body) {
   if(er){
     throw er
   }
-  console.log(response)
   var comments = JSON.parse(localStorage.getItem('comments'));
   comments = comments === null ? {} : comments
   var ID = response.body.commentID

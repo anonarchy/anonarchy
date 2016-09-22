@@ -17,7 +17,6 @@ Yavanna.provide('VoteCollection', ({cryptoHash, DB}) => {
     },
 
     find: async function(userVoteKey, votableId) {
-      console.log('about to hash: ', userVoteKey, votableId)
       let voteKey = cryptoHash([userVoteKey, votableId])
       return await DB.execOne('votes', 'findOne', {voteKey: voteKey})
     }

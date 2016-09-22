@@ -25,22 +25,23 @@ Yavanna.provide('Odin', ({
         console.log("new!!")
         options = {"sort": [['timestamp','desc']]}
       }
-      return await DB.exec('posts', 'find', {
-        loc: {
-          $nearSphere: {
-             $geometry: {
-                type : "Point",
-                coordinates : [ long, lat ]
-             },
-             $maxDistance: 3000
-          }
-        }
-      },
-      {
-        ownerToken: 0
-      },
-      options
-      )
+      return await PostCollection.findNearLocation(long, lat, 50, options)
+      // return await DB.exec('posts', 'find', {
+      //   loc: {
+      //     $nearSphere: {
+      //        $geometry: {
+      //           type : "Point",
+      //           coordinates : [ long, lat ]
+      //        },
+      //        $maxDistance: 3000
+      //     }
+      //   }
+      // },
+      // {
+      //   ownerToken: 0
+      // },
+      // options
+      // )
     },
 
     getPost: async function(id) {
@@ -55,14 +56,7 @@ Yavanna.provide('Odin', ({
     },
 
     createPost: async function(post) {
-      var newToken = generateToken()
-      post.ownerToken = newToken
-      post.upvotes = 0
-      post.downvotes = 0
-      post.netVotes = 0
-      post.timestamp = (new Date()).getTime()
-      post = await DB.execOne('posts', 'insertOne', post)
-      return {postID: post.insertedId, ownerToken: newToken}
+      return await PostCollection.create(post)
     },
 
     createComment: async function(comment) {
@@ -94,69 +88,10 @@ Yavanna.provide('Odin', ({
       }
     },
 
-
-
-    // createVote: async function(votableId, voteKey, value, type){
-    //   // PostCollection.recordVote(votableId, value)
-    //   var oldVote = await DB.execOne('votes', 'find', {postID: votableId, voteKey: voteKey})
-    //   var upvote = 0
-    //   var downvotes = 0
-    //   if (value === 1){
-    //     upvote = 1
-    //   }else{
-    //     downvote = 1
-    //   }
-    //   if (oldVote) {
-    //     if (oldVote.value === value) {
-    //       return
-    //     }
-    //     if (type === 'comment') {
-    //       DB.updateOne('comments', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value * 2, upvotes: value, downvotes: -value}})
-    //     }else{
-    //       DB.updateOne('posts', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value * 2, upvotes: value, downvotes: -value}})
-    //     }
-    //   }else{
-    //     if (type === 'comment') {
-    //       DB.updateOne('comments', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value, upvotes: upvote, downvotes: downvote}})
-    //     }else{
-    //       DB.updateOne('posts', {_id: new ObjectID(votableId)}, {$inc: {netVotes: value, upvotes: upvote, downvotes: downvote}})
-    //     }
-    //   }
-    //
-    //   var vote = await DB.findAndModify('votes',
-    //     {postID: vote.ID, voteKey: voteKey, type: vote.type},
-    //     [],
-    //     {$set: {value: vote.value}},
-    //     {upsert: true, new: true}
-    //   )
-    //
-    //   return vote
-    // },
-
-    // { _id: _id },     // query
-    // [],               // represents a sort order if multiple matches
-    // { $set: data },   // update statement
-    // { new: true },    // options - new to return the modified document
-
     deleteVote: async function(postID, voteKey){
       var vote = await DB.execOne('votes', 'findAndRemove', {postID: postID, voteKey: voteKey})
       return vote
     },
-
-    // updatePostVote: async function(vote){
-    //   var o_id = new ObjectID(vote.ID)
-    //   var adjustment = vote.value
-    //   var upvote = 0
-    //   var downvotes = 0
-    //   if (vote.value === 1){
-    //     upvote = 1
-    //   }else{
-    //     downvote = 1
-    //   }
-    //   var post = await DB.updateOne('posts', {id: o_id}, {$inc : { netVotes: adjustment, upvotes: upvote, downvotes: downvote})
-    //   return post
-    // },
-
 
     unvote: async function(vote, collection){
       var o_id = new ObjectID(vote.ID)
@@ -204,7 +139,6 @@ Yavanna.provide('Odin', ({
         console.log('created User')
         return token
       }
-
     },
 
     getLoginToken: async function(username, password){
