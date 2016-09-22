@@ -34,8 +34,8 @@ Yavanna.provide('PostCollection', ({DB, CurrentTimeService}) => {
       return {postID: post.insertedId, ownerToken: newToken}
     },
 
-    findRanked: async function() {
-      return await this.findNearLocation(0, 0, 10000, {"sort": [['timestamp','desc']]})
+    findRanked: async function(long, lat) {
+      return await this.findNearLocation(long, lat, 10000, {"sort": [['timestamp','desc']]})
     },
 
     findNearLocation: async function(long, lat, maxDistanceMeters, options) {
