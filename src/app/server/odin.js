@@ -88,9 +88,16 @@ Yavanna.provide('Odin', ({
       }
     },
 
-    deleteVote: async function(postID, voteKey){
-      var vote = await DB.execOne('votes', 'findAndRemove', {postID: postID, voteKey: voteKey})
-      return vote
+    deleteVote: async function(userVoteKey, votableId, type){
+      let oldVote = (await VoteCollection.delete(userVoteKey, votableId)).value
+      if (oldVote !== null){
+        if(type === 'comment'){
+          return await CommentCollection.deleteVote(votableId, oldVote.value, -oldVote.value)
+        }else{
+          return await PostCollection.deleteVote(votableId, oldVote.value, -oldVote.value)
+        }
+      }
+
     },
 
     unvote: async function(vote, collection){

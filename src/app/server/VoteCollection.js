@@ -12,9 +12,18 @@ Yavanna.provide('VoteCollection', ({cryptoHash, DB}) => {
       return vote.value
     },
 
+    delete: async function(userVoteKey, votableId) {
+      let voteKey = cryptoHash([userVoteKey, votableId])
+      return await DB.execOne('votes', 'findAndRemove', {votableId: votableId, voteKey: voteKey})
+    },
+
+
     count: async function() {
       return await DB.count('votes')
     },
+
+
+
 
     find: async function(userVoteKey, votableId) {
       let voteKey = cryptoHash([userVoteKey, votableId])

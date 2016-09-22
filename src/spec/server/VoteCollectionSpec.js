@@ -39,6 +39,12 @@ describe('VoteCollection', () => {
     expect(await VoteCollection.count()).toEqual(1)
   })
 
+  $it('deletes votes', async () => {
+    await VoteCollection.create('user-vote-key', 'votable-id', 1)
+    await VoteCollection.delete('user-vote-key', 'votable-id')
+    expect(await VoteCollection.count()).toEqual(0)
+  })
+
   $it('returns the vote record', async () => {
     expect(await VoteCollection.create('user-vote-key', 'votable-id', 1)).toEqual(jasmine.objectContaining({
       voteKey: 'da92269082e3b577300b85c5ba0c9d93425169bed6280f9cdbed28bfb43bae66',

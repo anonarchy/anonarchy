@@ -23,13 +23,13 @@ describe('PostCollection', () => {
 
   $it('ranks more recent posts higher than older posts', async () => {
     currentTimeMillis = 1
-    PostCollection.create({title: 'first', long: 0, lat: 0})
+    await PostCollection.create({title: 'old', loc: {long: 0, lat: 0}})
     currentTimeMillis = 2
-    PostCollection.create({title: 'second', long: 0, lat: 0})
+    await PostCollection.create({title: 'new', loc: {long: 0, lat: 0}})
 
     let ranked = await PostCollection.findRanked()
-    expect(ranked[0].title).toEqual('first')
-    expect(ranked[1].title).toEqual('second')
+    expect(ranked[0].title).toEqual('new')
+    expect(ranked[1].title).toEqual('old')
   })
 
   $it('ranks nearer posts higher than distant posts', async () => {
