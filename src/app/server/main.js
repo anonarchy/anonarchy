@@ -57,7 +57,17 @@ Yavanna.provide('AppController', ({Odin}) => {
         var long = Number(req.query.long)
         var lat = Number(req.query.lat)
         var sort = req.query.sort
-        var posts = await Odin.getPostsByLocation(long, lat, sort)
+        if (sort == 'new'){
+          var posts = await Odin.getNewestPosts(long, lat)
+        }else if (sort == 'hot'){
+          var posts = await Odin.getPostsByRank(long, lat)
+        }else if (sort == 'closest'){
+          var posts = await Odin.getPostsByLocation(long, lat)
+        }else if (sort == 'top'){
+          var posts = await Odin.getTopPosts(long, lat)
+        }else {
+          res.status(400).send("Sort option not recognized")
+        }
       }else{
         var posts = await Odin.getPosts()
       }

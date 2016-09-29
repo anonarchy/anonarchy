@@ -18,30 +18,22 @@ Yavanna.provide('Odin', ({
       return await DB.exec('posts', 'find')
     },
 
+    getPostsByRank: async function(long, lat) {
+      return await PostCollection.findRanked(long, lat)
+    },
+
+    getTopPosts: async function(long, lat){
+      return await PostCollection.findTop(long, lat)
+    },
+
     getPostsByLocation: async function(long, lat, sort){
       var options = {}
-      console.log(sort)
-      if (sort === 'new'){
-        console.log("new!!")
-        options = {"sort": [['timestamp','desc']]}
-      }
-      return await PostCollection.findNearLocation(long, lat, 50, options)
-      // return await DB.exec('posts', 'find', {
-      //   loc: {
-      //     $nearSphere: {
-      //        $geometry: {
-      //           type : "Point",
-      //           coordinates : [ long, lat ]
-      //        },
-      //        $maxDistance: 3000
-      //     }
-      //   }
-      // },
-      // {
-      //   ownerToken: 0
-      // },
-      // options
-      // )
+      return await PostCollection.findNearLocation(long, lat, 0, 1000, options, 50)
+    },
+
+    getNewestPosts: async function(long, lat){
+      let options = {"sort": [['timestamp','desc']]}
+      return await PostCollection.findNearLocation(long, lat, 0, 1000, options, 50)
     },
 
     getPost: async function(id) {

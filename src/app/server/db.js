@@ -7,7 +7,7 @@ Yavanna.provide('DB', ({env}) => {
   }
 
   return {
-    exec: async function (collection, operation, query, projection, options) {
+    exec: async function (collection, operation, query, projection, options, limit) {
       try{
         let conn = await getConnection()
         if (projection === undefined){
@@ -18,7 +18,13 @@ Yavanna.provide('DB', ({env}) => {
           console.log("optionss undefined")
           options = {}
         }
-        return await conn.collection(collection)[operation](query, projection, options).toArray();
+        let cursor = await conn.collection(collection)[operation](query, projection, options)
+
+        if (limit) {
+          cursor.limit(limit)
+        }
+
+        return cursor.toArray()
       }catch(error){
         console.log(error)
         return error
