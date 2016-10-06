@@ -19,6 +19,7 @@ db.posts.createIndex({loc: '2dsphere'})
 Set up environment variables:
 
 ```
+export PORT=3000
 export ANONYPOST_SECRET_KEY=secret
 export MONGODB_URI='mongodb://localhost:27017/anonypost'
 ```
