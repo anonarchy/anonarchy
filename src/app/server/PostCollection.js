@@ -1,6 +1,7 @@
 const ObjectID = require('mongodb').ObjectID;
 const generateToken = require('secure-random-string')
 const _ = require('underscore')
+const geolib = require('geolib')
 
 const MILLIS_PER_DAY = 1000 * 3600 * 24
 
@@ -38,36 +39,39 @@ Yavanna.provide('PostCollection', ({DB, CurrentTimeService}) => {
     },
 
     findRanked: async function(long, lat, quota=50) {
-      let found = []
-      let radii = [0, 50, 100, 200, 400, 1000]
-      for (let i = 1; i < radii.length; i++) {
-        let minDistanceMeters = radii[i-1]
+      let postsWithinRadius = []
+      let radii = [50, 100, 200, 400, 1000]
+      let intervals = [1, 3, 9, 27, 150] //days
+      for (let i = 0; i < radii.length; i++) {
         let maxDistanceMeters = radii[i]
-        let postsWithinDistanceBand =
+        let maxDay = intervals[i]
+        let oldestTime = CurrentTimeService.millis() - maxDay * 24 * 60 * 60 * 1000
+        postsWithinRadius =
           await this.findNearLocation(
             long, lat,
-            minDistanceMeters, maxDistanceMeters,
+            maxDistanceMeters,
+            oldestTime,
             {},
-            quota - found.length
+            quota
           )
 
-        found = found.concat(_(postsWithinDistanceBand).sortBy(awesomeness).reverse())
-        if (found.length >= quota) {
+        if (postsWithinRadius.length >= quota) {
           break;
         }
       }
-
-      return found
+      let userLocation = {
+        longitude: long,
+        latitude: lat
+      }
+      return _(postsWithinRadius).sortBy(awesomeness(userLocation)).reverse()
     },
 
     findTop: async function(long, lat, quota = 50) {
       let options = {"sort": [['netVotes','desc']]}
-      return await findNearLocation(long, lat, 0, 1000, options, quota)
+      return await findNearLocation(long, lat, 1000, 0, options, quota)
     },
 
-
-
-    findNearLocation: async function(long, lat, minDistanceMeters, maxDistanceMeters, options, limit) {
+    findNearLocation: async function(long, lat, maxDistanceMeters, oldestTime, options, limit) {
       let doNotShowOwnerToken = {ownerToken: 0}
 
       return (await DB.exec('posts', 'find', {loc: {
@@ -76,15 +80,21 @@ Yavanna.provide('PostCollection', ({DB, CurrentTimeService}) => {
               type : "Point",
               coordinates : [ long, lat ]
            },
-           $minDistance: minDistanceMeters,
+           $minDistance: 0,
            $maxDistance: maxDistanceMeters
-        }
+        },
+      }, timestamp: {
+        $gte: oldestTime
       }}, doNotShowOwnerToken, options, limit))
     }
   }
 
-  function awesomeness(post) {
-    return voteScore(post) + post.timestamp / 45000000
+  function awesomeness(userLocation) {
+    return function(post) {
+      let postLocation = {longitude: post.loc.long, latitude: post.loc.lat}
+      let distance = geolib.getDistance(postLocation, userLocation)
+      return voteScore(post) + post.timestamp / 45000000 - distance / 20
+    }
   }
 
   function voteScore(post) {
