@@ -1,1 +1,1 @@
-web: node dist/server.js
+web: npm i && gulp && node dist/server.js

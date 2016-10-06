@@ -23,11 +23,10 @@ var browserifier = FastBrowserifier({
   outputFilename: 'browser.js'
 })
 
-function allTasks () {
+function build () {
   return gulp.series(
     clean,
     compile(),
-    test,
     writeManifest,
     browserifier.writeBundleWithoutWatching,
     linkServer
@@ -44,7 +43,7 @@ var writeManifest = manifest({
   ]
 })
 
-gulp.task('default', allTasks())
+gulp.task('default', build())
 
 gulp.task('check', gulp.series(compile(), test))
 
