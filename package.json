@@ -43,16 +43,14 @@
     "regenerator-runtime": "^0.9.5",
     "secure-random-string": "^1.0.0",
     "webpack": "^1.13.1",
-    "xmlhttprequest": "^1.7.0"
-  },
-  "devDependencies": {
+    "xmlhttprequest": "^1.7.0",
+    "gulp": "github:gulpjs/gulp#4.0",
     "async-await-jasmine": "0.0.2",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.11.1",
     "browserify": "^13.0.1",
     "del": "^2.2.1",
     "glob": "^7.0.5",
-    "gulp": "github:gulpjs/gulp#4.0",
     "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.0",
     "gulp-debug": "^2.1.2",
