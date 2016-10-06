@@ -68,7 +68,7 @@ Yavanna.provide('PostCollection', ({DB, CurrentTimeService}) => {
 
     findTop: async function(long, lat, quota = 50) {
       let options = {"sort": [['netVotes','desc']]}
-      return await findNearLocation(long, lat, 1000, 0, options, quota)
+      return await this.findNearLocation(long, lat, 1000, 0, options, quota)
     },
 
     findNearLocation: async function(long, lat, maxDistanceMeters, oldestTime, options, limit) {

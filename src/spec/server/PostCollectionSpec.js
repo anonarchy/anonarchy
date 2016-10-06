@@ -108,4 +108,35 @@ describe('PostCollection', () => {
     expect(resultsWithQuotaOf2).not.toContain('850m away #2')
     expect(resultsWithQuotaOf2.length).toEqual(2)
   })
+
+  $it('uses topPost to rank by net votes', async function(){
+    let Odin = YavannaForTest.get('Odin')
+
+    let high = await PostCollection.create({title: 'high', loc: {long: 0, lat: 0}})
+    let low = await PostCollection.create({title: 'low', loc: {long: 0, lat: 0}})
+
+    await Odin.createVote('a-userVoteKey', high.postID.toString(), 1, 'post')
+    await Odin.createVote('a-userVoteKey2', high.postID.toString(), 1, 'post')
+    await Odin.createVote('a-userVoteKey3', high.postID.toString(), 1, 'post')
+
+    expect((await PostCollection.findById(high.postID.toString())).netVotes).toEqual(3)
+
+    let ranked = await PostCollection.findRanked(0, 0)
+    expect(ranked[0].title).toEqual('high')
+    expect(ranked[1].title).toEqual('low')
+
+    let lowest = await PostCollection.create({title: 'lowest', loc: {long: 0, lat: 0}})
+
+    await Odin.createVote('a-userVoteKey', lowest.postID.toString(), -1, 'post')
+    await Odin.createVote('a-userVoteKey2', lowest.postID.toString(), -1, 'post')
+    await Odin.createVote('a-userVoteKey3', lowest.postID.toString(), -1, 'post')
+
+    expect((await PostCollection.findById(lowest.postID.toString())).netVotes).toEqual(-3)
+
+    ranked = await PostCollection.findTop(0, 0)
+    expect(ranked[0].title).toEqual('high')
+    expect(ranked[1].title).toEqual('low')
+    expect(ranked[2].title).toEqual('lowest')
+
+  })
 })
