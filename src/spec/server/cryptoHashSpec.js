@@ -34,4 +34,8 @@ describe('cryptoHash', () => {
         .get('cryptoHash')
     }).toThrowError('no secret key; set the ANONYPOST_SECRET_KEY env variable')
   })
+
+  it('throws an exception when passed non-strings', function() {
+    expect(() => cryptoHash([{}])).toThrowError('Argument to cryptoHash must be an array of strings. [object Object] is not a string.')
+  })
 })

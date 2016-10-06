@@ -16,6 +16,11 @@ Yavanna.provide('cryptoHash', function({env}) {
     if (strings.every(s => s.length === 0)) {
       throw new Error('Only empty strings passed to cryptoHash')
     }
+    for (let s of strings) {
+      if (typeof s !== 'string') {
+        throw new Error(`Argument to cryptoHash must be an array of strings. ${s} is not a string.`)
+      }
+    }
 
     var h = crypto.createHmac('sha256', env.ANONYPOST_SECRET_KEY)
     var arrayLength = strings.length;

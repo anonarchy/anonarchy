@@ -8,7 +8,6 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-console.log('in app')
 
 Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
   return React.createClass({

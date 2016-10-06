@@ -7,7 +7,7 @@ Yavanna.provide('DB', ({env}) => {
   }
 
   return {
-    exec: async function (collection, operation, query, projection, options) {
+    exec: async function (collection, operation, query, projection, options, limit) {
       try{
         let conn = await getConnection()
         if (projection === undefined){
@@ -18,7 +18,13 @@ Yavanna.provide('DB', ({env}) => {
           console.log("optionss undefined")
           options = {}
         }
-        return await conn.collection(collection)[operation](query, projection, options).toArray();
+        let cursor = await conn.collection(collection)[operation](query, projection, options)
+
+        if (limit) {
+          cursor.limit(limit)
+        }
+
+        return cursor.toArray()
       }catch(error){
         console.log(error)
         return error
@@ -28,16 +34,13 @@ Yavanna.provide('DB', ({env}) => {
     execOne: async function (collection, operation, query) {
         let conn = await getConnection()
         let result = await conn.collection(collection)[operation](query);
-        console.log("successfully executed once!")
         return result
     },
 
     updateOne: async function (collection, args, set) {
         var operation = 'updateOne'
         let conn = await getConnection()
-        console.log(args)
         let result = await conn.collection(collection)[operation](args, set);
-        console.log("successfully updated!")
         return result
     },
 
@@ -45,15 +48,18 @@ Yavanna.provide('DB', ({env}) => {
       var operation = 'findAndModify'
       let conn = await getConnection()
       let result = await conn.collection(collection)[operation](query, sort, update, options);
-      console.log("successfully found and Modified!")
 
       return result
+    },
 
+    count: async function (collection) {
+      let conn = await getConnection()
+      return await conn.collection(collection).count()
     },
 
     armageddon: async function () {
       let conn = await getConnection()
-      let collectionsToClear = ['votes', 'users']
+      let collectionsToClear = ['posts','votes', 'users', 'comments']
       for (let coll of collectionsToClear) {
         await conn.collection(coll).deleteMany({})
       }

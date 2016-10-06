@@ -22,12 +22,9 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
     },
 
     componentDidMount () {
-      console.log("Console mounted")
       var postID = this.props.params.postID
       this.serverRequest = request('/api/post/'+ postID + '/comments/', function (er, response, body) {
         var body = JSON.parse(body)
-        console.log(body.post)
-        console.log(body.comments)
 
         this.setState({
           post: body.post,
@@ -41,8 +38,6 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
     },
 
     render () {
-      console.log(this.props.params.postID)
-
       var commentElement = function(comment){
         return (
           <li key= {comment._id}>
@@ -57,7 +52,6 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
       }
       var post = this.state.post
       var linkOrText = () => {
-        console.log(post.link)
         if (post.link === "" || post.link === undefined){
           return (<span style={{ display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 16, paddingLeft: 0, alignItems: 'center'}}>{post.title}</span>)
         }else{

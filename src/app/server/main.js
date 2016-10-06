@@ -53,13 +53,21 @@ Yavanna.provide('AppController', ({Odin}) => {
 
   app.get('/api/posts/', async function (req, res){
     try{
-      console.log("got the request")
       if (req.query.long !== undefined){
         var long = Number(req.query.long)
         var lat = Number(req.query.lat)
-        console.log(req.query)
         var sort = req.query.sort
-        var posts = await Odin.getPostsByLocation(long, lat, sort)
+        if (sort == 'new'){
+          var posts = await Odin.getNewestPosts(long, lat)
+        }else if (sort == 'hot'){
+          var posts = await Odin.getPostsByRank(long, lat)
+        }else if (sort == 'closest'){
+          var posts = await Odin.getPostsByLocation(long, lat)
+        }else if (sort == 'top'){
+          var posts = await Odin.getTopPosts(long, lat)
+        }else {
+          res.status(400).send("Sort option not recognized")
+        }
       }else{
         var posts = await Odin.getPosts()
       }
@@ -70,13 +78,10 @@ Yavanna.provide('AppController', ({Odin}) => {
   })
 
   app.get('/api/post/:id/comments', async function (req, res) {
-    console.log(req.params.id)
     try{
       var post = await Odin.getPost(req.params.id)
-      console.log(post)
       var comments = await Odin.getCommments(req.params.id)
       var ret = {post: post, comments: comments}
-      console.log(ret)
       res.send(ret)
     }catch(error){
       console.log(error)
@@ -168,10 +173,10 @@ Yavanna.provide('AppController', ({Odin}) => {
     try{
       var userVoteKey = await Odin.getUserVoteKey(req.cookies.session)
       if(userVoteKey){
-        console.log(userVoteKey)
-        var voteKey = hash([userVoteKey, req.body.vote.ID])
+        console.log('voting: userVoteKey is', userVoteKey)
         var payload = req.body.vote
-        var result = await Odin.createVote(payload.ID, payload.value, voteKey, payload.type)
+        var result = await Odin.createVote(userVoteKey, payload.ID, payload.value, payload.type)
+        console.log('voting: created vote successfully', result)
         if (result){
           res.status(200).send()
         }else{
