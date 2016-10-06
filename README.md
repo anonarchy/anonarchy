@@ -20,5 +20,5 @@ Set up environment variables:
 
 ```
 export ANONYPOST_SECRET_KEY=secret
-export ANONYPOST_DATABASE='mongodb://localhost:27017/anonypost'
+export MONGODB_URI='mongodb://localhost:27017/anonypost'
 ```

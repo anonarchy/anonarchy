@@ -2,8 +2,8 @@ require('babel-polyfill')
 var MongoClient = require('mongodb').MongoClient
 
 Yavanna.provide('DB', ({env}) => {
-  if (!env.ANONYPOST_DATABASE) {
-    throw new Error('ANONYPOST_DATABASE env var must be set.')
+  if (!env.MONGODB_URI) {
+    throw new Error('MONGODB_URI env var must be set.')
   }
 
   return {
@@ -71,7 +71,7 @@ Yavanna.provide('DB', ({env}) => {
   var existingConnection
   async function getConnection () {
     if (existingConnection) return existingConnection
-    existingConnection = await MongoClient.connect(env.ANONYPOST_DATABASE)
+    existingConnection = await MongoClient.connect(env.MONGODB_URI)
     return existingConnection
   }
 })

@@ -3,7 +3,7 @@ const { $afterEach, $it } = require('async-await-jasmine')
 describe('VoteCollection', () => {
   const YavannaForTest = Yavanna.withOverrides({
     env: {
-      ANONYPOST_DATABASE: 'mongodb://localhost:27017/anonypost_test',
+      MONGODB_URI: 'mongodb://localhost:27017/anonypost_test',
       ANONYPOST_SECRET_KEY: 'secret'
     }
   })
