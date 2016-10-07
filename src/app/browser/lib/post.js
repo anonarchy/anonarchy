@@ -97,11 +97,19 @@ Yavanna.provide('Post', ({Vote}) => {
               </div>
             </div>
             <Divider style={{marginLeft: 68}}/>
+              <div>
+                <span style={{marginLeft: 68}}/>
+                {showExpandCollapse()}
+                <div style={{margin: 0, cursor: 'pointer', display: 'inline-block', fontSize: 12, textTransform: 'uppercase', padding:8, paddingLeft: 0}} onTouchTap={()=> this.viewComments(post._id)}>
+                  Comments
+                </div>
+              </div>
+            <Divider style={{marginLeft: 68}}/>
             <div expandable={true} style={{padding: 0, paddingRight:16, marginLeft: 68}}>
               <ReactMarkdown source={post.body} />
             </div>
             <Divider style={{marginLeft: 68}}/>
-              <div>
+              <div  expandable={true}>
                 <span style={{marginLeft: 68}}/>
                 {showExpandCollapse()}
                 <div style={{margin: 0, cursor: 'pointer', display: 'inline-block', fontSize: 12, textTransform: 'uppercase', padding:8, paddingLeft: 0}} onTouchTap={()=> this.viewComments(post._id)}>

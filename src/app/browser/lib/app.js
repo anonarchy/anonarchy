@@ -9,10 +9,21 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
+var getCookies = function(){
+  var pairs = document.cookie.split(";");
+  var cookies = {};
+  for (var i=0; i<pairs.length; i++){
+    var pair = pairs[i].split("=");
+    cookies[pair[0]] = unescape(pair[1]);
+  }
+  return cookies;
+}
+
 Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
   return React.createClass({
     getInitialState: function(){
-      return {login: false, loggedIn: false, signup: false, open: false}
+      let loggedIn = getCookies().session !== undefined //Call server, log in, return true if valid session token
+      return {login: false, loggedIn: loggedIn, signup: false, open: false}
     },
 
     handleLoginOpen(){
@@ -53,8 +64,8 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
                 >
                   <MenuItem primaryText="Login" href= '/login'/>
                   <MenuItem primaryText="Sign Up" onTouchTap={this.handleSignupOpen} />
-                  <MenuItem primaryText="Contribute" href='https://github.com/AlexLerman/anonypost-js'/>
-                  <MenuItem primaryText="Report Bug" href='https://github.com/AlexLerman/anonypost-js/issues' />
+                  <MenuItem primaryText="Contribute" href='https://github.com/anonypost/anonypost'/>
+                  <MenuItem primaryText="Report Bug" href='https://github.com/anonypost/anonypost/issues' />
                 </IconMenu>
                 }
             />
@@ -63,7 +74,19 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
           return (
             <AppBar
               title="AnonyPost"
-              style={{backgroundColor: 'black'}}
+              style={{backgroundColor: 'black', position: 'fixed'}}
+              onLeftIconButtonTouchTap={this.handleLeftButton}
+              iconElementRight={
+                <IconMenu
+                  iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                  anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                  targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                >
+                  <MenuItem primaryText="Log Out" href= '/login'/>
+                  <MenuItem primaryText="Contribute" href='https://github.com/anonypost/anonypost'/>
+                  <MenuItem primaryText="Report Bug" href='https://github.com/anonypost/anonypost/issues' />
+                </IconMenu>
+                }
             />
           )
         }
@@ -90,8 +113,8 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
               <div style={{height: 100, backgroundColor:'black'}}/>
               <MenuItem primaryText="Login" href= '/login'/>
               <MenuItem primaryText="Sign Up" href='/signup' />
-              <MenuItem primaryText="Contribute" href='https://github.com/AlexLerman/anonypost-js'/>
-              <MenuItem primaryText="Report Bug" href='https://github.com/AlexLerman/anonypost-js/issues' />
+              <MenuItem primaryText="Contribute" href='https://github.com/anonypost/anonypost'/>
+              <MenuItem primaryText="Report Bug" href='https://github.com/anonypost/anonypost/issues' />
             </Drawer>
             <Signup open={this.state.signup} handleClose={this.handleSignupClose}/>
 

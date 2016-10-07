@@ -98,7 +98,7 @@ describe('PostCollection', () => {
   $it('does not find more posts than the quota', async function() {
     await PostCollection.create({title: 'here', loc: {long: -122.07905010000002, lat: 37.3931981}})
     await PostCollection.create({title: '850m away', loc: {long: -122.089742, lat: 37.393316}})
-    await PostCollection.create({title: '850m away #2', loc: {long: -122.089742, lat: 37.393316}})
+    await PostCollection.create({title: '850m away #2', loc: {long: -122.089743, lat: 37.393317}})
     await PostCollection.create({title: 'away', loc: {long: 2, lat: 2}})
 
     let resultsWithQuotaOf2 = (await PostCollection.findRanked(-122.07905010000002, 37.3931981, 2)).map(post => post.title)
