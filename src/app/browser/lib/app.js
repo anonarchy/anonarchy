@@ -8,6 +8,7 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import request from 'browser-request'
 
 var getCookies = function(){
   var pairs = document.cookie.split(";");
@@ -23,7 +24,21 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
   return React.createClass({
     getInitialState: function(){
       let loggedIn = getCookies().session !== undefined //Call server, log in, return true if valid session token
+      if (loggedIn){
+        console.log("logged in!")
+        request({method:'POST', url:'/api/verify', json: {}}, this.onResponse)
+      }
       return {login: false, loggedIn: loggedIn, signup: false, open: false}
+    },
+
+    onResponse(err, res, body){
+      if(err){
+        console.log("Error: ", err)
+        console.log(res)
+        console.log(body)
+        console.log("Not actually logged in")
+        this.setState({loggedIn: false});
+      }
     },
 
     handleLoginOpen(){

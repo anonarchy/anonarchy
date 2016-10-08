@@ -51,6 +51,18 @@ Yavanna.provide('AppController', ({Odin}) => {
     }
   })
 
+  app.post('/api/verify/', async function(req, res){
+    console.log('Cookie: ', req.cookies.session)
+    var loginToken = await Odin.exchangeToken(req.cookies.session)
+    if(loginToken){
+      console.log("setting session cookie")
+      setSessionCookie(loginToken, res)
+      res.status(200).send({}) //Not sure why {} fixed the error. Other posts don't require {} to work
+    }else{
+      res.status(403).send("Token expired") //For some reason strings are causing errors... This might be better as a GET function
+    }
+  })
+
   app.get('/api/posts/', async function (req, res){
     try{
       if (req.query.long !== undefined){
