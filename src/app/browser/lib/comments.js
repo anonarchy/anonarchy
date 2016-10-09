@@ -42,7 +42,7 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
         return (
           <li key= {comment._id}>
             <Paper style={{marginBottom: 10, display: 'flex', alignItems: 'center'}}>
-              <Vote value={10} ID={comment._id} />
+              <Vote voteTotal={comment.netVotes} ID={comment._id} />
               <div style={{padding: 0, paddingRight:16, flex: 1, minWidth: 0}}>
                 <ReactMarkdown source={comment.body}/>
               </div>

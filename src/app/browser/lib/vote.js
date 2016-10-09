@@ -26,16 +26,16 @@ Yavanna.provide('Vote', () => {
   return React.createClass({
 //            floatingLabelFixed={true}
     getInitialState: function() {
-      return {voteTotal: 0, vote: 0}
+      return {vote: 0, voteTotal:this.props.voteTotal}
     },
 
     componentDidMount: function(){
-      var postID = this.props.ID
+      let postID = this.props.ID
       this.serverRequest = request('/api/post/'+ postID + '/votes/', function (er, response, body) {
-        var body = JSON.parse(body)
+        body = JSON.parse(body)
         this.setState({
-          voteTotal: body.voteCount,
-          vote: body.userVote
+          vote: body.userVote,
+          voteTotal: this.state.voteTotal - body.userVote
         });
       }.bind(this));
     },
@@ -54,17 +54,16 @@ Yavanna.provide('Vote', () => {
       }
     },
 
-
     castVote(value){
       console.log("casting a vote")
       if (this.state.vote === 0){
-        this.setState({vote: value, voteTotal: this.state.voteTotal + value})
+        this.setState({vote: value})
         request({method:'POST', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value}}}, this.onResponse)
       }else if (this.state.vote !== value){
-        this.setState({vote: value, voteTotal: this.state.voteTotal + value*2})
+        this.setState({vote: value})
         request({method:'POST', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value}}}, this.onResponse)
       }else{
-        this.setState({vote: 0, voteTotal: this.state.voteTotal - value})
+        this.setState({vote: 0})
         request({method:'DELETE', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value}}}, this.onResponse)
       }
     },
@@ -74,7 +73,7 @@ Yavanna.provide('Vote', () => {
       return (
         <div style={{width: 68, height: 68, flexShrink: 0, alignSelf: 'baseline'}}>
           <span className={"icon-upvote"} style={(this.state.vote === 1 ? upVoted : notUpVoted)}  onTouchTap={()=> this.castVote(1)} />
-          <p style={{fontSize: 15, textAlign: 'center', marginTop: 0, marginBottom: 0}}> {this.state.voteTotal} </p>
+          <p style={{fontSize: 15, textAlign: 'center', marginTop: 0, marginBottom: 0}}> {this.state.voteTotal + this.state.vote} </p>
           <span className={"icon-downvote"} style={(this.state.vote === -1 ? downVoted : notDownVoted)} onTouchTap={()=> this.castVote(-1)} />
         </div>
       )

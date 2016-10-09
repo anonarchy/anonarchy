@@ -52,15 +52,7 @@ Yavanna.provide('Odin', ({
     },
 
     createComment: async function(comment) {
-      var newToken = generateToken()
-      comment.ownerToken = newToken
-      comment.upvotes = 0
-      comment.downvotes = 0
-      comment.netVotes = 0
-      comment.timestamp = (new Date()).getTime()
-      comment = await DB.execOne('comments', 'insertOne', comment)
-      return {commentID: comment.insertedId, ownerToken: newToken}
-
+      return await CommentCollection.create(comment)
     },
 
     getCommments: async function(postID) {

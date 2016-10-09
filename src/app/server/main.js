@@ -110,8 +110,8 @@ Yavanna.provide('AppController', ({Odin}) => {
       }else{
         var userVote = 0
       }
-      var voteCount = await Odin.getVoteCount(req.params.id)
-      var ret = {voteCount: voteCount, userVote: userVote}
+      // var voteCount = await Odin.getVoteCount(req.params.id)
+      var ret = {userVote: userVote}
       console.log(ret)
       res.status(200).send(ret)
     }catch(error){
