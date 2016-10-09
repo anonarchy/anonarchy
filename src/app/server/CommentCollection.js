@@ -1,4 +1,6 @@
-var ObjectID = require('mongodb').ObjectID;
+const ObjectID = require('mongodb').ObjectID;
+const generateToken = require('secure-random-string')
+const _ = require('underscore')
 
 Yavanna.provide('CommentCollection', ({DB}) => {
   return {

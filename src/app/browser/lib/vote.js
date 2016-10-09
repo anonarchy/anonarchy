@@ -37,6 +37,7 @@ Yavanna.provide('Vote', () => {
           vote: body.userVote,
           voteTotal: this.state.voteTotal - body.userVote
         });
+        console.log("Stuff: ", this.state.voteTotal, this.state.vote )
       }.bind(this));
     },
 

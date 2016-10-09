@@ -18,14 +18,14 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
 
 // export default class Comments extends React.Component {
     getInitialState () {
-      return {post: {title: "", author: "", body: "", link: ""}, comments: []}
+      return {post: {title: "", author: "", body: "", link: "", netVotes: null}, comments: []}
     },
 
-    componentDidMount () {
+    componentWillMount () {
       var postID = this.props.params.postID
       this.serverRequest = request('/api/post/'+ postID + '/comments/', function (er, response, body) {
         var body = JSON.parse(body)
-
+        console.log(body.post)
         this.setState({
           post: body.post,
           comments: body.comments
@@ -59,25 +59,28 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
 
         }
       }
-
-      return (
-        <div style={{margin: 1.66 + '%'}}>
-          <Card >
-            <div style={{display: 'flex', alignItems: 'center'}}>
-              <Vote value={345} ID={this.props.params.postID} />
-              <div style={{padding: 0, paddingRight:16, flex: 1, minWidth: 0, fontSize: 18}}>
-                {linkOrText()}
+      if (this.state.post.netVotes === null){
+        return null
+      }else{
+        return (
+          <div style={{margin: 1.66 + '%'}}>
+            <Card >
+              <div style={{display: 'flex', alignItems: 'center'}}>
+                <Vote voteTotal={this.state.post.netVotes} ID={this.props.params.postID} />
+                <div style={{padding: 0, paddingRight:16, flex: 1, minWidth: 0, fontSize: 18}}>
+                  {linkOrText()}
+                </div>
               </div>
-            </div>
-            <Divider />
-            <div style={{padding: 0, paddingRight:16, paddingBottom: 1, marginLeft: 68, minHeight: 16}}>
-              <ReactMarkdown source={this.state.post.body} />
-            </div>
-          </Card>
-          <CreateComment postID={this.props.params.postID}/>
-          <ul style={ulStyle} >{this.state.comments.map(commentElement.bind(this))}</ul>
-        </div>
-      )
+              <Divider />
+              <div style={{padding: 0, paddingRight:16, paddingBottom: 1, marginLeft: 68, minHeight: 16}}>
+                <ReactMarkdown source={this.state.post.body} />
+              </div>
+            </Card>
+            <CreateComment postID={this.props.params.postID}/>
+            <ul style={ulStyle} >{this.state.comments.map(commentElement.bind(this))}</ul>
+          </div>
+        )
+      }
     }
   })
 
