@@ -59,13 +59,13 @@ Yavanna.provide('Vote', () => {
       console.log("casting a vote")
       if (this.state.vote === 0){
         this.setState({vote: value})
-        request({method:'POST', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value}}}, this.onResponse)
+        request({method:'POST', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value, type: this.props.type}}}, this.onResponse)
       }else if (this.state.vote !== value){
         this.setState({vote: value})
-        request({method:'POST', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value}}}, this.onResponse)
+        request({method:'POST', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value, type: this.props.type}}}, this.onResponse)
       }else{
         this.setState({vote: 0})
-        request({method:'DELETE', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value}}}, this.onResponse)
+        request({method:'DELETE', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value, type: this.props.type}}}, this.onResponse)
       }
     },
 

@@ -39,10 +39,11 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
 
     render () {
       var commentElement = function(comment){
+        console.log(comment)
         return (
           <li key= {comment._id}>
             <Paper style={{marginBottom: 10, display: 'flex', alignItems: 'center'}}>
-              <Vote voteTotal={comment.netVotes} ID={comment._id} />
+              <Vote voteTotal={comment.netVotes} ID={comment._id} type="comment" />
               <div style={{padding: 0, paddingRight:16, flex: 1, minWidth: 0}}>
                 <ReactMarkdown source={comment.body}/>
               </div>
@@ -66,7 +67,7 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
           <div style={{margin: 1.66 + '%'}}>
             <Card >
               <div style={{display: 'flex', alignItems: 'center'}}>
-                <Vote voteTotal={this.state.post.netVotes} ID={this.props.params.postID} />
+                <Vote voteTotal={this.state.post.netVotes} ID={this.props.params.postID} type="post" />
                 <div style={{padding: 0, paddingRight:16, flex: 1, minWidth: 0, fontSize: 18}}>
                   {linkOrText()}
                 </div>

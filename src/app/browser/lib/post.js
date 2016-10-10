@@ -91,7 +91,7 @@ Yavanna.provide('Post', ({Vote}) => {
         return (
           <Card expanded={this.state.expanded} >
             <div style={{display: 'flex', alignItems: 'center'}}>
-              <Vote voteTotal={this.props.post.netVotes} ID={this.props.post._id}/>
+              <Vote voteTotal={this.props.post.netVotes} ID={this.props.post._id} type="post" />
               <div style={{padding: 0, paddingRight:16, flex: 1, minWidth: 0, fontSize: 18}}>
                 {linkOrText()}
               </div>
