@@ -39,7 +39,6 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
 
     render () {
       var commentElement = function(comment){
-        console.log(comment)
         return (
           <li key= {comment._id}>
             <Paper style={{marginBottom: 10, display: 'flex', alignItems: 'center'}}>

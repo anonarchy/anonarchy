@@ -64,10 +64,8 @@ Yavanna.provide('Odin', ({
       await VoteCollection.create(userVoteKey, votableId, value)
 
       let delta = value - (existingVote ? existingVote.value : 0)
-      console.log("type: ", type)
 
       if(type === 'comment'){
-        console.log("It's a comment")
         return await CommentCollection.recordVote(votableId, value, delta)
       }else{
         return await PostCollection.recordVote(votableId, value, delta)

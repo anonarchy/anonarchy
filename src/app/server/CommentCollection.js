@@ -11,7 +11,6 @@ Yavanna.provide('CommentCollection', ({DB}) => {
       }else if (delta == 0){
         return
       }else{
-        console.log("upvoting")
         return await DB.updateOne('comments', {_id: new ObjectID(votableId)}, {$inc: {netVotes: delta, upvotes: value}})
       }
     },
