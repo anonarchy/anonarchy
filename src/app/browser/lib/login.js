@@ -3,6 +3,7 @@ import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import request from 'browser-request'
+import {browserHistory} from 'react-router'
 
 Yavanna.provide('Login', () => {
 
@@ -14,14 +15,19 @@ Yavanna.provide('Login', () => {
     },
 
     onResponse(err, res, body){
-      if(err){
+      console.log(err)
+      console.log(body)
+      console.log(res.body)
+      console.log(res)
+      if(body.err){
           console.log(body)
           console.log(res.body)
           console.log(res)
+          alert(body.err);
           return
           // throw err;
       }
-      this.props.handleClose()
+      browserHistory.push('/')
     },
 
     submit(){

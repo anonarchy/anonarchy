@@ -47,7 +47,7 @@ Yavanna.provide('AppController', ({Odin}) => {
       setSessionCookie(loginToken, res)
       res.status(200).send({token: loginToken})
     }else{
-      res.status(403).send("Invalid username or password")
+      res.status(403).send({err: "Invalid username or password"})
     }
   })
 
