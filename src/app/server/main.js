@@ -23,6 +23,18 @@ app.use('/assets', express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.json({reviver: dateReviver}))
 app.use(cookieParser())
 
+var forceSsl = function (req, res, next) {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+        return res.redirect(['https://', req.get('Host'), req.url].join(''));
+    }
+    return next()
+}
+
+if (process.env.SERVER === 'production'){
+  app.use(forceSsl);
+}
+
+
 // var posts = [{id: 1, title: 'Oh baby', body: 'Food is nice', author: 'ILikeFood'}, {id: 2, title: 'Suck it', body: 'ILikeFood is a dumbdumb!', author: 'Trollolol'}]
 // var comments = [{body: 'What the hell is this guy on?'}, {body: 'poop there it is!'}]
 // var db = Yavanna.get('DB')
