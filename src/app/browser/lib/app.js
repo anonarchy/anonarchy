@@ -78,7 +78,7 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
                   targetOrigin={{horizontal: 'right', vertical: 'top'}}
                 >
                   <MenuItem primaryText="Login" href= '/login'/>
-                  <MenuItem primaryText="Sign Up" onTouchTap={this.handleSignupOpen} />
+                  <MenuItem primaryText="Sign Up" href = 'signup' />
                   <MenuItem primaryText="Contribute" href='https://github.com/anonypost/anonypost'/>
                   <MenuItem primaryText="Report Bug" href='https://github.com/anonypost/anonypost/issues' />
                 </IconMenu>
@@ -120,19 +120,6 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
               <Route path="/login" component={Login}/>
               <Route path="/signup" component={Signup}/>
             </Router>
-            <Drawer open={this.state.open}
-              docked={false}
-              open={this.state.open}
-              onRequestChange={(open) => this.setState({open})}
-            >
-              <div style={{height: 100, backgroundColor:'black'}}/>
-              <MenuItem primaryText="Login" href= '/login'/>
-              <MenuItem primaryText="Sign Up" href='/signup' />
-              <MenuItem primaryText="Contribute" href='https://github.com/anonypost/anonypost'/>
-              <MenuItem primaryText="Report Bug" href='https://github.com/anonypost/anonypost/issues' />
-            </Drawer>
-            <Signup open={this.state.signup} handleClose={this.handleSignupClose}/>
-
           </div>
         </MuiThemeProvider>
 

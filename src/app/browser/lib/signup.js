@@ -3,6 +3,7 @@ import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import request from 'browser-request'
+import {browserHistory} from 'react-router'
 
 Yavanna.provide('Signup', () => {
 
@@ -18,10 +19,11 @@ Yavanna.provide('Signup', () => {
           console.log(body)
           console.log(res.body)
           console.log(res)
+          alert(body.err);
           return
           // throw err;
       }
-      this.props.handleClose()
+      browserHistory.push('/')
     },
 
     submit(){
@@ -51,27 +53,9 @@ Yavanna.provide('Signup', () => {
     },
 
     render() {
-      const actions = [
-        <FlatButton
-          label="Cancel"
-          primary={true}
-          onTouchTap={this.props.handleClose}
-        />,
-        <FlatButton
-          label="Submit"
-          primary={true}
-          disabled={this.isNotValid()}
-          onTouchTap={this.submit}
-        />,
-      ];
-
       return (
-        <div>
-          <Dialog
-            open={this.props.open}
-            modal={true}
-            actions={actions}
-          >
+        <div style={{textAlign: 'center', width: 100+ '%',height: 100 + '%' }}>
+          <div style={{marginTop: 100}}>
             <TextField
               autoFocus={true}
               hintText="Username"
@@ -94,7 +78,19 @@ Yavanna.provide('Signup', () => {
               onChange={this.updateConfirmedPassword}
             />
             <br />
-          </Dialog>
+            <br />
+            <FlatButton
+              label="Cancel"
+              primary={true}
+              onTouchTap={this.props.handleClose}
+            />
+            <FlatButton
+              label="Submit"
+              primary={true}
+              disabled={this.isNotValid()}
+              onTouchTap={this.submit}
+            />
+          </div>
         </div>
       )
     }
