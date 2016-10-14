@@ -120,6 +120,9 @@ Yavanna.provide('AppController', ({Odin}) => {
     }
   })
 
+  app.get(process.env.ACME_VERIFICATION_URL, function(req, res) {
+    res.status(200).send(process.env.ACME_VERIFICATION_VALUE)
+  })
 
   app.get('*', function (req, res) {
     const html = `<!DOCTYPE html>
@@ -228,6 +231,8 @@ Yavanna.provide('AppController', ({Odin}) => {
     }
   })
 })
+
+
 
 function setSessionCookie(token, response) {
   try {
