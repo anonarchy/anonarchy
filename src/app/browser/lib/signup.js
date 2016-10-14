@@ -4,6 +4,7 @@ import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import request from 'browser-request'
 import {browserHistory} from 'react-router'
+import Recaptcha from 'react-gcaptcha'
 
 Yavanna.provide('Signup', () => {
 
@@ -45,11 +46,19 @@ Yavanna.provide('Signup', () => {
 
 
     isNotValid(){
-      if (this.state.username === "" || this.state.password === "" || this.state.password !== this.state.confirmedPassword){
+      if (this.state.username === "" || this.state.password === "" || this.state.password !== this.state.confirmedPassword || ! this.state.human){
         return true
       }
       return false
 
+    },
+
+    recaptchaVerified(){
+      this.setState({human: true})
+    },
+
+    recaptchaExpired(){
+      this.setState({human: false})
     },
 
     render() {
@@ -76,6 +85,12 @@ Yavanna.provide('Signup', () => {
               floatingLabelText="Confirm Password"
               type="password"
               onChange={this.updateConfirmedPassword}
+            />
+            <br />
+            <Recaptcha
+              sitekey="6LcZQAkUAAAAABnDYk8-sl2T-mU4ycGHg1LIBd4j"
+              verifyCallback={this.recaptchaVerified}
+              expiredCallback={this.recaptchaExpired}
             />
             <br />
             <br />

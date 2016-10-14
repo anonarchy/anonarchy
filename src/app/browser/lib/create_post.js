@@ -4,6 +4,7 @@ import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import {browserHistory} from 'react-router'
 import request from 'browser-request'
+import Recaptcha from 'react-gcaptcha'
 
 function on_response(er, response, body) {
   if(er){
@@ -82,6 +83,14 @@ Yavanna.provide('CreatePost', () => {
       this.setState({link: value})
     },
 
+    recaptchaVerified(){
+      this.setState({human: true})
+    },
+
+    recaptchaExpired(){
+      this.setState({human: false})
+    },
+
     render () {
       return (
         <div style={{margin: 24 }}>
@@ -108,10 +117,16 @@ Yavanna.provide('CreatePost', () => {
              fullWidth={true}
              onChange={this.updateText}
           />
-            <RaisedButton label="Submit" primary={true}
-              disabled={this.state.postTitle === ""}
-              onTouchTap={this.submit}
-            />
+          <Recaptcha
+            sitekey="6LcZQAkUAAAAABnDYk8-sl2T-mU4ycGHg1LIBd4j"
+            verifyCallback={this.recaptchaVerified}
+            expiredCallback={this.recaptchaExpired}
+          />
+          <br/>
+          <RaisedButton label="Submit" primary={true}
+            disabled={this.state.postTitle === "" || !this.state.human}
+            onTouchTap={this.submit}
+          />
           </div>
 
 
