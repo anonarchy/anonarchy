@@ -116,9 +116,9 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
             {getAppBar.bind(this)(this.state.loggedIn)}
             <div style={{height: 64}}/>
             <Router history={browserHistory}>
-              <Route path="/" component={PostList}/>
-              <Route path="comments/:postID" component={Comments}/>
-              <Route path="/new" component={CreatePost}/>
+              <Route path="/" component={PostList} loggedIn={this.state.loggedIn}/>
+              <Route path="comments/:postID" component={Comments} loggedIn={this.state.loggedIn}/>
+              <Route path="/new" component={CreatePost} loggedIn={this.state.loggedIn}/>
               <Route path="/login" component={Login}/>
               <Route path="/signup" component={Signup}/>
             </Router>

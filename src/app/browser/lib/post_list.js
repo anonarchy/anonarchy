@@ -92,7 +92,13 @@ Yavanna.provide('PostList', ({Login, Post}) => {
     },
 
     addPost () {
-      browserHistory.push('/new')
+      if (this.props.route.loggedIn){
+        console.log("Logged in!")
+        browserHistory.push('/new')
+      }else{
+        console.log("Not logged in")
+        browserHistory.push('/login')
+      }
     },
 
     saveTab(value){
@@ -119,7 +125,7 @@ Yavanna.provide('PostList', ({Login, Post}) => {
       var createPost = function (post) {
         return (
           <li key= {post._id} style={{ marginTop: 10 }} >
-            <Post post={post}/>
+            <Post post={post} loggedIn={this.props.route.loggedIn}/>
           </li>
         )
       }

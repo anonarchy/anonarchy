@@ -27,12 +27,18 @@ Yavanna.provide('Login', () => {
           return
           // throw err;
       }
-      browserHistory.push('/')
+      browserHistory.push('/') //Find some way to goBack unless navigated directly, the go to home page.
+
+      // browserHistory.goBack()
     },
 
     submit(){
       console.log(this.state.username)
       request({method:'POST', url:'/api/login', json:{username: this.state.username, password: this.state.password}}, this.onResponse)
+    },
+
+    cancel(){
+      browserHistory.goBack()
     },
 
     updateUsername(event, value){
@@ -90,7 +96,7 @@ Yavanna.provide('Login', () => {
             <FlatButton
               label="Cancel"
               primary={true}
-              onTouchTap={this.props.handleClose}
+              onTouchTap={this.cancel}
             />
             <FlatButton
               label="Submit"

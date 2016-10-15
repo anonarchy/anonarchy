@@ -24,11 +24,17 @@ Yavanna.provide('Signup', () => {
           return
           // throw err;
       }
-      browserHistory.push('/')
+      browserHistory.push('/') //Find some way to goBack unless navigated directly, the go to home page.
+
+      // browserHistory.goBack()
     },
 
     submit(){
       request({method:'POST', url:'/api/signup', json:{username: this.state.username, password: this.state.password, recaptcha: this.state.recaptcha}}, this.onResponse)
+    },
+
+    cancel(){
+      browserHistory.goBack()
     },
 
     updateUsername(event, value){

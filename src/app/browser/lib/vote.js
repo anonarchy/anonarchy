@@ -2,6 +2,7 @@ import React from 'react'
 import request from 'browser-request'
 import _ from 'underscore'
 // var upvote = require('./upvote.png')
+import {browserHistory} from 'react-router'
 
 var upVoted = {
   fontSize: 18,
@@ -56,17 +57,23 @@ Yavanna.provide('Vote', () => {
     },
 
     castVote(value){
-      console.log("casting a vote")
-      if (this.state.vote === 0){
-        this.setState({vote: value})
-        request({method:'POST', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value, type: this.props.type}}}, this.onResponse)
-      }else if (this.state.vote !== value){
-        this.setState({vote: value})
-        request({method:'POST', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value, type: this.props.type}}}, this.onResponse)
+      if (this.props.loggedIn){
+        console.log("casting a vote")
+        if (this.state.vote === 0){
+          this.setState({vote: value})
+          request({method:'POST', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value, type: this.props.type}}}, this.onResponse)
+        }else if (this.state.vote !== value){
+          this.setState({vote: value})
+          request({method:'POST', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value, type: this.props.type}}}, this.onResponse)
+        }else{
+          this.setState({vote: 0})
+          request({method:'DELETE', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value, type: this.props.type}}}, this.onResponse)
+        }
       }else{
-        this.setState({vote: 0})
-        request({method:'DELETE', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value, type: this.props.type}}}, this.onResponse)
+        browserHistory.push("/login")
       }
+
+
     },
 
     render() {
