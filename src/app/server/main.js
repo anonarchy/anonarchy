@@ -1,4 +1,5 @@
 const express = require('express')
+const request = require('request')
 const path = require('path')
 var bodyParser = require('body-parser');
 // require('babel-polyfill')
@@ -43,13 +44,24 @@ if (process.env.SERVER === 'production'){
 Yavanna.provide('AppController', ({Odin}) => {
 
   app.post('/api/signup', async function(req, res){
-    var token = await Odin.createUser(req.body.username, req.body.password)
-    if(token){
-      setSessionCookie(token, res)
-      res.status(201).send({any: 'data'})
-    }else{
-      res.status(400).send("User already exists")
-    }
+    request.post({url:'https://www.google.com/recaptcha/api/siteverify', form: {secret:process.env.RECAPTCHA_SECRET, response: req.body.recaptcha}}, async function(err, recaptchaRes, body){
+      body = JSON.parse(body)
+      if (body.success) {
+        var token = await Odin.createUser(req.body.username, req.body.password)
+        if(token){
+          setSessionCookie(token, res)
+          res.status(201).send({any: 'data'})
+        }else{
+          res.status(400).send("User already exists")
+        }
+      }else{
+        console.log(body)
+
+        res.status(400).send(body)
+      }
+
+    })
+
   })
 
   app.post('/api/login/', async function(req, res){
@@ -157,22 +169,30 @@ Yavanna.provide('AppController', ({Odin}) => {
   })
 
   app.post('/api/posts', async function (req, res){
-    try{
-      console.log(req.cookies.session)
-      var token = await Odin.exchangeToken(req.cookies.session)
-      //get user too
-      setSessionCookie(token, res)
-      if (token){
-        var new_post = await Odin.createPost(req.body.post)
-        res.status(200).send(new_post)
-        // return post id? some other UUID?
+    request.post({url:'https://www.google.com/recaptcha/api/siteverify', form: {secret:process.env.RECAPTCHA_SECRET, response: req.body.recaptcha}}, async function(err, recaptchaRes, body){
+      body = JSON.parse(body)
+      if (body.success) {
+        try{
+          console.log(req.cookies.session)
+          var token = await Odin.exchangeToken(req.cookies.session)
+          //get user too
+          setSessionCookie(token, res)
+          if (token){
+            var new_post = await Odin.createPost(req.body.post)
+            res.status(200).send(new_post)
+            // return post id? some other UUID?
+          }else{
+            res.status(403).send(null)
+          }
+        }catch(error){
+          console.log(error)
+          res.status(500).send(null)
+        }
       }else{
-        res.status(403).send(null)
+        console.log(body)
+        res.status(400).send(body)
       }
-    }catch(error){
-      console.log(error)
-      res.status(500).send(null)
-    }
+    })
   })
 
   app.post('/api/comment', async function (req, res){

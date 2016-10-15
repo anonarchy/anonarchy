@@ -28,7 +28,7 @@ Yavanna.provide('Signup', () => {
     },
 
     submit(){
-      request({method:'POST', url:'/api/signup', json:{username: this.state.username, password: this.state.password}}, this.onResponse)
+      request({method:'POST', url:'/api/signup', json:{username: this.state.username, password: this.state.password, recaptcha: this.state.recaptcha}}, this.onResponse)
     },
 
     updateUsername(event, value){
@@ -53,8 +53,8 @@ Yavanna.provide('Signup', () => {
 
     },
 
-    recaptchaVerified(){
-      this.setState({human: true})
+    recaptchaVerified(res){
+      this.setState({human: true, recaptcha: res})
     },
 
     recaptchaExpired(){

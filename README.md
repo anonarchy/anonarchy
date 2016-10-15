@@ -20,6 +20,7 @@ Set up environment variables:
 
 ```
 export ACME_VERIFICATION_URL=/jirblytoon
+export RECAPTCHA_SECRET=shhhhhhh
 export PORT=3000
 export ANONYPOST_SECRET_KEY=secret
 export MONGODB_URI='mongodb://localhost:27017/anonypost'

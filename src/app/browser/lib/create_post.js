@@ -19,6 +19,7 @@ function on_response(er, response, body) {
   posts[ID] = response.body.ownerToken
   console.log(posts)
   localStorage.setItem('posts', JSON.stringify(posts));
+  browserHistory.push('/')
 }
 
 var watchID
@@ -67,8 +68,7 @@ Yavanna.provide('CreatePost', () => {
 
     submit(){
       console.log(this.state.postTitle)
-      request({method:'POST', url:'/api/posts', json: {post: {title: this.state.postTitle, author: this.state.author, body: this.state.body, link: this.state.link, loc: {long: this.state.long, lat: this.state.lat}}}}, on_response)
-      browserHistory.push('/')
+      request({method:'POST', url:'/api/posts', json: {recaptcha: this.state.recaptcha, post: {title: this.state.postTitle, author: this.state.author, body: this.state.body, link: this.state.link, loc: {long: this.state.long, lat: this.state.lat}}}}, on_response)
     },
 
     updateTitle(event, value){
@@ -83,8 +83,8 @@ Yavanna.provide('CreatePost', () => {
       this.setState({link: value})
     },
 
-    recaptchaVerified(){
-      this.setState({human: true})
+    recaptchaVerified(res){
+      this.setState({human: true, recaptcha: res})
     },
 
     recaptchaExpired(){
