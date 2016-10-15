@@ -91,6 +91,7 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
             <AppBar
               title="AnonyPost"
               style={{backgroundColor: 'black', position: 'fixed'}}
+              iconElementLeft={<div style={{width: 10}}/>}
               onLeftIconButtonTouchTap={this.handleLeftButton}
               iconElementRight={
                 <IconMenu
