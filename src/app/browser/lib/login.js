@@ -27,8 +27,14 @@ Yavanna.provide('Login', ({messageBus}) => {
           return
           // throw err;
       }
+      console.log('about to log in: history.length = ', browserHistory.length)
       messageBus.send('login')
-      browserHistory.push('/') //Find some way to goBack unless navigated directly, the go to home page.
+      if (this.props.route.prev !== window.location.pathname){
+        console.log("Previous location", this.props.route.prev)
+        browserHistory.goBack()
+      }else{
+        browserHistory.push('/') //Find some way to goBack unless navigated directly, the go to home page.
+      }
 
       // browserHistory.goBack()
     },
@@ -39,7 +45,12 @@ Yavanna.provide('Login', ({messageBus}) => {
     },
 
     cancel(){
-      browserHistory.goBack()
+      if (this.props.route.prev !== window.location.pathname){
+        console.log("Previous location", this.props.route.prev)
+        browserHistory.goBack()
+      }else{
+        browserHistory.push('/') //Find some way to goBack unless navigated directly, the go to home page.
+      }
     },
 
     updateUsername(event, value){

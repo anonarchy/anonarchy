@@ -3722,7 +3722,7 @@
       "resolved": "https://registry.npmjs.org/raw-body/-/raw-body-2.1.7.tgz"
     },
     "react": {
-      "version": "15.3.0",
+      "version": "15.3.2",
       "from": "react@>=15.2.1 <16.0.0",
       "resolved": "https://registry.npmjs.org/react/-/react-15.3.0.tgz"
     },

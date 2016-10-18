@@ -25,8 +25,12 @@ Yavanna.provide('Signup', ({messageBus}) => {
           // throw err;
       }
       messageBus.send('login')
-      browserHistory.push('/') //Find some way to goBack unless navigated directly, the go to home page.
-
+      if (this.props.route.prev !== window.location.pathname){
+        console.log("Previous location", this.props.route.prev)
+        browserHistory.goBack()
+      }else{
+        browserHistory.push('/') //Find some way to goBack unless navigated directly, the go to home page.
+      }
       // browserHistory.goBack()
     },
 
@@ -35,7 +39,12 @@ Yavanna.provide('Signup', ({messageBus}) => {
     },
 
     cancel(){
-      browserHistory.goBack()
+      if (this.props.route.prev !== window.location.pathname){
+        console.log("Previous location", this.props.route.prev)
+        browserHistory.goBack()
+      }else{
+        browserHistory.push('/') //Find some way to goBack unless navigated directly, the go to home page.
+      }
     },
 
     updateUsername(event, value){

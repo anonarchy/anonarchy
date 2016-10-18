@@ -9,6 +9,7 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import request from 'browser-request'
+import cookies from 'browser-cookies'
 
 var getCookies = function(){
   var pairs = document.cookie.split(";");
@@ -23,7 +24,7 @@ var getCookies = function(){
 Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageBus}) => {
   return React.createClass({
     getInitialState: function(){
-      let loggedIn = getCookies().session !== undefined //Call server, log in, return true if valid session token
+      let loggedIn = cookies.get('session')!== undefined //Call server, log in, return true if valid session token
       if (loggedIn){
         console.log("logged in!")
         request({method:'POST', url:'/api/verify', json: {}}, this.onResponse)
@@ -42,6 +43,7 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageB
     },
 
     componentWillMount() {
+      console.log('app is booting; history.length = ', browserHistory)
       messageBus.subscribe('login', () => {
         this.setState({loggedIn: true})
       })
@@ -53,6 +55,7 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageB
 
     logout(){
       this.setState({loggedIn: false})
+      cookies.erase('session')
       browserHistory.push('/login')
     },
 
@@ -134,7 +137,7 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageB
               <Route path="/" component={PostList} loggedIn={this.state.loggedIn}/>
               <Route path="comments/:postID" component={Comments} loggedIn={this.state.loggedIn}/>
               <Route path="/new" component={CreatePost} loggedIn={this.state.loggedIn}/>
-              <Route path="/login" component={Login}/>
+              <Route path="/login" component={Login} prev={window.location.pathname}/>
               <Route path="/signup" component={Signup}/>
             </Router>
           </div>
