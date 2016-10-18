@@ -20,7 +20,7 @@ var getCookies = function(){
   return cookies;
 }
 
-Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
+Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageBus}) => {
   return React.createClass({
     getInitialState: function(){
       let loggedIn = getCookies().session !== undefined //Call server, log in, return true if valid session token
@@ -39,6 +39,21 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
         console.log("Not actually logged in")
         this.setState({loggedIn: false});
       }
+    },
+
+    componentWillMount() {
+      messageBus.subscribe('login', () => {
+        this.setState({loggedIn: true})
+      })
+
+      messageBus.subscribe('logout', () => {
+        this.setState({loggedIn: false})
+      })
+    },
+
+    logout(){
+      this.setState({loggedIn: false})
+      browserHistory.push('/login')
     },
 
     handleLoginOpen(){
@@ -99,7 +114,7 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup}) => {
                   anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                   targetOrigin={{horizontal: 'right', vertical: 'top'}}
                 >
-                  <MenuItem primaryText="Log Out" href= '/login'/>
+                  <MenuItem primaryText="Log Out" onTouchTap={this.logout} />
                   <MenuItem primaryText="Contribute" href='https://github.com/anonypost/anonypost'/>
                   <MenuItem primaryText="Report Bug" href='https://github.com/anonypost/anonypost/issues' />
                 </IconMenu>

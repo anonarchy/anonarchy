@@ -6,7 +6,7 @@ import request from 'browser-request'
 import {browserHistory} from 'react-router'
 import Recaptcha from 'react-gcaptcha'
 
-Yavanna.provide('Signup', () => {
+Yavanna.provide('Signup', ({messageBus}) => {
 
   return React.createClass({
 //            floatingLabelFixed={true}
@@ -24,6 +24,7 @@ Yavanna.provide('Signup', () => {
           return
           // throw err;
       }
+      messageBus.send('login')
       browserHistory.push('/') //Find some way to goBack unless navigated directly, the go to home page.
 
       // browserHistory.goBack()

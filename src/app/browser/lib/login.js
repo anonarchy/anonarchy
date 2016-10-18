@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField'
 import request from 'browser-request'
 import {browserHistory} from 'react-router'
 
-Yavanna.provide('Login', () => {
+Yavanna.provide('Login', ({messageBus}) => {
 
   return React.createClass({
 //            floatingLabelFixed={true}
@@ -27,6 +27,7 @@ Yavanna.provide('Login', () => {
           return
           // throw err;
       }
+      messageBus.send('login')
       browserHistory.push('/') //Find some way to goBack unless navigated directly, the go to home page.
 
       // browserHistory.goBack()
