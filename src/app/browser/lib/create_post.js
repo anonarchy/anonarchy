@@ -8,6 +8,7 @@ import Recaptcha from 'react-gcaptcha'
 
 function on_response(er, response, body) {
   if(er){
+    console.log(response)
     alert(er)
     throw er
   }
@@ -28,17 +29,27 @@ var watchID
 function watchLocation(func) {
     console.log('watchLocation')
     if (navigator.geolocation) {
-        watchID = navigator.geolocation.watchPosition(func, function(){}, {maximumAge: 0, enableHighAccuracy: true})
+        watchID = navigator.geolocation.watchPosition(func, noLocation, {maximumAge: 0, enableHighAccuracy: true})
     } else {
         console.log("Geolocation is not supported by this browser.")
     }
+}
+
+function noLocation(err) {
+  console.log(err.message)
+  if (err.code == 2) {
+    alert("Network location provider not responding")
+  }else {
+    console.log(err.message)
+    alert(err.message)
+  }
 }
 
 
 function getLocation(func) {
     console.log("getting location")
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(func, function(){}, {enableHighAccuracy: true, maximumAge: 100})
+        navigator.geolocation.getCurrentPosition(func, noLocation, {enableHighAccuracy: true, maximumAge: 100})
     } else {
         console.log("Geolocation is not supported by this browser.")
     }
@@ -99,6 +110,7 @@ Yavanna.provide('CreatePost', () => {
             autoFocus={true}
             ref="titleInput"
             floatingLabelText="Title"
+            hintText="Required"
             multiLine={true}
             floatingLabelFixed={true}
             fullWidth={true}
@@ -107,12 +119,14 @@ Yavanna.provide('CreatePost', () => {
           <TextField
             floatingLabelText="Link"
             floatingLabelFixed={true}
+            hintText="Optional"
             fullWidth={true}
             onChange={this.updateLink}
           />
           <TextField
              floatingLabelText="Text"
              multiLine={true}
+             hintText="Optional"
              floatingLabelFixed={true}
              rows={4}
              fullWidth={true}

@@ -33,10 +33,20 @@ function dateReviver(key, value) {
 
 function getLocation(func) {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(func, function(){}, {maximumAge: 100, enableHighAccuracy: true})
+        navigator.geolocation.getCurrentPosition(func, noLocation, {maximumAge: 100, enableHighAccuracy: true, timeout: 10000})
     } else {
         console.log("Geolocation is not supported by this browser.")
     }
+}
+
+function noLocation(err) {
+  console.log(err.message)
+  if (err.code == 2) {
+    alert("Network location provider not responding")
+  }else {
+    console.log(err.message)
+    alert(err.message)
+  }
 }
 
 Yavanna.provide('PostList', ({Login, Post}) => {
