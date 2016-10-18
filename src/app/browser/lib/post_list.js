@@ -92,7 +92,8 @@ Yavanna.provide('PostList', ({Login, Post}) => {
     },
 
     addPost () {
-      if (this.props.route.loggedIn){
+      console.log(this.props.route.loggedIn())
+      if (this.props.route.loggedIn()) {
         console.log("Logged in!")
         browserHistory.push('/new')
       }else{
@@ -122,10 +123,11 @@ Yavanna.provide('PostList', ({Login, Post}) => {
 //                   actAsExpander={post.body !== ""}
 
     render () {
+      console.log('re-rendering post list compoinent ===============', this.props.route.loggedIn())
       var createPost = function (post) {
         return (
           <li key= {post._id} style={{ marginTop: 10 }} >
-            <Post post={post} loggedIn={this.props.route.loggedIn}/>
+            <Post post={post} loggedIn={this.props.route.loggedIn()}/>
           </li>
         )
       }
