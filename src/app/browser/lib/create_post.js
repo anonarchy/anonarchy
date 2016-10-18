@@ -8,6 +8,7 @@ import Recaptcha from 'react-gcaptcha'
 
 function on_response(er, response, body) {
   if(er){
+    alert(er)
     throw er
   }
   console.log(response)

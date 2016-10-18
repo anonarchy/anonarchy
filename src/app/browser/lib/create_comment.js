@@ -7,6 +7,7 @@ import request from 'browser-request'
 
 function on_response(er, response, body) {
   if(er){
+    alert(er)
     throw er
   }
   var comments = JSON.parse(localStorage.getItem('comments'));

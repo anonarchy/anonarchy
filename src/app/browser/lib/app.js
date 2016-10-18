@@ -11,17 +11,9 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import request from 'browser-request'
 import cookies from 'browser-cookies'
 
-var getCookies = function(){
-  var pairs = document.cookie.split(";");
-  var cookies = {};
-  for (var i=0; i<pairs.length; i++){
-    var pair = pairs[i].split("=");
-    cookies[pair[0]] = unescape(pair[1]);
-  }
-  return cookies;
-}
 
 Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageBus}) => {
+
   return React.createClass({
     getInitialState: function(){
       console.log("Cookie: ", cookies.get('session'))

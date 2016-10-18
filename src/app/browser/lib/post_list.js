@@ -72,12 +72,16 @@ Yavanna.provide('PostList', ({Login, Post}) => {
       var query = '/api/posts/?long='+long+'&lat='+lat+'&sort='+tab
       console.log(query)
       this.serverRequest = request(query,  function (er, response, body) {
-        var post_list = JSON.parse(body, dateReviver)
-        console.log(post_list)
-        if(!_.isEmpty(post_list)){
-          this.setState({
-            posts: post_list
-          });
+        if (er){
+          alert(er)
+        }else{
+          var post_list = JSON.parse(body, dateReviver)
+          console.log(post_list)
+          if(!_.isEmpty(post_list)){
+            this.setState({
+              posts: post_list
+            });
+          }
         }
       }.bind(this));
     },

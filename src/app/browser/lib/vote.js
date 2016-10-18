@@ -51,6 +51,7 @@ Yavanna.provide('Vote', () => {
           console.log(body)
           console.log(res.body)
           console.log(res)
+          alert(err)
           return
           // throw err;
       }
