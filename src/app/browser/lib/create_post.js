@@ -64,7 +64,7 @@ function getLocation(func) {
     }
 }
 
-Yavanna.provide('CreatePost', () => {
+Yavanna.provide('CreatePost', ({AnonyBar}) => {
 
   return React.createClass({
 
@@ -128,6 +128,9 @@ Yavanna.provide('CreatePost', () => {
     render () {
       this.checkLogin()
       return (
+        <div>
+        <AnonyBar loggedIn={this.props.route.loggedIn()} prev={this.props.route.prev} logout={this.logout}/>
+        <div style={{height: 64}}/>
         <div style={{margin: 24 }}>
           <TextField
             autoFocus={true}
@@ -165,7 +168,8 @@ Yavanna.provide('CreatePost', () => {
             disabled={this.state.postTitle === "" || !this.state.human}
             onTouchTap={this.submit}
           />
-          </div>
+        </div>
+        </div>
 
 
       )

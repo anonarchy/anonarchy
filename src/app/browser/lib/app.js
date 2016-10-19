@@ -13,7 +13,7 @@ import request from 'browser-request'
 import cookies from 'browser-cookies'
 
 
-Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageBus}) => {
+Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageBus, AnonyBar}) => {
 
   return React.createClass({
     getInitialState: function(){
@@ -23,7 +23,7 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageB
         console.log("logged in!")
         request({method:'POST', url:'/api/verify', json: {}}, this.onResponse)
       }
-      return {login: false, loggedIn: loggedIn, signup: false, open: false}
+      return {login: false, loggedIn: loggedIn, signup: false, open: false, pathname: window.location.pathname}
     },
 
     onResponse(err, res, body){
@@ -91,23 +91,23 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageB
     },
 
     displayBackButton(){
-      if (window.location.pathname == "/"){
+      if (this.state.pathname == "/"){
         return (<div style={{width: 10}}/>)
       }else{
-        return (<IconButton><Back /></IconButton>)
+        return (<IconButton onTouchTap={this.handleLeftButton}><Back /></IconButton>)
       }
     },
 
     handleLeftButton(){
       console.log("Before path change")
-      // let currPath = window.location.pathname
-      // console.log("Before path change")
-      // browserHistory.goBack()
-      // console.log("currPath: ", currPath)
-      // if (currPath == window.location.pathname){
-      //   browserHistory.push('/')
-      //
-      // }
+      let currPath = window.location.pathname
+      console.log("Before path change")
+      if (this.state.pathname == window.location.pathname){
+        browserHistory.push('/')
+      }else{
+        browserHistory.goBack()
+      }
+      this.setState({pathname: window.location.pathname})
     },
 
     goToHome(){
@@ -120,6 +120,9 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageB
     // <Signup open={this.state.signup} handleClose={this.handleSignupClose}/>
     render: function () {
       console.log('re-rendering app compoinent ===============', this.state.loggedIn)
+      var logg = function(){
+        console.log("LOGG")
+      }
       var getAppBar = function(loggedIn){
         let backButton = this.displayBackButton()
         if (!loggedIn){
@@ -129,7 +132,7 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageB
               onTitleTouchTap={this.goToHome}
               style={{backgroundColor: 'black', position: 'fixed'}}
               iconElementLeft={backButton}
-              onLeftIconButtonTouchTap={this.handleLeftButton}
+              onLeftIconButtonTouchTap={logg}
               iconElementRight={
                 <IconMenu
                   iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
@@ -151,7 +154,7 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageB
               style={{backgroundColor: 'black', position: 'fixed'}}
               onTitleTouchTap={this.goToHome}
               iconElementLeft={backButton}
-              onLeftIconButtonTouchTap={this.handleLeftButton}
+              // onLeftIconButtonTouchTap={logg}
               iconElementRight={
                 <IconMenu
                   iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
@@ -168,18 +171,18 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageB
         }
 
       }
-
+      // {getAppBar.bind(this)(this.state.loggedIn)}
+      // <AnonyBar loggedIn={this.isLoggedIn()} prev={window.location.pathname} logout={this.logout}/>
+      // <div style={{height: 64}}/>
       return (
         <MuiThemeProvider>
           <div>
-            {getAppBar.bind(this)(this.state.loggedIn)}
-            <div style={{height: 64}}/>
             <Router history={browserHistory}>
-              <Route path="/" component={PostList} loggedIn={this.isLoggedIn}/>
-              <Route path="comments/:postID" component={Comments} loggedIn={this.isLoggedIn}/>
-              <Route path="/new" component={CreatePost} loggedIn={this.isLoggedIn}/>
-              <Route path="/login" component={Login} prev={window.location.pathname}/>
-              <Route path="/signup" component={Signup} prev={window.location.pathname}/>
+              <Route path="/" component={PostList} loggedIn={this.isLoggedIn} prev={window.location.pathname}/>
+              <Route path="comments/:postID" component={Comments} loggedIn={this.isLoggedIn} prev={window.location.pathname}/>
+              <Route path="/new" component={CreatePost} loggedIn={this.isLoggedIn} prev={window.location.pathname}/>
+              <Route path="/login" component={Login} loggedIn={this.isLoggedIn} prev={window.location.pathname}/>
+              <Route path="/signup" component={Signup} loggedIn={this.isLoggedIn} prev={window.location.pathname}/>
             </Router>
           </div>
         </MuiThemeProvider>

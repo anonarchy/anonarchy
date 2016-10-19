@@ -12,7 +12,7 @@ var ulStyle = {
 }
 
 
-Yavanna.provide('Comments', ({CreateComment, Vote}) => {
+Yavanna.provide('Comments', ({CreateComment, Vote, AnonyBar}) => {
 
   return React.createClass({
 
@@ -76,6 +76,9 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
         return null
       }else{
         return (
+          <div>
+          <AnonyBar loggedIn={this.props.route.loggedIn()} prev={this.props.route.prev} logout={this.logout}/>
+          <div style={{height: 64}}/>
           <div style={{margin: 1.66 + '%'}}>
             <Card >
               <div style={{display: 'flex', alignItems: 'center'}}>
@@ -91,6 +94,7 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
             </Card>
             <CreateComment postID={this.props.params.postID} loggedIn={this.props.route.loggedIn()}/>
             <ul style={ulStyle} >{this.state.comments.map(commentElement.bind(this))}</ul>
+          </div>
           </div>
         )
       }

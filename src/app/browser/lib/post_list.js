@@ -32,7 +32,7 @@ function dateReviver(key, value) {
 };
 
 
-Yavanna.provide('PostList', ({Login, Post}) => {
+Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
 
   return React.createClass({
 
@@ -162,6 +162,9 @@ Yavanna.provide('PostList', ({Login, Post}) => {
         return <p> Could not find location</p>
       }
       return (
+        <div>
+        <AnonyBar loggedIn={this.props.route.loggedIn()} prev={this.props.route.prev} logout={this.logout}/>
+        <div style={{height: 64}}/>
           <div>
             <Tabs value={this.state.tab} onChange={this.handleChange} tabItemContainerStyle={{backgroundColor: 'black'}} inkBarStyle={{backgroundColor: 'white'}} >
               <Tab label="Hot" value="hot" >
@@ -183,7 +186,7 @@ Yavanna.provide('PostList', ({Login, Post}) => {
               <ContentAdd />
             </FloatingActionButton>
           </div>
-
+          </div>
       )
     }
   })

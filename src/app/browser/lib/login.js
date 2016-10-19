@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField'
 import request from 'browser-request'
 import {browserHistory} from 'react-router'
 
-Yavanna.provide('Login', ({messageBus}) => {
+Yavanna.provide('Login', ({messageBus, AnonyBar}) => {
 
   return React.createClass({
 //            floatingLabelFixed={true}
@@ -89,6 +89,9 @@ Yavanna.provide('Login', ({messageBus}) => {
       ];
 
       return (
+        <div>
+        <AnonyBar loggedIn={this.props.route.loggedIn()} prev={this.props.route.prev} logout={this.logout}/>
+        <div style={{height: 64}}/>
         <div style={{textAlign: 'center', width: 100+ '%',height: 100 + '%' }}>
           <div style={{marginTop: 100}}>
             <TextField
@@ -122,6 +125,8 @@ Yavanna.provide('Login', ({messageBus}) => {
             />
           </div>
         </div>
+        </div>
+
       )
     }
 
