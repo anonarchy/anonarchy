@@ -47,13 +47,18 @@ Yavanna.provide('Vote', () => {
     },
 
     onResponse(err, res, body){
-      if(err){
-          console.log(body)
-          console.log(res.body)
-          console.log(res)
-          alert(err)
-          return
+      if(res.status == 0){
+        alert("Sorry. The server could not be reached")
+        return null
+      }
+      if(body.err){
+          alert(body.err);
+          return null
           // throw err;
+      }
+      if (err){
+        alert("Unknown Error. Something's not right. Our bad, maybe. We don't really have a clue.")
+        return null
       }
     },
 

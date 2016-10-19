@@ -31,23 +31,6 @@ function dateReviver(key, value) {
   return value;
 };
 
-function getLocation(func) {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(func, noLocation, {maximumAge: 100, enableHighAccuracy: true, timeout: 10000})
-    } else {
-        console.log("Geolocation is not supported by this browser.")
-    }
-}
-
-function noLocation(err) {
-  console.log(err.message)
-  if (err.code == 2) {
-    alert("Network location provider not responding")
-  }else {
-    console.log(err.message)
-    alert(err.message)
-  }
-}
 
 Yavanna.provide('PostList', ({Login, Post}) => {
 
@@ -61,8 +44,28 @@ Yavanna.provide('PostList', ({Login, Post}) => {
       return {posts: [], open: true, tab: tab}
     },
 
+    getLocation: function(func) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(func, this.noLocation, {maximumAge: 100, enableHighAccuracy: true, timeout: 10000})
+        } else {
+            console.log("Geolocation is not supported by this browser.")
+            alert("Couldn't get location. Make sure your browser supports it and you've given the site permission")
+            this.setState({long: null, lat: null})
+        }
+    },
+
+    noLocation: function(err) {
+      console.log(err.message)
+      if (err.code == 2) {
+        alert("Network location provider not responding")
+      }else {
+        console.log(err.message)
+        alert(err.message)
+      }
+    },
+
     componentDidMount: function() {
-      getLocation(this.setPosition)
+      this.getLocation(this.setPosition)
     },
 
     setPosition(position){
@@ -81,9 +84,13 @@ Yavanna.provide('PostList', ({Login, Post}) => {
       // this.setState({long: long, lat: lat})
       var query = '/api/posts/?long='+long+'&lat='+lat+'&sort='+tab
       console.log(query)
-      this.serverRequest = request(query,  function (er, response, body) {
-        if (er){
-          alert(er)
+      this.serverRequest = request(query,  function (err, res, body) {
+        if(res.status == 0){
+          alert("Sorry. The server could not be reached")
+        }else if(body.err){
+          alert(body.err);
+        }else if (err){
+          alert("Unknown Error. Something's not right. Our bad, maybe. We don't really have a clue.")
         }else{
           var post_list = JSON.parse(body, dateReviver)
           console.log(post_list)
@@ -150,6 +157,9 @@ Yavanna.provide('PostList', ({Login, Post}) => {
       }
       if (this.state.long === undefined){
         return <p> getting location....</p>
+      }
+      if (this.state.long === null){
+        return <p> Could not find location</p>
       }
       return (
           <div>

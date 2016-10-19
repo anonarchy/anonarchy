@@ -16,13 +16,18 @@ Yavanna.provide('Signup', ({messageBus}) => {
 
     onResponse(err, res, body){
       console.log(res)
-      if(err){
-          console.log(body)
-          console.log(res.body)
-          console.log(res)
+      if(res.status == 0){
+        alert("Sorry. The server could not be reached")
+        return null
+      }
+      if(body.err){
           alert(body.err);
-          return
+          return null
           // throw err;
+      }
+      if (err){
+        alert("Unknown Error. Something's not right. Our bad, maybe. We don't really have a clue.")
+        return null
       }
       messageBus.send('login')
       if (this.props.route.prev !== window.location.pathname){
@@ -113,7 +118,7 @@ Yavanna.provide('Signup', ({messageBus}) => {
             <FlatButton
               label="Cancel"
               primary={true}
-              onTouchTap={this.props.handleClose}
+              onTouchTap={this.cancel}
             />
             <FlatButton
               label="Submit"

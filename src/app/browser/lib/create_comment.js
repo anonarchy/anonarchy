@@ -6,9 +6,17 @@ import {browserHistory} from 'react-router'
 import request from 'browser-request'
 
 function on_response(er, response, body) {
-  if(er){
-    alert(er)
-    throw er
+  if(response.status == 0){
+    alert("Sorry. The server could not be reached")
+    return null
+  }
+  if(body.err){
+      alert(body.err);
+      return null
+  }
+  if (err){
+    alert("Unknown Error. Something's not right. Our bad, maybe. We don't really have a clue.")
+    return null
   }
   var comments = JSON.parse(localStorage.getItem('comments'));
   comments = comments === null ? {} : comments
@@ -27,8 +35,13 @@ Yavanna.provide('CreateComment', () => {
     },
 
     submit(){
-      var date = new Date()
-      request({method:'POST', url:'/api/comment', json: {comment: {postID: this.props.postID, body: this.state.body}}}, on_response)
+      if (this.props.loggedIn){
+        var date = new Date()
+        request({method:'POST', url:'/api/comment', json: {comment: {postID: this.props.postID, body: this.state.body}}}, on_response)
+      }else{
+        browserHistory.push('/login')
+      }
+
     },
 
     updateText(event, value){

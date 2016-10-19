@@ -4,6 +4,7 @@ import { Router, Route, Link, browserHistory } from 'react-router'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
 import IconMenu from 'material-ui/IconMenu';
+import Back from 'material-ui/svg-icons/navigation/chevron-left';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton/IconButton';
@@ -26,7 +27,23 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageB
     },
 
     onResponse(err, res, body){
-      if(err){
+      if(res.status == 0){
+        alert("Sorry. The server could not be reached")
+        return null
+      }
+      if(body.err){
+          console.log("Error: ", body.err)
+          console.log(body)
+          console.log("Not actually logged in")
+          this.setState({loggedIn: false});
+          //delete session cookie?
+          return null
+          // throw err;
+      }
+      if (err){
+        alert("Unknown Error. Something's not right. Our bad, maybe. We don't really have a clue.")
+        return null
+      }if(err){
         console.log("Error: ", err)
         console.log(res)
         console.log(body)
@@ -73,21 +90,45 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageB
       this.setState({signup: false});
     },
 
-    handleLeftButton(){
-      this.setState({open: !this.state.open})
+    displayBackButton(){
+      if (window.location.pathname == "/"){
+        return (<div style={{width: 10}}/>)
+      }else{
+        return (<IconButton><Back /></IconButton>)
+      }
     },
+
+    handleLeftButton(){
+      console.log("Before path change")
+      // let currPath = window.location.pathname
+      // console.log("Before path change")
+      // browserHistory.goBack()
+      // console.log("currPath: ", currPath)
+      // if (currPath == window.location.pathname){
+      //   browserHistory.push('/')
+      //
+      // }
+    },
+
+    goToHome(){
+      browserHistory.push('/')
+    },
+
+
     // menuStyle={{position: 'absolute', top: 30, right: 0}}
     // <Login open={this.state.login} handleClose={this.handleLoginClose}/>
     // <Signup open={this.state.signup} handleClose={this.handleSignupClose}/>
     render: function () {
       console.log('re-rendering app compoinent ===============', this.state.loggedIn)
       var getAppBar = function(loggedIn){
+        let backButton = this.displayBackButton()
         if (!loggedIn){
           return (
             <AppBar
               title="AnonyPost"
+              onTitleTouchTap={this.goToHome}
               style={{backgroundColor: 'black', position: 'fixed'}}
-              iconElementLeft={<div style={{width: 10}}/>}
+              iconElementLeft={backButton}
               onLeftIconButtonTouchTap={this.handleLeftButton}
               iconElementRight={
                 <IconMenu
@@ -108,7 +149,8 @@ Yavanna.provide('App', ({PostList, CreatePost, Comments, Login, Signup, messageB
             <AppBar
               title="AnonyPost"
               style={{backgroundColor: 'black', position: 'fixed'}}
-              iconElementLeft={<div style={{width: 10}}/>}
+              onTitleTouchTap={this.goToHome}
+              iconElementLeft={backButton}
               onLeftIconButtonTouchTap={this.handleLeftButton}
               iconElementRight={
                 <IconMenu

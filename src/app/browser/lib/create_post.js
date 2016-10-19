@@ -6,11 +6,18 @@ import {browserHistory} from 'react-router'
 import request from 'browser-request'
 import Recaptcha from 'react-gcaptcha'
 
-function on_response(er, response, body) {
-  if(er){
-    console.log(response)
-    alert(er)
-    throw er
+function on_response(err, response, body) {
+  if(response.status == 0){
+    alert("Sorry. The server could not be reached")
+    return null
+  }
+  if(body.err){
+      alert(body.err);
+      return null
+  }
+  if (err){
+    alert("Unknown Error. Something's not right. Our bad, maybe. We don't really have a clue.")
+    return null
   }
   console.log(response)
   var posts = JSON.parse(localStorage.getItem('posts'));
@@ -32,6 +39,7 @@ function watchLocation(func) {
         watchID = navigator.geolocation.watchPosition(func, noLocation, {maximumAge: 0, enableHighAccuracy: true})
     } else {
         console.log("Geolocation is not supported by this browser.")
+        alert("Couldn't get location. Make sure your browser supports it and you've given the site permission")
     }
 }
 
@@ -52,6 +60,7 @@ function getLocation(func) {
         navigator.geolocation.getCurrentPosition(func, noLocation, {enableHighAccuracy: true, maximumAge: 100})
     } else {
         console.log("Geolocation is not supported by this browser.")
+        alert("Couldn't get location. Make sure your browser supports it and you've given the site permission")
     }
 }
 
@@ -60,17 +69,30 @@ Yavanna.provide('CreatePost', () => {
   return React.createClass({
 
     getInitialState(){
+
       return {postTitle: "", author:"", body: "", link:"", long: null, lat: null}
     },
 
     componentDidMount(){
       // getLocation(this.setCoordinates)
+
       watchLocation(this.setCoordinates)
     },
 
     componentWillUnmount(){
       navigator.geolocation.clearWatch(watchID)
       getLocation(function(){})
+    },
+
+    checkLogin(){
+      if (!this.props.route.loggedIn()){
+        let con = confirm("You need to be logged in to create a post!")
+        if (con == true){
+          browserHistory.push('/login')
+        }else{
+          browserHistory.push('/')
+        }
+      }
     },
 
     setCoordinates(position){
@@ -104,6 +126,7 @@ Yavanna.provide('CreatePost', () => {
     },
 
     render () {
+      this.checkLogin()
       return (
         <div style={{margin: 24 }}>
           <TextField

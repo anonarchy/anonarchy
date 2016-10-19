@@ -17,15 +17,19 @@ Yavanna.provide('Login', ({messageBus}) => {
     onResponse(err, res, body){
       console.log(err)
       console.log(body)
-      console.log(res.body)
       console.log(res)
+      if(res.status == 0){
+        alert("Sorry. The server could not be reached")
+        return null
+      }
       if(body.err){
-          console.log(body)
-          console.log(res.body)
-          console.log(res)
           alert(body.err);
-          return
+          return null
           // throw err;
+      }
+      if (err){
+        alert("Unknown Error. Something's not right. Our bad, maybe. We don't really have a clue.")
+        return null
       }
       console.log('about to log in: history.length = ', browserHistory.length)
       messageBus.send('login')

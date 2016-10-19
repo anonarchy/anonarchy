@@ -23,7 +23,20 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
 
     componentWillMount () {
       var postID = this.props.params.postID
-      this.serverRequest = request('/api/post/'+ postID + '/comments/', function (er, response, body) {
+      this.serverRequest = request('/api/post/'+ postID + '/comments/', function (err, res, body) {
+        if(res.status == 0){
+          alert("Sorry. The server could not be reached")
+          return null
+        }
+        if(body.err){
+            alert(body.err);
+            return null
+            // throw err;
+        }
+        if (err){
+          alert("Unknown Error. Something's not right. Our bad, maybe. We don't really have a clue.")
+          return null
+        }
         var body = JSON.parse(body)
         console.log(body.post)
         this.setState({
@@ -76,7 +89,7 @@ Yavanna.provide('Comments', ({CreateComment, Vote}) => {
                 <ReactMarkdown source={this.state.post.body} />
               </div>
             </Card>
-            <CreateComment postID={this.props.params.postID}/>
+            <CreateComment postID={this.props.params.postID} loggedIn={this.props.route.loggedIn()}/>
             <ul style={ulStyle} >{this.state.comments.map(commentElement.bind(this))}</ul>
           </div>
         )

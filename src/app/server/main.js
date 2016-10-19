@@ -52,12 +52,12 @@ Yavanna.provide('AppController', ({Odin}) => {
           setSessionCookie(token, res)
           res.status(201).send({any: 'data'})
         }else{
-          res.status(400).send("User already exists")
+          res.status(400).send({err: "User already exists"})
         }
       }else{
         console.log(body)
 
-        res.status(400).send(body)
+        res.status(400).send({err: body})
       }
 
     })
@@ -83,7 +83,7 @@ Yavanna.provide('AppController', ({Odin}) => {
       setSessionCookie(loginToken, res)
       res.status(200).send({}) //Not sure why {} fixed the error. Other posts don't require {} to work
     }else{
-      res.status(403).send("Token expired") //For some reason strings are causing errors... This might be better as a GET function
+      res.status(403).send({err: "Token expired"}) //For some reason strings are causing errors... This might be better as a GET function
     }
   })
 
@@ -102,14 +102,14 @@ Yavanna.provide('AppController', ({Odin}) => {
         }else if (sort == 'top'){
           var posts = await Odin.getTopPosts(long, lat)
         }else {
-          res.status(400).send("Sort option not recognized")
+          res.status(400).send({err: "Sort option not recognized"})
         }
       }else{
         var posts = await Odin.getPosts()
       }
       res.send(posts)
     }catch(error){
-      res.status(500).send(error)
+      res.status(500).send({err: error})
     }
   })
 
@@ -121,7 +121,7 @@ Yavanna.provide('AppController', ({Odin}) => {
       res.send(ret)
     }catch(error){
       console.log(error)
-      res.status(500).send(error)
+      res.status(500).send({err: error})
     }
   })
 
@@ -140,7 +140,7 @@ Yavanna.provide('AppController', ({Odin}) => {
       res.status(200).send(ret)
     }catch(error){
       console.log(error)
-      res.status(500).send(error)
+      res.status(500).send({err: error})
     }
   })
 
@@ -182,15 +182,15 @@ Yavanna.provide('AppController', ({Odin}) => {
             res.status(200).send(new_post)
             // return post id? some other UUID?
           }else{
-            res.status(403).send(null)
+            res.status(403).send({err: "User not found"})
           }
         }catch(error){
           console.log(error)
-          res.status(500).send(null)
+          res.status(500).send({err: "Internal Server Error"})
         }
       }else{
         console.log(body)
-        res.status(400).send(body)
+        res.status(400).send({err: body})
       }
     })
   })
@@ -207,11 +207,11 @@ Yavanna.provide('AppController', ({Odin}) => {
         res.status(200).send(new_comment)
         // return post id? some other UUID?
       }else{
-        res.status(403).send(null)
+        res.status(403).send({err: "User not found"})
       }
     }catch(error){
       console.log(error)
-      res.status(500).send(null)
+      res.status(500).send({err: error})
     }
   })
 
@@ -228,14 +228,14 @@ Yavanna.provide('AppController', ({Odin}) => {
         if (result){
           res.status(200).send()
         }else{
-          res.status(403).send("Already voted")
+          res.status(403).send({err: "Already voted"})
         }
       }else{
-        res.status(403).send("No user found")
+        res.status(403).send({err: "No user found"})
       }
     }catch(error){
       console.log(error)
-      res.status(500).send(null)
+      res.status(500).send({err: error})
     }
   })
 
@@ -253,14 +253,14 @@ Yavanna.provide('AppController', ({Odin}) => {
           // }
           res.status(200).send()
         }else{
-          res.status(403).send("Vote not there")
+          res.status(403).send({err: "Vote not there"})
         }
       }else{
-        res.status(403).send("No user found")
+        res.status(403).send({err: "No user found"})
       }
     }catch(error){
       console.log(error)
-      res.status(500).send(null)
+      res.status(500).send({err: error})
     }
   })
 })
