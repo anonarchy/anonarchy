@@ -16,7 +16,7 @@ Yavanna.provide('AnonyBar', () => {
   return React.createClass({
 
     getInitialState(){
-      return {}
+      return {pathname: window.location.pathname}
     },
 
     displayBackButton(){
@@ -29,8 +29,8 @@ Yavanna.provide('AnonyBar', () => {
     },
 
     handleLeftButton(){
-      console.log("Previous path: ", this.props.prev)
-      if (this.props.prev == window.location.pathname){
+      console.log("Previous path: ", this.state.pathname)
+      if (this.state.pathname == window.location.pathname){
         browserHistory.push('/')
       }else{
         browserHistory.goBack()

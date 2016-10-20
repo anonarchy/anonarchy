@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
-// import {browserHistory} from 'react-router'
+import {browserHistory} from 'react-router'
 import request from 'browser-request'
 import Recaptcha from 'react-gcaptcha'
 
@@ -54,9 +54,12 @@ Yavanna.provide('CreatePost', ({AnonyBar}) => {
       this.props.route.setPathname(window.location.pathname)
     },
 
+    componentDidUpdate(){
+      this.checkLogin()
+    },
+
     componentDidMount(){
       // getLocation(this.setCoordinates)
-
       watchLocation(this.setCoordinates)
     },
 
@@ -68,12 +71,15 @@ Yavanna.provide('CreatePost', ({AnonyBar}) => {
     checkLogin(){
       if (!this.props.route.loggedIn()){
         let con = confirm("You need to be logged in to create a post!")
+        console.log("Location1: ", window.location.pathname)
         if (con == true){
-          this.props.history.push('/login')
+          console.log("Location2: ", window.location.pathname)
+          browserHistory.push('/login')
         }else{
-          this.props.history.push('/')
+          browserHistory.push('/')
         }
       }
+      console.log("Location3: ", window.location.pathname)
     },
 
     setCoordinates(position){
@@ -132,7 +138,7 @@ Yavanna.provide('CreatePost', ({AnonyBar}) => {
     },
 
     render () {
-      this.checkLogin()
+      console.log("RENDERING NEW POST")
       return (
         <div style={{margin: 24 }}>
           <TextField

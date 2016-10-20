@@ -15,6 +15,7 @@ Yavanna.provide('Login', ({messageBus, AnonyBar}) => {
     },
 
     componentWillMount(){
+      console.log("Trying to set new pathname for login")
       this.props.route.setPathname(window.location.pathname)
     },
 
