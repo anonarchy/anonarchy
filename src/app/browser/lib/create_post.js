@@ -2,34 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
-import {browserHistory} from 'react-router'
+// import {browserHistory} from 'react-router'
 import request from 'browser-request'
 import Recaptcha from 'react-gcaptcha'
 
-function on_response(err, response, body) {
-  if(response.status == 0){
-    alert("Sorry. The server could not be reached")
-    return null
-  }
-  if(body.err){
-      alert(body.err);
-      return null
-  }
-  if (err){
-    alert("Unknown Error. Something's not right. Our bad, maybe. We don't really have a clue.")
-    return null
-  }
-  console.log(response)
-  var posts = JSON.parse(localStorage.getItem('posts'));
-  posts = posts === null ? {} : posts
-  console.log(response)
-  var ID = response.body.postID
-  console.log(ID)
-  posts[ID] = response.body.ownerToken
-  console.log(posts)
-  localStorage.setItem('posts', JSON.stringify(posts));
-  browserHistory.push('/')
-}
+
 
 var watchID
 
@@ -73,6 +50,10 @@ Yavanna.provide('CreatePost', ({AnonyBar}) => {
       return {postTitle: "", author:"", body: "", link:"", long: null, lat: null}
     },
 
+    componentWillMount(){
+      this.props.route.setPathname(window.location.pathname)
+    },
+
     componentDidMount(){
       // getLocation(this.setCoordinates)
 
@@ -88,9 +69,9 @@ Yavanna.provide('CreatePost', ({AnonyBar}) => {
       if (!this.props.route.loggedIn()){
         let con = confirm("You need to be logged in to create a post!")
         if (con == true){
-          browserHistory.push('/login')
+          this.props.history.push('/login')
         }else{
-          browserHistory.push('/')
+          this.props.history.push('/')
         }
       }
     },
@@ -102,7 +83,32 @@ Yavanna.provide('CreatePost', ({AnonyBar}) => {
 
     submit(){
       console.log(this.state.postTitle)
-      request({method:'POST', url:'/api/posts', json: {recaptcha: this.state.recaptcha, post: {title: this.state.postTitle, author: this.state.author, body: this.state.body, link: this.state.link, loc: {long: this.state.long, lat: this.state.lat}}}}, on_response)
+      request({method:'POST', url:'/api/posts', json: {recaptcha: this.state.recaptcha, post: {title: this.state.postTitle, author: this.state.author, body: this.state.body, link: this.state.link, loc: {long: this.state.long, lat: this.state.lat}}}}, this.onResponse)
+    },
+
+    onResponse(err, response, body) {
+      if(response.status == 0){
+        alert("Sorry. The server could not be reached")
+        return null
+      }
+      if(body.err){
+          alert(body.err);
+          return null
+      }
+      if (err){
+        alert("Unknown Error. Something's not right. Our bad, maybe. We don't really have a clue.")
+        return null
+      }
+      console.log(response)
+      var posts = JSON.parse(localStorage.getItem('posts'));
+      posts = posts === null ? {} : posts
+      console.log(response)
+      var ID = response.body.postID
+      console.log(ID)
+      posts[ID] = response.body.ownerToken
+      console.log(posts)
+      localStorage.setItem('posts', JSON.stringify(posts));
+      this.props.history.push('/')
     },
 
     updateTitle(event, value){
@@ -128,9 +134,6 @@ Yavanna.provide('CreatePost', ({AnonyBar}) => {
     render () {
       this.checkLogin()
       return (
-        <div>
-        <AnonyBar loggedIn={this.props.route.loggedIn()} prev={this.props.route.prev} logout={this.logout}/>
-        <div style={{height: 64}}/>
         <div style={{margin: 24 }}>
           <TextField
             autoFocus={true}
@@ -169,8 +172,6 @@ Yavanna.provide('CreatePost', ({AnonyBar}) => {
             onTouchTap={this.submit}
           />
         </div>
-        </div>
-
 
       )
     }

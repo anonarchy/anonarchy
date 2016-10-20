@@ -3,7 +3,7 @@ import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import request from 'browser-request'
-import {browserHistory} from 'react-router'
+// import {browserHistory} from 'react-router'
 import Recaptcha from 'react-gcaptcha'
 
 Yavanna.provide('Signup', ({messageBus}) => {
@@ -12,6 +12,10 @@ Yavanna.provide('Signup', ({messageBus}) => {
 //            floatingLabelFixed={true}
     getInitialState: function() {
       return {username: "", password: "", confirmedPassword: ""}
+    },
+
+    componentWillMount(){
+      this.props.route.setPathname(window.location.pathname)
     },
 
     onResponse(err, res, body){
@@ -32,11 +36,11 @@ Yavanna.provide('Signup', ({messageBus}) => {
       messageBus.send('login')
       if (this.props.route.prev !== window.location.pathname){
         console.log("Previous location", this.props.route.prev)
-        browserHistory.goBack()
+        this.props.history.goBack()
       }else{
-        browserHistory.push('/') //Find some way to goBack unless navigated directly, the go to home page.
+        this.props.history.push('/') //Find some way to goBack unless navigated directly, the go to home page.
       }
-      // browserHistory.goBack()
+      // this.props.history.goBack()
     },
 
     submit(){
@@ -46,9 +50,9 @@ Yavanna.provide('Signup', ({messageBus}) => {
     cancel(){
       if (this.props.route.prev !== window.location.pathname){
         console.log("Previous location", this.props.route.prev)
-        browserHistory.goBack()
+        this.props.history.goBack()
       }else{
-        browserHistory.push('/') //Find some way to goBack unless navigated directly, the go to home page.
+        this.props.history.push('/') //Find some way to goBack unless navigated directly, the go to home page.
       }
     },
 
@@ -128,6 +132,7 @@ Yavanna.provide('Signup', ({messageBus}) => {
             />
           </div>
         </div>
+
       )
     }
 

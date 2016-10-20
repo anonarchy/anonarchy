@@ -3,7 +3,7 @@ import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import request from 'browser-request'
-import {browserHistory} from 'react-router'
+// import {browserHistory} from 'react-router'
 
 Yavanna.provide('Login', ({messageBus, AnonyBar}) => {
 
@@ -12,6 +12,10 @@ Yavanna.provide('Login', ({messageBus, AnonyBar}) => {
     getInitialState: function() {
       console.log('login!!!!!!!')
       return {username: "", password: ""}
+    },
+
+    componentWillMount(){
+      this.props.route.setPathname(window.location.pathname)
     },
 
     onResponse(err, res, body){
@@ -31,16 +35,15 @@ Yavanna.provide('Login', ({messageBus, AnonyBar}) => {
         alert("Unknown Error. Something's not right. Our bad, maybe. We don't really have a clue.")
         return null
       }
-      console.log('about to log in: history.length = ', browserHistory.length)
+      console.log('about to log in: history.length = ', this.props.history.length)
       messageBus.send('login')
       if (this.props.route.prev !== window.location.pathname){
         console.log("Previous location", this.props.route.prev)
-        browserHistory.goBack()
+        this.props.history.goBack()
       }else{
-        browserHistory.push('/') //Find some way to goBack unless navigated directly, the go to home page.
+        this.props.history.push('/')
+        // browserHistory.push('/') //Find some way to goBack unless navigated directly, the go to home page.
       }
-
-      // browserHistory.goBack()
     },
 
     submit(){
@@ -51,9 +54,10 @@ Yavanna.provide('Login', ({messageBus, AnonyBar}) => {
     cancel(){
       if (this.props.route.prev !== window.location.pathname){
         console.log("Previous location", this.props.route.prev)
-        browserHistory.goBack()
+        this.props.history.goBack()
       }else{
-        browserHistory.push('/') //Find some way to goBack unless navigated directly, the go to home page.
+        this.props.history.push('/')
+        // browserHistory.push('/') //Find some way to goBack unless navigated directly, the go to home page.
       }
     },
 
@@ -74,24 +78,8 @@ Yavanna.provide('Login', ({messageBus, AnonyBar}) => {
     },
 
     render() {
-      const actions = [
-        <FlatButton
-          label="Cancel"
-          primary={true}
-          onTouchTap={this.props.handleClose}
-        />,
-        <FlatButton
-          label="Submit"
-          primary={true}
-          disabled={this.isValid()}
-          onTouchTap={this.submit}
-        />,
-      ];
-
       return (
-        <div>
-        <AnonyBar loggedIn={this.props.route.loggedIn()} prev={this.props.route.prev} logout={this.logout}/>
-        <div style={{height: 64}}/>
+
         <div style={{textAlign: 'center', width: 100+ '%',height: 100 + '%' }}>
           <div style={{marginTop: 100}}>
             <TextField
@@ -124,7 +112,6 @@ Yavanna.provide('Login', ({messageBus, AnonyBar}) => {
               onTouchTap={this.submit}
             />
           </div>
-        </div>
         </div>
 
       )

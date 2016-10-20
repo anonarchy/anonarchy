@@ -3,7 +3,7 @@ import {Card, CardTitle, CardText, CardActions} from 'material-ui/Card'
 import Divider from 'material-ui/Divider'
 import AppBar from 'material-ui/AppBar'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
-import { Router, Route, Link, browserHistory } from 'react-router'
+// import { Router, Route, Link, browserHistory } from 'react-router'
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import request from 'browser-request'
 import FlatButton from 'material-ui/FlatButton'
@@ -64,7 +64,8 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
       }
     },
 
-    componentDidMount: function() {
+    componentWillMount(){
+      this.props.route.setPathname(window.location.pathname)
       this.getLocation(this.setPosition)
     },
 
@@ -109,17 +110,17 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
 
     viewComments(id) {
       console.log("view comments " +id)
-      browserHistory.push('comments/' + id)
+      this.props.history.push('comments/' + id)
     },
 
     addPost () {
       console.log(this.props.route.loggedIn())
       if (this.props.route.loggedIn()) {
         console.log("Logged in!")
-        browserHistory.push('/new')
+        this.props.history.push('/new')
       }else{
         console.log("Not logged in")
-        browserHistory.push('/login')
+        this.props.history.push('/login')
       }
     },
 
@@ -162,9 +163,6 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
         return <p> Could not find location</p>
       }
       return (
-        <div>
-        <AnonyBar loggedIn={this.props.route.loggedIn()} prev={this.props.route.prev} logout={this.logout}/>
-        <div style={{height: 64}}/>
           <div>
             <Tabs value={this.state.tab} onChange={this.handleChange} tabItemContainerStyle={{backgroundColor: 'black'}} inkBarStyle={{backgroundColor: 'white'}} >
               <Tab label="Hot" value="hot" >
@@ -185,7 +183,6 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
             >
               <ContentAdd />
             </FloatingActionButton>
-          </div>
           </div>
       )
     }

@@ -37,8 +37,8 @@ Yavanna.provide('AnonyBar', () => {
       }
     },
 
-    goToHome(){
-      browserHistory.push('/')
+    nav(path){
+      browserHistory.push(path)
     },
 
 
@@ -49,7 +49,7 @@ Yavanna.provide('AnonyBar', () => {
           return (
             <AppBar
               title="AnonyPost"
-              onTitleTouchTap={this.goToHome}
+              onTitleTouchTap={this.nav.bind(this, '/')}
               style={{backgroundColor: 'black', position: 'fixed'}}
               iconElementLeft={backButton}
               iconElementRight={
@@ -58,8 +58,8 @@ Yavanna.provide('AnonyBar', () => {
                   anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                   targetOrigin={{horizontal: 'right', vertical: 'top'}}
                 >
-                  <MenuItem primaryText="Login" href= '/login'/>
-                  <MenuItem primaryText="Sign Up" href = 'signup' />
+                  <MenuItem primaryText="Login" onTouchTap={this.nav.bind(this, '/login')} />
+                  <MenuItem primaryText="Sign Up" onTouchTap={this.nav.bind(this, '/signup')} />
                   <MenuItem primaryText="Contribute" href='https://github.com/anonypost/anonypost'/>
                   <MenuItem primaryText="Report Bug" href='https://github.com/anonypost/anonypost/issues' />
                 </IconMenu>
@@ -71,7 +71,7 @@ Yavanna.provide('AnonyBar', () => {
             <AppBar
               title="AnonyPost"
               style={{backgroundColor: 'black', position: 'fixed'}}
-              onTitleTouchTap={this.goToHome}
+              onTitleTouchTap={this.nav.bind(this, '/')}
               iconElementLeft={backButton}
               iconElementRight={
                 <IconMenu

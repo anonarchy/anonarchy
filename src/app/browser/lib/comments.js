@@ -22,6 +22,7 @@ Yavanna.provide('Comments', ({CreateComment, Vote, AnonyBar}) => {
     },
 
     componentWillMount () {
+      this.props.route.setPathname(window.location.pathname)
       var postID = this.props.params.postID
       this.serverRequest = request('/api/post/'+ postID + '/comments/', function (err, res, body) {
         if(res.status == 0){
@@ -64,6 +65,7 @@ Yavanna.provide('Comments', ({CreateComment, Vote, AnonyBar}) => {
         )
       }
       var post = this.state.post
+      console.log(post)
       var linkOrText = () => {
         if (post.link === "" || post.link === undefined){
           return (<span style={{ display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 16, paddingLeft: 0, alignItems: 'center'}}>{post.title}</span>)
@@ -72,13 +74,13 @@ Yavanna.provide('Comments', ({CreateComment, Vote, AnonyBar}) => {
 
         }
       }
+      if (!post){
+        return <p> Could not find post. It may have been deleted. </p>
+      }
       if (this.state.post.netVotes === null){
         return null
       }else{
         return (
-          <div>
-          <AnonyBar loggedIn={this.props.route.loggedIn()} prev={this.props.route.prev} logout={this.logout}/>
-          <div style={{height: 64}}/>
           <div style={{margin: 1.66 + '%'}}>
             <Card >
               <div style={{display: 'flex', alignItems: 'center'}}>
@@ -94,7 +96,6 @@ Yavanna.provide('Comments', ({CreateComment, Vote, AnonyBar}) => {
             </Card>
             <CreateComment postID={this.props.params.postID} loggedIn={this.props.route.loggedIn()}/>
             <ul style={ulStyle} >{this.state.comments.map(commentElement.bind(this))}</ul>
-          </div>
           </div>
         )
       }
