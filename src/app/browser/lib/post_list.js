@@ -153,8 +153,10 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
           </li>
         )
       }
+      let posts = this.state.posts
       if (posts.length === 0) {
-        return <p>There are no posts here</p>
+        posts = [{title: "There are no posts in your area. Be the first to post here!", body: "No one has posted within 1km of you. Sorry if you feel lonely. We all do sometimes.", _id: 1, netVotes: 1000 }]
+        // return <p>There are no posts here</p>
       }
       if (this.state.long === undefined){
         return <p> getting location....</p>
@@ -166,16 +168,16 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
           <div>
             <Tabs value={this.state.tab} onChange={this.handleChange} tabItemContainerStyle={{backgroundColor: 'black'}} inkBarStyle={{backgroundColor: 'white'}} >
               <Tab label="Hot" value="hot" >
-                <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
+                <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
               </Tab>
               <Tab label="new" value="new" >
-                <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
+                <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
               </Tab>
               <Tab label="top" value="top" >
-                <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
+                <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
               </Tab>
               <Tab label="closest" value="closest" >
-                <ul style={ulStyle} >{this.state.posts.map(createPost.bind(this))}</ul>
+                <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
               </Tab>
             </Tabs>
             <FloatingActionButton style={{position: 'fixed', right: 24, bottom: 24}}

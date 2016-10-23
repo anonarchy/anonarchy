@@ -47,6 +47,9 @@ Yavanna.provide('Vote', () => {
     },
 
     onResponse(err, res, body){
+      console.log(res)
+      console.log(err)
+      console.log(body)
       if(res.status == 0){
         alert("Sorry. The server could not be reached")
         return null
@@ -83,7 +86,7 @@ Yavanna.provide('Vote', () => {
     },
 
     render() {
-
+      console.log("Calling vote render.....")
       return (
         <div style={{width: 68, height: 68, flexShrink: 0, alignSelf: 'baseline'}}>
           <span className={"icon-upvote"} style={(this.state.vote === 1 ? upVoted : notUpVoted)}  onTouchTap={()=> this.castVote(1)} />

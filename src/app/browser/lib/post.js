@@ -83,6 +83,7 @@ Yavanna.provide('Post', ({Vote}) => {
 
           }
         }
+        console.log(this.props.post.title, " : ", this.props.post.netVotes)
 
         // <CardTitle
         //   style={{paddingLeft: 0}}

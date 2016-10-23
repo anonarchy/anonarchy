@@ -5,7 +5,7 @@ import Paper from 'material-ui/Paper'
 import {browserHistory} from 'react-router'
 import request from 'browser-request'
 
-function on_response(er, response, body) {
+function on_response(err, response, body) {
   if(response.status == 0){
     alert("Sorry. The server could not be reached")
     return null

@@ -226,7 +226,7 @@ Yavanna.provide('AppController', ({Odin}) => {
         var result = await Odin.createVote(userVoteKey, payload.ID, payload.value, payload.type)
         console.log('voting: created vote successfully', result)
         if (result){
-          res.status(200).send()
+          res.status(200).send({message: "Vote recorded"})
         }else{
           res.status(403).send({err: "Already voted"})
         }
@@ -243,15 +243,14 @@ Yavanna.provide('AppController', ({Odin}) => {
     try{
       var userVoteKey = await Odin.getUserVoteKey(req.cookies.session)
       if (userVoteKey){
-        var voteKey = hash([userVoteKey, req.body.vote.ID])
-        var result = await Odin.deleteVote(req.body.vote.ID, voteKey)
+        var result = await Odin.deleteVote(userVoteKey, req.body.vote.ID, req.body.vote.type )
         if (result){
           // if (req.body.vote.type === "comment"){
           //     await Odin.unvote(vote, 'comments')
           // }else{
           //     await Odin.unvote(vote, 'posts')
           // }
-          res.status(200).send()
+          res.status(200).send({message: "Vote deleted"})
         }else{
           res.status(403).send({err: "Vote not there"})
         }
