@@ -31,19 +31,30 @@ Yavanna.provide('Vote', () => {
     },
 
     componentDidMount: function(){
+      console.log("Component mounting")
+      console.log("vote total: ", this.props.voteTotal)
       let postID = this.props.ID
       this.serverRequest = request('/api/post/'+ postID + '/votes/', function (er, response, body) {
         body = JSON.parse(body)
         this.setState({
           vote: body.userVote,
-          voteTotal: this.state.voteTotal - body.userVote
+          voteTotal: this.props.voteTotal - body.userVote
         });
         console.log("Stuff: ", this.state.voteTotal, this.state.vote )
       }.bind(this));
     },
 
-    componentWillUnmount () {
-      this.serverRequest.abort();
+    componentWillReceiveProps(nextProps){
+      if (this.props.voteTotal !== nextProps.voteTotal){
+        let postID = this.props.ID
+        this.serverRequest = request('/api/post/'+ postID + '/votes/', function (er, response, body) {
+          body = JSON.parse(body)
+          this.setState({
+            vote: body.userVote,
+            voteTotal: this.props.voteTotal - body.userVote
+          });
+        }.bind(this));
+      }
     },
 
     onResponse(err, res, body){
@@ -87,6 +98,8 @@ Yavanna.provide('Vote', () => {
 
     render() {
       console.log("Calling vote render.....")
+      console.log(this.state.voteTotal, " : ",this.state.vote)
+
       return (
         <div style={{width: 68, height: 68, flexShrink: 0, alignSelf: 'baseline'}}>
           <span className={"icon-upvote"} style={(this.state.vote === 1 ? upVoted : notUpVoted)}  onTouchTap={()=> this.castVote(1)} />
