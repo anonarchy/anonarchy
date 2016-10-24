@@ -33,9 +33,14 @@ Yavanna.provide('PostCollection', ({DB, CurrentTimeService}) => {
       post.ownerToken = newToken
       post.upvotes = 0
       post.netVotes = 0
+      post.commentCount = 0
       post.timestamp = CurrentTimeService.millis()
       post = await DB.execOne('posts', 'insertOne', post)
       return {postID: post.insertedId, ownerToken: newToken}
+    },
+
+    countComment: async function(postID) {
+      return await DB.updateOne('posts', {_id: new ObjectID(postID)}, {$inc: {commentCount: 1}})
     },
 
     findRanked: async function(long, lat, quota=50) {

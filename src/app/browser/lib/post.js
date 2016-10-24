@@ -90,6 +90,8 @@ Yavanna.provide('Post', ({Vote}) => {
         //   title={post.title}
         //   titleStyle={{ display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 0, alignItems: 'center'}}
         // />
+        let commentCount = this.props.post.commentCount ? this.props.post.commentCount : 0
+        let commentLink = commentCount + " Comment" + (commentCount == 1 ? "" : "s")
         return (
           <Card expanded={this.state.expanded} >
             <div style={{display: 'flex', alignItems: 'center'}}>
@@ -103,7 +105,7 @@ Yavanna.provide('Post', ({Vote}) => {
                 <span style={{marginLeft: 68}}/>
                 {showExpandCollapse()}
                 <div style={{margin: 0, cursor: 'pointer', display: 'inline-block', fontSize: 12, textTransform: 'uppercase', padding:8, paddingLeft: 0}} onTouchTap={()=> this.viewComments(post._id)}>
-                  Comments
+                  {commentLink}
                 </div>
               </div>
             <Divider style={{marginLeft: 68}}/>

@@ -52,7 +52,9 @@ Yavanna.provide('Odin', ({
     },
 
     createComment: async function(comment) {
-      return await CommentCollection.create(comment)
+      let commentObject = await CommentCollection.create(comment)
+      await PostCollection.countComment(comment.postID)
+      return commentObject
     },
 
     getCommments: async function(postID) {
