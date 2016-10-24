@@ -41,7 +41,7 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
       if (tab === null){
         tab = 'hot'
       }
-      return {posts: [], open: true, tab: tab}
+      return { open: true, tab: tab}
     },
 
     getLocation: function(func) {
@@ -95,11 +95,9 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
         }else{
           var post_list = JSON.parse(body, dateReviver)
           console.log(post_list)
-          if(!_.isEmpty(post_list)){
-            this.setState({
-              posts: post_list
-            });
-          }
+          this.setState({
+            posts: post_list
+          });
         }
       }.bind(this));
     },
@@ -154,7 +152,8 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
         )
       }
       let posts = this.state.posts
-      if (posts.length === 0) {
+
+      if (posts && posts.length === 0) {
         posts = [{title: "There are no posts in your area. Be the first to post here!", body: "No one has posted within 1km of you. Sorry if you feel lonely. We all do sometimes.", _id: 1, netVotes: 1000 }]
         // return <p>There are no posts here</p>
       }
@@ -163,6 +162,9 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
       }
       if (this.state.long === null){
         return <p> Could not find location</p>
+      }
+      if (!posts){
+        return null
       }
       return (
           <div>
