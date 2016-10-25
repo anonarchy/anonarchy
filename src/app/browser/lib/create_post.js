@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import {browserHistory} from 'react-router'
 import request from 'browser-request'
 import Recaptcha from 'react-gcaptcha'
+import parse from 'url-parse'
 
 
 
@@ -126,6 +127,10 @@ Yavanna.provide('CreatePost', ({AnonyBar}) => {
     },
 
     updateLink(event, value){
+      let uri = parse(value)
+      if (uri.pathname == ('/' + value)){
+        value = "http://" + value
+      }
       this.setState({link: value})
     },
 
