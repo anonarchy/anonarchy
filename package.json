@@ -71,6 +71,7 @@
     "run-sequence": "^1.2.1",
     "secure-random-string": "^1.0.0",
     "uglify": "^0.1.5",
+    "url-parse": "^1.1.6",
     "vinyl-buffer": "^1.0.0",
     "vinyl-named": "^1.1.0",
     "vinyl-source-stream": "^1.1.0",
