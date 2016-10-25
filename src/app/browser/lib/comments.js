@@ -23,6 +23,15 @@ Yavanna.provide('Comments', ({CreateComment, Vote, AnonyBar}) => {
 
     componentWillMount () {
       this.props.route.setPathname(window.location.pathname)
+      this.getComments()
+    },
+
+
+    componentWillUnmount () {
+      this.serverRequest.abort();
+    },
+
+    getComments(){
       var postID = this.props.params.postID
       this.serverRequest = request('/api/post/'+ postID + '/comments/', function (err, res, body) {
         if(res.status == 0){
@@ -45,10 +54,6 @@ Yavanna.provide('Comments', ({CreateComment, Vote, AnonyBar}) => {
           comments: body.comments
         });
       }.bind(this));
-    },
-
-    componentWillUnmount () {
-      this.serverRequest.abort();
     },
 
     render () {
@@ -94,7 +99,7 @@ Yavanna.provide('Comments', ({CreateComment, Vote, AnonyBar}) => {
                 <ReactMarkdown source={this.state.post.body} />
               </div>
             </Card>
-            <CreateComment postID={this.props.params.postID} loggedIn={this.props.route.loggedIn()}/>
+            <CreateComment postID={this.props.params.postID} reload={this.getComments} loggedIn={this.props.route.loggedIn()}/>
             <ul style={ulStyle} >{this.state.comments.map(commentElement.bind(this))}</ul>
           </div>
         )
