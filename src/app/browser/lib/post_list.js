@@ -62,6 +62,8 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
         console.log(err.message)
         alert(err.message)
       }
+      this.setState({long: null, lat: null})
+
     },
 
     componentWillMount(){

@@ -78,6 +78,10 @@ Yavanna.provide('Login', ({messageBus, AnonyBar}) => {
 
     },
 
+    signup(){
+      this.props.history.push('/signup')
+    },
+
     render() {
       return (
 
@@ -100,7 +104,7 @@ Yavanna.provide('Login', ({messageBus, AnonyBar}) => {
               onChange={this.updatePassword}
             />
             <br />
-            <br />
+            <p style={{fontSize: 12, fontFamily: 'roboto,sans-serif'}}>{"Don't have an account?"} <a style={{color: 'blue'}} onTouchTap={this.signup}> Sign up! </a></p>
             <FlatButton
               label="Cancel"
               primary={true}
