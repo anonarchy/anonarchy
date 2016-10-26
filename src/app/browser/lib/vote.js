@@ -31,8 +31,6 @@ Yavanna.provide('Vote', () => {
     },
 
     componentDidMount: function(){
-      console.log("Component mounting")
-      console.log("vote total: ", this.props.voteTotal)
       let postID = this.props.ID
       this.serverRequest = request('/api/post/'+ postID + '/votes/', function (er, response, body) {
         body = JSON.parse(body)
@@ -40,7 +38,6 @@ Yavanna.provide('Vote', () => {
           vote: body.userVote,
           voteTotal: this.props.voteTotal - body.userVote
         });
-        console.log("Stuff: ", this.state.voteTotal, this.state.vote )
       }.bind(this));
     },
 
@@ -78,7 +75,6 @@ Yavanna.provide('Vote', () => {
 
     castVote(value){
       if (this.props.loggedIn){
-        console.log("casting a vote")
         if (this.state.vote === 0){
           this.setState({vote: value})
           request({method:'POST', url:'/api/vote', json:{vote: {ID: this.props.ID, value: value, type: this.props.type}}}, this.onResponse)
@@ -97,9 +93,6 @@ Yavanna.provide('Vote', () => {
     },
 
     render() {
-      console.log("Calling vote render.....")
-      console.log(this.state.voteTotal, " : ",this.state.vote)
-
       return (
         <div style={{width: 68, height: 52, flexShrink: 0, alignSelf: 'baseline'}}>
           <span className={"icon-upvote"} style={(this.state.vote === 1 ? upVoted : notUpVoted)}  onTouchTap={()=> this.castVote(1)} />

@@ -50,7 +50,6 @@ Yavanna.provide('Post', ({Vote, DistanceAndTime}) => {
     },
 
     viewComments(id) {
-      console.log("view comments " +id)
       browserHistory.push('comments/' + id)
     },
 
@@ -82,7 +81,6 @@ Yavanna.provide('Post', ({Vote, DistanceAndTime}) => {
             return (<a href={post.link} style={style}>{post.title}</a>)
           }
         }
-        console.log(this.props.post.title, " : ", this.props.post.netVotes)
 
         // <CardTitle
         //   style={{paddingLeft: 0}}

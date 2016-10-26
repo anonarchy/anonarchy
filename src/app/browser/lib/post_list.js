@@ -9,7 +9,7 @@ import request from 'browser-request'
 import FlatButton from 'material-ui/FlatButton'
 import FontAwesome from 'react-fontawesome';
 import {Tabs, Tab} from 'material-ui/Tabs';
-
+import ReactPullToRefresh from 'react-pull-to-refresh'
 var _ = require('underscore')
 
 var posts = [{title: 'Oh baby', body: 'Food is nice', author: 'ILikeFood'}, {title: 'Suck it', body: 'ILikeFood is a dumbdumb!', author: 'Trollolol'}]
@@ -45,6 +45,7 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
     },
 
     getLocation: function(func) {
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(func, this.noLocation, {maximumAge: 100, enableHighAccuracy: true, timeout: 10000})
         } else {
@@ -125,6 +126,18 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
       this.getPosts(value)
       this.saveTab(value)
     },
+
+    handleRefresh(resolve, reject){
+      let prevList = this.state.posts
+      this.getLocation(this.setPosition)
+      resolve()
+
+      // if (prevList !== this.state.posts){
+      //   resolve()
+      // }else{
+        // reject() //some uncaught error. Should UI wait or just snap back?
+      // }
+    },
     // <FontAwesome name='rocket' style={{margin: 0, marginRight: 6, cursor: 'pointer', display: 'inline-block'}} onTouchTap={()=> this.viewComments(post._id)}/>
 
 //            <Card onTouchTap={() => this.viewComments(post._id)}>
@@ -149,29 +162,47 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
         posts = [{title: "There are no posts in your area. Be the first to post here!", body: "No one has posted within 1km of you. Sorry if you feel lonely. We all do sometimes.", _id: 1, netVotes: 1000 }]
         // return <p>There are no posts here</p>
       }
+      let statusStyle = {fontFamily: 'roboto,sans-serif', color: '#666', textAlign: 'center', marginTop: 10 + '%'}
       if (this.state.long === undefined){
-        return <p> getting location....</p>
+        return <p style={statusStyle}> getting location....</p>
       }
       if (this.state.long === null){
-        return <p> Could not find location</p>
+        return <p style={statusStyle}> Could not find location</p>
       }
       if (!posts){
         return null
       }
+
+      let postList = function(){
+        return (
+          <ReactPullToRefresh onRefresh={this.handleRefresh}>
+            <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
+          </ReactPullToRefresh>
+        )
+      }
+
       return (
           <div>
             <Tabs value={this.state.tab} onChange={this.handleChange} tabItemContainerStyle={{backgroundColor: 'black'}} inkBarStyle={{backgroundColor: 'white'}} >
               <Tab label="Hot" value="hot" >
-                <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
+                <ReactPullToRefresh onRefresh={this.handleRefresh}>
+                  <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
+                </ReactPullToRefresh>
               </Tab>
               <Tab label="new" value="new" >
-                <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
+                <ReactPullToRefresh onRefresh={this.handleRefresh}>
+                  <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
+                </ReactPullToRefresh>
               </Tab>
               <Tab label="top" value="top" >
-                <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
+                <ReactPullToRefresh onRefresh={this.handleRefresh}>
+                  <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
+                </ReactPullToRefresh>
               </Tab>
               <Tab label="closest" value="closest" >
-                <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
+                <ReactPullToRefresh onRefresh={this.handleRefresh}>
+                  <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
+                </ReactPullToRefresh>
               </Tab>
             </Tabs>
             <FloatingActionButton style={{position: 'fixed', right: 24, bottom: 24}}

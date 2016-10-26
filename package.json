@@ -62,6 +62,7 @@
     "react-gcaptcha": "^3.2.0",
     "react-markdown": "^2.4.2",
     "react-marked": "^0.3.1",
+    "react-pull-to-refresh": "^1.0.6",
     "react-recaptcha": "^2.2.0",
     "react-remarkable": "^1.1.1",
     "react-router": "^2.5.2",
