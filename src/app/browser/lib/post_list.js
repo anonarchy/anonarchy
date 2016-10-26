@@ -48,18 +48,18 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(func, this.noLocation, {maximumAge: 100, enableHighAccuracy: true, timeout: 10000})
         } else {
-            console.log("Geolocation is not supported by this browser.")
+            console.error("Geolocation is not supported by this browser.")
             alert("Couldn't get location. Make sure your browser supports it and you've given the site permission")
             this.setState({long: null, lat: null})
         }
     },
 
     noLocation: function(err) {
-      console.log(err.message)
+      console.error(err.message)
       if (err.code == 2) {
         alert("Network location provider not responding")
       }else {
-        console.log(err.message)
+        console.error(err.message)
         alert(err.message)
       }
       this.setState({long: null, lat: null})
@@ -82,11 +82,8 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
     getPosts(tab){
       var long = this.state.long
       var lat = this.state.lat
-      console.log(tab)
-      console.log("Called getPosts")
       // this.setState({long: long, lat: lat})
       var query = '/api/posts/?long='+long+'&lat='+lat+'&sort='+tab
-      console.log(query)
       this.serverRequest = request(query,  function (err, res, body) {
         if(res.status == 0){
           alert("Sorry. The server could not be reached")
@@ -96,7 +93,6 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
           alert("Unknown Error. Something's not right. Our bad, maybe. We don't really have a clue.")
         }else{
           var post_list = JSON.parse(body, dateReviver)
-          console.log(post_list)
           this.setState({
             posts: post_list
           });
@@ -109,17 +105,13 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
     },
 
     viewComments(id) {
-      console.log("view comments " +id)
       this.props.history.push('comments/' + id)
     },
 
     addPost () {
-      console.log(this.props.route.loggedIn())
       if (this.props.route.loggedIn()) {
-        console.log("Logged in!")
         this.props.history.push('/new')
       }else{
-        console.log("Not logged in")
         this.props.history.push('/login')
       }
     },
@@ -129,7 +121,6 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
     },
 
     handleChange(value){
-      console.log(value)
       this.setState({tab: value})
       this.getPosts(value)
       this.saveTab(value)
@@ -145,11 +136,10 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
 //                   actAsExpander={post.body !== ""}
 
     render () {
-      console.log('re-rendering post list compoinent ===============', this.props.route.loggedIn())
       var createPost = function (post) {
         return (
           <li key= {post._id} style={{ marginTop: 10 }} >
-            <Post post={post} loggedIn={this.props.route.loggedIn()}/>
+            <Post post={post} loggedIn={this.props.route.loggedIn()} currentLocation={{lat: this.state.lat, long: this.state.long}}/>
           </li>
         )
       }
