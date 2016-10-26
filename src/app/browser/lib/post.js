@@ -42,8 +42,7 @@ var expander = {
   cursor: 'pointer'
 }
 
-Yavanna.provide('Post', ({Vote}) => {
-
+Yavanna.provide('Post', ({Vote, DistanceAndTime}) => {
   return React.createClass({
 
     getInitialState(){
@@ -76,11 +75,11 @@ Yavanna.provide('Post', ({Vote}) => {
         }
 
         var linkOrText = () => {
+          var style = { display: 'flex', fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 16, paddingLeft: 0, paddingBottom: 2, paddingTop: 10, alignItems: 'center'}
           if (post.link === "" || post.link === undefined){
-            return (<span style={{ display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 16, paddingLeft: 0, alignItems: 'center', wordBreak: 'break-all' }}>{post.title}</span>)
+            return (<span style={style}>{post.title}</span>)
           }else{
-            return (<a href={post.link} style={{display: 'flex', minHeight: 36, fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 16, paddingLeft: 0, alignItems: 'center', outline: 'none', wordBreak: 'break-all'}}>{post.title}</a>)
-
+            return (<a href={post.link} style={style}>{post.title}</a>)
           }
         }
         console.log(this.props.post.title, " : ", this.props.post.netVotes)
@@ -92,14 +91,18 @@ Yavanna.provide('Post', ({Vote}) => {
         // />
         let commentCount = this.props.post.commentCount ? this.props.post.commentCount : 0
         let commentLink = commentCount + " Comment" + (commentCount == 1 ? "" : "s")
+
         return (
           <Card expanded={this.state.expanded} >
             <div style={{display: 'flex', alignItems: 'center'}}>
               <Vote voteTotal={this.props.post.netVotes} ID={this.props.post._id} loggedIn={this.props.loggedIn} type="post" />
               <div style={{padding: 0, paddingRight:16, flex: 1, minWidth: 0, fontSize: 18}}>
                 {linkOrText()}
+                <DistanceAndTime currentLocation={this.props.currentLocation} post={this.props.post} />
               </div>
+
             </div>
+
             <Divider style={{marginLeft: 68}}/>
               <div>
                 <span style={{marginLeft: 68}}/>

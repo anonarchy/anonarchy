@@ -1,11 +1,10 @@
 const ObjectID = require('mongodb').ObjectID;
 const generateToken = require('secure-random-string')
 const _ = require('underscore')
-const geolib = require('geolib')
 
 const MILLIS_PER_DAY = 1000 * 3600 * 24
 
-Yavanna.provide('PostCollection', ({DB, CurrentTimeService}) => {
+Yavanna.provide('PostCollection', ({DB, CurrentTimeService, getDistance}) => {
   return {
     recordVote: async function(votableId, value, delta) {
       if (Math.abs(delta) == 1){
@@ -64,10 +63,7 @@ Yavanna.provide('PostCollection', ({DB, CurrentTimeService}) => {
           break;
         }
       }
-      let userLocation = {
-        longitude: long,
-        latitude: lat
-      }
+      let userLocation = {long, lat}
       return _(postsWithinRadius).sortBy(awesomeness(userLocation)).reverse()
     },
 
@@ -96,8 +92,7 @@ Yavanna.provide('PostCollection', ({DB, CurrentTimeService}) => {
 
   function awesomeness(userLocation) {
     return function(post) {
-      let postLocation = {longitude: post.loc.long, latitude: post.loc.lat}
-      let distance = geolib.getDistance(postLocation, userLocation)
+      let distance = getDistance(post.loc, userLocation)
       return voteScore(post) + post.timestamp / 45000000 - distance / 20
     }
   }

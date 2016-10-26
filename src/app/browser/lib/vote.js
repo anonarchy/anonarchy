@@ -5,7 +5,7 @@ import _ from 'underscore'
 import {browserHistory} from 'react-router'
 
 var upVoted = {
-  fontSize: 18,
+  fontSize: 20,
   height: 14,
   display: 'block',
   textAlign: 'center',
@@ -101,7 +101,7 @@ Yavanna.provide('Vote', () => {
       console.log(this.state.voteTotal, " : ",this.state.vote)
 
       return (
-        <div style={{width: 68, height: 68, flexShrink: 0, alignSelf: 'baseline'}}>
+        <div style={{width: 68, height: 52, flexShrink: 0, alignSelf: 'baseline'}}>
           <span className={"icon-upvote"} style={(this.state.vote === 1 ? upVoted : notUpVoted)}  onTouchTap={()=> this.castVote(1)} />
           <p style={{fontSize: 15, textAlign: 'center', marginTop: 0, marginBottom: 0}}> {this.state.voteTotal + this.state.vote} </p>
           <span className={"icon-downvote"} style={(this.state.vote === -1 ? downVoted : notDownVoted)} onTouchTap={()=> this.castVote(-1)} />
