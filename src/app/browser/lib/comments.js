@@ -60,7 +60,7 @@ Yavanna.provide('Comments', ({CreateComment, Vote, AnonyBar}) => {
       var commentElement = function(comment){
         return (
           <li key= {comment._id}>
-            <Paper style={{marginBottom: 10, display: 'flex', alignItems: 'center'}}>
+            <Paper style={{marginBottom: 10, display: 'flex', alignItems: 'center', minHeight: 64}}>
               <Vote voteTotal={comment.netVotes} ID={comment._id} loggedIn={this.props.route.loggedIn()} type="comment" />
               <div style={{padding: 0, paddingRight:16, flex: 1, minWidth: 0}}>
                 <ReactMarkdown source={comment.body}/>
