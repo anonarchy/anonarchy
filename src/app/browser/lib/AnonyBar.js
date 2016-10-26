@@ -62,6 +62,7 @@ Yavanna.provide('AnonyBar', () => {
                   <MenuItem primaryText="Sign Up" onTouchTap={this.nav.bind(this, '/signup')} />
                   <MenuItem primaryText="Contribute" href='https://github.com/anonypost/anonypost'/>
                   <MenuItem primaryText="Report Bug" href='https://github.com/anonypost/anonypost/issues' />
+                  <MenuItem primaryText="FAQ" href='https://github.com/anonypost/anonypost/blob/master/faq.md' />
                 </IconMenu>
                 }
             />
@@ -82,6 +83,7 @@ Yavanna.provide('AnonyBar', () => {
                   <MenuItem primaryText="Log Out" onTouchTap={this.props.logout} />
                   <MenuItem primaryText="Contribute" href='https://github.com/anonypost/anonypost'/>
                   <MenuItem primaryText="Report Bug" href='https://github.com/anonypost/anonypost/issues' />
+                  <MenuItem primaryText="FAQ" href='https://github.com/anonypost/anonypost/blob/master/faq.md' />
                 </IconMenu>
                 }
             />
