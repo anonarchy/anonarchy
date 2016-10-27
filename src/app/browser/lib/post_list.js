@@ -157,12 +157,23 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
         )
       }
       let posts = this.state.posts
-
-      if (posts && posts.length === 0) {
-        posts = [{title: "There are no posts in your area. Be the first to post here!", body: "No one has posted within 1km of you. Sorry if you feel lonely. We all do sometimes.", _id: 1, netVotes: 1000 }]
-        // return <p>There are no posts here</p>
-      }
       let statusStyle = {fontFamily: 'roboto,sans-serif', color: '#666', textAlign: 'center', marginTop: 10 + '%'}
+      if (posts && posts.length === 0) {
+        return (
+          <div>
+          <div style={statusStyle}>
+            <p > There are no posts in your area. Be the first to post here! </p>
+            <p >  (Sorry if you feel lonely. We all do sometimes.) </p>
+          </div>
+          <FloatingActionButton style={{position: 'fixed', right: 24, bottom: 24}}
+            onTouchTap={this.addPost}
+            >
+            <ContentAdd />
+          </FloatingActionButton>
+          </div>
+
+        )
+      }
       if (this.state.long === undefined){
         return <p style={statusStyle}> getting location....</p>
       }
