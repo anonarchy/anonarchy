@@ -196,22 +196,22 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
           <div>
             <Tabs value={this.state.tab} onChange={this.handleChange} tabItemContainerStyle={{backgroundColor: 'black'}} inkBarStyle={{backgroundColor: 'white'}} >
               <Tab label="Hot" value="hot" >
-                <ReactPullToRefresh onRefresh={this.handleRefresh}>
+                <ReactPullToRefresh onRefresh={this.handleRefresh} hammerOptions={{ touchAction: 'auto' }} >
                   <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
                 </ReactPullToRefresh>
               </Tab>
               <Tab label="new" value="new" >
-                <ReactPullToRefresh onRefresh={this.handleRefresh}>
+                <ReactPullToRefresh onRefresh={this.handleRefresh} hammerOptions={{ touchAction: 'auto' }} >
                   <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
                 </ReactPullToRefresh>
               </Tab>
               <Tab label="top" value="top" >
-                <ReactPullToRefresh onRefresh={this.handleRefresh}>
+                <ReactPullToRefresh onRefresh={this.handleRefresh} hammerOptions={{ touchAction: 'auto' }} >
                   <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
                 </ReactPullToRefresh>
               </Tab>
               <Tab label="closest" value="closest" >
-                <ReactPullToRefresh onRefresh={this.handleRefresh}>
+                <ReactPullToRefresh onRefresh={this.handleRefresh} hammerOptions={{ touchAction: 'auto' }} >
                   <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
                 </ReactPullToRefresh>
               </Tab>
