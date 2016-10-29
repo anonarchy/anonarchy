@@ -4,6 +4,8 @@ import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
 import IconMenu from 'material-ui/IconMenu';
 import Back from 'material-ui/svg-icons/navigation/chevron-left';
+import Reload from 'material-ui/svg-icons/navigation/refresh';
+
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
@@ -28,6 +30,15 @@ Yavanna.provide('AnonyBar', () => {
       }
     },
 
+    displayRefreshButton(){
+      if (window.location.pathname == "/"){
+        return  <IconButton color={'white'} onTouchTap={this.refresh}><Reload color={'white'}/></IconButton>
+
+      }else{
+        return null
+      }
+    },
+
     handleLeftButton(){
       console.log("Previous path: ", this.state.pathname)
       if (this.state.pathname == window.location.pathname){
@@ -41,8 +52,14 @@ Yavanna.provide('AnonyBar', () => {
       browserHistory.push(path)
     },
 
+    refresh(){
+      location.reload()
+    },
 
     render: function() {
+      var buttonStyle = {
+        backgroundColor: 'transparent',
+      };
       var getAppBar = function(loggedIn){
         let backButton = this.displayBackButton()
         if (!loggedIn){
@@ -53,8 +70,10 @@ Yavanna.provide('AnonyBar', () => {
               style={{backgroundColor: 'black', position: 'fixed'}}
               iconElementLeft={backButton}
               iconElementRight={
+                <div style={buttonStyle}>
+                {this.displayRefreshButton()}
                 <IconMenu
-                  iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                  iconButtonElement={<IconButton color={'white'}><MoreVertIcon  color={'white'}/></IconButton>}
                   anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                   targetOrigin={{horizontal: 'right', vertical: 'top'}}
                 >
@@ -64,6 +83,7 @@ Yavanna.provide('AnonyBar', () => {
                   <MenuItem primaryText="Report Bug" href='https://github.com/anonypost/anonypost/issues' />
                   <MenuItem primaryText="FAQ" href='https://github.com/anonypost/anonypost/blob/master/faq.md' />
                 </IconMenu>
+                </div>
                 }
             />
           )
@@ -75,8 +95,10 @@ Yavanna.provide('AnonyBar', () => {
               onTitleTouchTap={this.nav.bind(this, '/')}
               iconElementLeft={backButton}
               iconElementRight={
+                <div>
+                {this.displayRefreshButton()}
                 <IconMenu
-                  iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                  iconButtonElement={<IconButton><MoreVertIcon color={'white'}/></IconButton>}
                   anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                   targetOrigin={{horizontal: 'right', vertical: 'top'}}
                 >
@@ -85,6 +107,7 @@ Yavanna.provide('AnonyBar', () => {
                   <MenuItem primaryText="Report Bug" href='https://github.com/anonypost/anonypost/issues' />
                   <MenuItem primaryText="FAQ" href='https://github.com/anonypost/anonypost/blob/master/faq.md' />
                 </IconMenu>
+                </div>
                 }
             />
           )

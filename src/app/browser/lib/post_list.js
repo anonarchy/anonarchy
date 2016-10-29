@@ -157,13 +157,13 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
         )
       }
       let posts = this.state.posts
-      let statusStyle = {fontFamily: 'roboto,sans-serif', color: '#666', textAlign: 'center', marginTop: 10 + '%'}
+      let statusStyle = {fontFamily: 'roboto,sans-serif', color: '#666', textAlign: 'center', margin: 'auto', marginTop: 10 + '%', width: 90+ '%', }
       if (posts && posts.length === 0) {
         return (
           <div>
           <div style={statusStyle}>
-            <p > There are no posts in your area. Be the first to post here! </p>
-            <p >  (Sorry if you feel lonely. We all do sometimes.) </p>
+            <p  > There are no posts in your area. Be the first to post here! </p>
+            <p  >  (Sorry if you feel lonely. We all do sometimes.) </p>
           </div>
           <FloatingActionButton style={{position: 'fixed', right: 24, bottom: 24}}
             onTouchTap={this.addPost}
@@ -184,43 +184,27 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
         return null
       }
 
-      let postList = function(){
-        return (
-          <ReactPullToRefresh onRefresh={this.handleRefresh}>
-            <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
-          </ReactPullToRefresh>
-        )
-      }
-
       return (
           <div>
             <Tabs value={this.state.tab} onChange={this.handleChange} tabItemContainerStyle={{backgroundColor: 'black'}} inkBarStyle={{backgroundColor: 'white'}} >
               <Tab label="Hot" value="hot" >
-                <ReactPullToRefresh onRefresh={this.handleRefresh} hammerOptions={{ touchAction: 'auto' }} >
                   <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
-                </ReactPullToRefresh>
               </Tab>
               <Tab label="new" value="new" >
-                <ReactPullToRefresh onRefresh={this.handleRefresh} hammerOptions={{ touchAction: 'auto' }} >
                   <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
-                </ReactPullToRefresh>
               </Tab>
               <Tab label="top" value="top" >
-                <ReactPullToRefresh onRefresh={this.handleRefresh} hammerOptions={{ touchAction: 'auto' }} >
                   <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
-                </ReactPullToRefresh>
               </Tab>
               <Tab label="closest" value="closest" >
-                <ReactPullToRefresh onRefresh={this.handleRefresh} hammerOptions={{ touchAction: 'auto' }} >
                   <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
-                </ReactPullToRefresh>
               </Tab>
             </Tabs>
-            <FloatingActionButton style={{position: 'fixed', right: 24, bottom: 24}}
+          <FloatingActionButton style={{position: 'fixed', right: 24, bottom: 24}}
               onTouchTap={this.addPost}
             >
               <ContentAdd />
-            </FloatingActionButton>
+          </FloatingActionButton>
           </div>
       )
     }
