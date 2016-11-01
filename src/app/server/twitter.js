@@ -13,7 +13,7 @@ Yavanna.provide('Twitter', ({PostCollection}) => {
     fetchTweetsAsPosts: async function(long, lat) {
       console.log("Fetching tweets")
       return new Promise((resolve, reject) => {
-        twitterClient.get('search/tweets', {geocode: `${lat},${long},1km`, q: ''}, async function(error, body, response) {
+        twitterClient.get('search/tweets', {geocode: `${lat},${long},0.3km`, q: ''}, async function(error, body, response) {
           if (error) {
             reject(error)
             return
@@ -48,15 +48,28 @@ Yavanna.provide('Twitter', ({PostCollection}) => {
 })
 
 function notADirectMessage(tweet) {
-  return tweet.text[0] !== '@'
+  return tweet.text.indexOf('@') === -1
 }
 
 function getUsefulTweetInfo(tweet) {
+  tweet = extractLink(tweet)
   return {
     title: tweet.text,
+    link: tweet.link,
     tweet_id: tweet.id,
     timestamp: +new Date(tweet.created_at)
   }
+}
+
+function extractLink(tweet){
+  let text = tweet.text
+  let arr = text.split(' ')
+  if (arr[arr.length-1].indexOf('https://') == 0 || arr[arr.length-1].indexOf('http://') == 0){
+      tweet.link = arr[arr.length-1]
+      arr.splice(arr.length-1, 1)
+      tweet.text = arr.join(" ")
+  }
+  return tweet
 }
 
 function assignLocation(long, lat) {

@@ -22,7 +22,6 @@ Yavanna.provide('Odin', ({
     getPostsByRank: async function(long, lat) {
       var realPosts = await PostCollection.findRanked(long, lat)
       if (realPosts.length < 10){
-        console.log("Not enough posts!")
         await Twitter.fetchTweetsAsPosts(long, lat)
         return await PostCollection.findRanked(long, lat)
       }else{
@@ -31,17 +30,35 @@ Yavanna.provide('Odin', ({
     },
 
     getTopPosts: async function(long, lat){
-      return await PostCollection.findTop(long, lat)
+      var realPosts = await PostCollection.findTop(long, lat)
+      if (realPosts.length < 10){
+        await Twitter.fetchTweetsAsPosts(long, lat)
+        return await PostCollection.findTop(long, lat)
+      }else{
+        return realPosts
+      }
     },
 
     getPostsByLocation: async function(long, lat, sort){
       var options = {}
-      return await PostCollection.findNearLocation(long, lat, 1000, 0, options, 50)
+      var realPosts = await PostCollection.findNearLocation(long, lat, 1000, 0, options, 50)
+      if (realPosts.length < 10){
+        await Twitter.fetchTweetsAsPosts(long, lat)
+        return await PostCollection.findNearLocation(long, lat, 1000, 0, options, 50)
+      }else{
+        return realPosts
+      }
     },
 
     getNewestPosts: async function(long, lat){
       let options = {"sort": [['timestamp','desc']]}
-      return await PostCollection.findNearLocation(long, lat, 1000, 0, options, 50)
+      var realPosts = await PostCollection.findNearLocation(long, lat, 1000, 0, options, 50)
+      if (realPosts.length < 10){
+        await Twitter.fetchTweetsAsPosts(long, lat)
+        return await PostCollection.findNearLocation(long, lat, 1000, 0, options, 50)
+      }else{
+        return realPosts
+      }
     },
 
     getPost: async function(id) {

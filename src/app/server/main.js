@@ -170,7 +170,7 @@ Yavanna.provide('AppController', ({Odin, PostRequestBody}) => {
 
   app.post('/api/posts', async function (req, res){
     request.post({url:'https://www.google.com/recaptcha/api/siteverify', form: {secret:process.env.RECAPTCHA_SECRET, response: req.body.recaptcha}}, async function(err, recaptchaRes, body){
-      body = PostRequestBody(JSON.parse(body))
+      body = JSON.parse(body)
       if (body.success) {
         try{
           console.log(req.cookies.session)
@@ -178,7 +178,7 @@ Yavanna.provide('AppController', ({Odin, PostRequestBody}) => {
           //get user too
           setSessionCookie(token, res)
           if (token){
-            var new_post = await Odin.createPost(req.body.post)
+            var new_post = await Odin.createPost(PostRequestBody(req.body.post))
             res.status(200).send(new_post)
             // return post id? some other UUID?
           }else{
@@ -189,7 +189,7 @@ Yavanna.provide('AppController', ({Odin, PostRequestBody}) => {
           res.status(500).send({err: "Internal Server Error"})
         }
       }else{
-        console.log(body)
+        console.log("Logging body because err: ", body)
         res.status(400).send({err: body})
       }
     })

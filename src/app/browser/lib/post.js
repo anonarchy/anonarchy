@@ -64,7 +64,7 @@ Yavanna.provide('Post', ({Vote, DistanceAndTime}) => {
     render () {
         var post = this.props.post
         var showExpandCollapse = () => {
-          if (post.body !== ""){
+          if (post.body){
             if (!this.state.expanded){
               return <span className={"icon-plus-square-o"} style={expander} onTouchTap={this.expand}/>
             }else{
@@ -80,6 +80,20 @@ Yavanna.provide('Post', ({Vote, DistanceAndTime}) => {
           }else{
             return (<a href={post.link} style={style}>{post.title}</a>)
           }
+        }
+
+        var renderBody = () => {
+          if (post.body){
+            return(
+              <div expandable={true} >
+                <Divider style={{marginLeft: 68}}/>
+                <div style={{padding: 0, paddingRight:16, paddingBottom: 1, marginLeft: 68}}>
+                  <ReactMarkdown source={post.body} />
+                </div>
+              </div>
+            )
+          }
+          return null
         }
 
         // <CardTitle
@@ -109,10 +123,7 @@ Yavanna.provide('Post', ({Vote, DistanceAndTime}) => {
                   {commentLink}
                 </div>
               </div>
-            <Divider style={{marginLeft: 68}}/>
-            <div expandable={true} style={{padding: 0, paddingRight:16, paddingBottom: 1, marginLeft: 68}}>
-              <ReactMarkdown source={post.body} />
-            </div>
+              {renderBody()}
           </Card>
         )
     }
