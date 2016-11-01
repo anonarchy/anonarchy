@@ -107,6 +107,7 @@ Yavanna.provide('AppController', ({Odin, PostRequestBody}) => {
       }else{
         var posts = await Odin.getPosts()
       }
+      console.log(posts)
       res.send(posts)
     }catch(error){
       res.status(500).send({err: error})

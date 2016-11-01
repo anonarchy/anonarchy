@@ -75,7 +75,7 @@ Yavanna.provide('Post', ({Vote, DistanceAndTime}) => {
 
         var linkOrText = () => {
           var style = { display: 'flex', fontSize: 18, lineHeight: 22 + 'px', margin: 0, padding: 16, paddingLeft: 0, paddingBottom: 2, paddingTop: 10, alignItems: 'center'}
-          if (post.link === "" || post.link === undefined){
+          if (!post.link){
             return (<span style={style}>{post.title}</span>)
           }else{
             return (<a href={post.link} style={style}>{post.title}</a>)
