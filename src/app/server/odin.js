@@ -11,7 +11,8 @@ Yavanna.provide('Odin', ({
   PostCollection,
   CommentCollection,
   VoteCollection,
-  cryptoHash
+  cryptoHash,
+  Twitter
 }) => {
   return {
     getPosts: async function() {
@@ -19,7 +20,14 @@ Yavanna.provide('Odin', ({
     },
 
     getPostsByRank: async function(long, lat) {
-      return await PostCollection.findRanked(long, lat)
+      var realPosts = await PostCollection.findRanked(long, lat)
+      if (realPosts.length < 10){
+        console.log("Not enough posts!")
+        await Twitter.fetchTweetsAsPosts(long, lat)
+        return await PostCollection.findRanked(long, lat)
+      }else{
+        return realPosts
+      }
     },
 
     getTopPosts: async function(long, lat){

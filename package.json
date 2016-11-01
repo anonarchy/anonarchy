@@ -71,6 +71,7 @@
     "regenerator-runtime": "^0.9.5",
     "run-sequence": "^1.2.1",
     "secure-random-string": "^1.0.0",
+    "twitter": "^1.4.0",
     "uglify": "^0.1.5",
     "url-parse": "^1.1.6",
     "vinyl-buffer": "^1.0.0",
@@ -85,5 +86,6 @@
     "test": "gulp check"
   },
   "author": "Ben Christel",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {}
 }

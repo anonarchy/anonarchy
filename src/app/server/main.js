@@ -41,7 +41,7 @@ if (process.env.SERVER === 'production'){
 // var db = Yavanna.get('DB')
 // db.exec('posts', 'insertOne', {title: 'Oh baby', body: 'Food is nice', author: 'ILikeFood'})
 
-Yavanna.provide('AppController', ({Odin}) => {
+Yavanna.provide('AppController', ({Odin, PostRequestBody}) => {
 
   app.post('/api/signup', async function(req, res){
     request.post({url:'https://www.google.com/recaptcha/api/siteverify', form: {secret:process.env.RECAPTCHA_SECRET, response: req.body.recaptcha}}, async function(err, recaptchaRes, body){
@@ -170,7 +170,7 @@ Yavanna.provide('AppController', ({Odin}) => {
 
   app.post('/api/posts', async function (req, res){
     request.post({url:'https://www.google.com/recaptcha/api/siteverify', form: {secret:process.env.RECAPTCHA_SECRET, response: req.body.recaptcha}}, async function(err, recaptchaRes, body){
-      body = JSON.parse(body)
+      body = PostRequestBody(JSON.parse(body))
       if (body.success) {
         try{
           console.log(req.cookies.session)

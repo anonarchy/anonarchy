@@ -4,7 +4,7 @@ const _ = require('underscore')
 
 const MILLIS_PER_DAY = 1000 * 3600 * 24
 
-Yavanna.provide('PostCollection', ({DB, CurrentTimeService, getDistance}) => {
+Yavanna.provide('PostCollection', ({DB, CurrentTimeService, getDistance, Post}) => {
   return {
     recordVote: async function(votableId, value, delta) {
       if (Math.abs(delta) == 1){
@@ -27,15 +27,14 @@ Yavanna.provide('PostCollection', ({DB, CurrentTimeService, getDistance}) => {
       return await DB.execOne('posts', 'findOne', {_id: o_id})
     },
 
-    create: async function(post) {
-      var newToken = generateToken()
-      post.ownerToken = newToken
-      post.upvotes = 0
-      post.netVotes = 0
-      post.commentCount = 0
-      post.timestamp = CurrentTimeService.millis()
-      post = await DB.execOne('posts', 'insertOne', post)
-      return {postID: post.insertedId, ownerToken: newToken}
+    findByTweetId: async function(tweetID) {
+      return await DB.execOne('posts', 'findOne', {tweet_id: tweetID})
+    },
+
+    create: async function(data) {
+      var unsaved = Post(data)
+      var saved = await DB.execOne('posts', 'insertOne', unsaved)
+      return {postID: saved.insertedId, ownerToken: unsaved.ownerToken}
     },
 
     countComment: async function(postID) {
@@ -93,7 +92,7 @@ Yavanna.provide('PostCollection', ({DB, CurrentTimeService, getDistance}) => {
   function awesomeness(userLocation) {
     return function(post) {
       let distance = getDistance(post.loc, userLocation)
-      return voteScore(post) + post.timestamp / 45000000 - distance / 20
+      return voteScore(post) + post.timestamp / 100000000 - distance / 20
     }
   }
 

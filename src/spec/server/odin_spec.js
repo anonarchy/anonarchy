@@ -44,7 +44,7 @@ describe('Odin', () => {
       let Odin = YavannaForTest.get('Odin')
       let PostCollection = YavannaForTest.get('PostCollection')
 
-      var post = await Odin.createPost({title: "Some post", text: "body"})
+      var post = await Odin.createPost({title: "Some post", text: "body", loc: {}})
       var foo = await Odin.createVote('a-userVoteKey', post.postID.toString(), 1, 'post')
       expect((await PostCollection.findById(post.postID.toString())).netVotes).toEqual(1)
       expect((await PostCollection.findById(post.postID.toString())).upvotes).toEqual(1)
@@ -61,7 +61,7 @@ describe('Odin', () => {
       let Odin = YavannaForTest.get('Odin')
       let PostCollection = YavannaForTest.get('PostCollection')
 
-      var post = await Odin.createPost({title: "Some post", text: "body"})
+      var post = await Odin.createPost({title: "Some post", text: "body", loc: {}})
       var foo = await Odin.createVote('a-userVoteKey', post.postID.toString(), -1, 'post')
       expect((await PostCollection.findById(post.postID.toString())).netVotes).toEqual(-1)
       expect((await PostCollection.findById(post.postID.toString())).upvotes).toEqual(0)
@@ -75,7 +75,7 @@ describe('Odin', () => {
       let Odin = YavannaForTest.get('Odin')
       let PostCollection = YavannaForTest.get('PostCollection')
 
-      var post = await Odin.createPost({title: "Some post", text: "body"})
+      var post = await Odin.createPost({title: "Some post", text: "body", loc: {}})
       var foo = await Odin.createVote('a-userVoteKey', post.postID.toString(), -1, 'post')
       expect((await PostCollection.findById(post.postID.toString())).netVotes).toEqual(-1)
       expect((await PostCollection.findById(post.postID.toString())).upvotes).toEqual(0)
@@ -89,7 +89,7 @@ describe('Odin', () => {
       let Odin = YavannaForTest.get('Odin')
       let PostCollection = YavannaForTest.get('PostCollection')
 
-      var post = await Odin.createPost({title: "Some post", text: "body"})
+      var post = await Odin.createPost({title: "Some post", text: "body", loc: {}})
       var foo = await Odin.createVote('a-userVoteKey', post.postID.toString(), 1, 'post')
       expect((await PostCollection.findById(post.postID.toString())).netVotes).toEqual(1)
       expect((await PostCollection.findById(post.postID.toString())).upvotes).toEqual(1)
@@ -103,7 +103,7 @@ describe('Odin', () => {
       let Odin = YavannaForTest.get('Odin')
       let PostCollection = YavannaForTest.get('PostCollection')
 
-      var post = await Odin.createPost({title: "Some post", text: "body"})
+      var post = await Odin.createPost({title: "Some post", text: "body", loc: {}})
       var foo = await Odin.createVote('a-userVoteKey', post.postID.toString(), 1, 'post')
       expect((await PostCollection.findById(post.postID.toString())).netVotes).toEqual(1)
       expect((await PostCollection.findById(post.postID.toString())).upvotes).toEqual(1)
@@ -117,7 +117,7 @@ describe('Odin', () => {
       let Odin = YavannaForTest.get('Odin')
       let PostCollection = YavannaForTest.get('PostCollection')
 
-      var post = await Odin.createPost({title: "Some post", text: "body"})
+      var post = await Odin.createPost({title: "Some post", text: "body", loc: {}})
       var foo = await Odin.createVote('a-userVoteKey', post.postID.toString(), 1, 'post')
       expect((await PostCollection.findById(post.postID.toString())).netVotes).toEqual(1)
       expect((await PostCollection.findById(post.postID.toString())).upvotes).toEqual(1)
@@ -155,7 +155,7 @@ describe('Odin', () => {
       let Odin = YavannaForTest.get('Odin')
       let PostCollection = YavannaForTest.get('PostCollection')
 
-      var post = await Odin.createPost({title: "Some post", text: "body"})
+      var post = await Odin.createPost({title: "Some post", text: "body", loc: {}})
       var foo = await Odin.createVote('a-userVoteKey', post.postID.toString(), 1, 'post')
       expect((await PostCollection.findById(post.postID.toString())).netVotes).toEqual(1)
       expect((await PostCollection.findById(post.postID.toString())).upvotes).toEqual(1)
@@ -175,7 +175,7 @@ describe('Odin', () => {
       let Odin = YavannaForTest.get('Odin')
       let PostCollection = YavannaForTest.get('PostCollection')
 
-      var post = await Odin.createPost({title: "Some post", text: "body"})
+      var post = await Odin.createPost({title: "Some post", text: "body", loc: {}})
       var foo = await Odin.createVote('a-userVoteKey', post.postID.toString(), 1, 'post')
       expect((await PostCollection.findById(post.postID.toString())).netVotes).toEqual(1)
       expect((await PostCollection.findById(post.postID.toString())).upvotes).toEqual(1)
