@@ -126,27 +126,6 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
       this.saveTab(value)
     },
 
-    handleRefresh(resolve, reject){
-      let prevList = this.state.posts
-      this.getLocation(this.setPosition)
-      resolve()
-
-      // if (prevList !== this.state.posts){
-      //   resolve()
-      // }else{
-        // reject() //some uncaught error. Should UI wait or just snap back?
-      // }
-    },
-    // <FontAwesome name='rocket' style={{margin: 0, marginRight: 6, cursor: 'pointer', display: 'inline-block'}} onTouchTap={()=> this.viewComments(post._id)}/>
-
-//            <Card onTouchTap={() => this.viewComments(post._id)}>
-// <CardActions>
-//   <button label="Comments" style={{float: 'right', position: 'relative'}}/>
-// </CardActions>
-    // propTypes: {posts: React.PropTypes.array.isRequired},
-    //                   style={{paddingLeft: 0, marginLeft: 0}}
-//                   actAsExpander={post.body !== ""}
-
     render () {
       var createPost = function (post) {
         return (
