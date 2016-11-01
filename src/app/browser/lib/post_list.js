@@ -9,7 +9,6 @@ import request from 'browser-request'
 import FlatButton from 'material-ui/FlatButton'
 import FontAwesome from 'react-fontawesome';
 import {Tabs, Tab} from 'material-ui/Tabs';
-import ReactPullToRefresh from 'react-pull-to-refresh'
 var _ = require('underscore')
 
 var posts = [{title: 'Oh baby', body: 'Food is nice', author: 'ILikeFood'}, {title: 'Suck it', body: 'ILikeFood is a dumbdumb!', author: 'Trollolol'}]
