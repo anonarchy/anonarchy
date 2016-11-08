@@ -152,7 +152,7 @@ Yavanna.provide('AppController', ({Odin, PostRequestBody}) => {
     const html = `<!DOCTYPE html>
     <html>
       <head>
-        <title>AnonyPost</title>
+        <title>Anonarchy</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="/assets/fonts/untitled-font-3/styles.css" rel="stylesheet">
         <link href="/assets/css/markdown.css" rel="stylesheet">
