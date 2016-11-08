@@ -1,4 +1,4 @@
-# Anonypost FAQ
+# Anonarchy FAQ
 
 ## What is this for?
 
