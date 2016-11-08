@@ -144,8 +144,12 @@ Yavanna.provide('AppController', ({Odin, PostRequestBody}) => {
     }
   })
 
-  app.get(process.env.ACME_VERIFICATION_URL, function(req, res) {
-    res.status(200).send(process.env.ACME_VERIFICATION_VALUE)
+  app.get(process.env.ACME_VERIFICATION_URL_1, function(req, res) {
+    res.status(200).send(process.env.ACME_VERIFICATION_VALUE_1)
+  })
+
+  app.get(process.env.ACME_VERIFICATION_URL_2, function(req, res) {
+    res.status(200).send(process.env.ACME_VERIFICATION_VALUE_2)
   })
 
   app.get('*', function (req, res) {
