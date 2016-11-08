@@ -70,7 +70,6 @@ Yavanna.provide('AnonyBar', () => {
               style={{backgroundColor: 'black', position: 'fixed'}}
               iconElementLeft={backButton}
               iconElementRight={
-              iconElementRight={
                 <div style={buttonStyle}>
                 {this.displayRefreshButton()}
                 <IconMenu
@@ -91,7 +90,7 @@ Yavanna.provide('AnonyBar', () => {
         }else{
           return (
             <AppBar
-              title="AnonyPost"
+              title="Anonarchy"
               style={{backgroundColor: 'black', position: 'fixed'}}
               onTitleTouchTap={this.nav.bind(this, '/')}
               iconElementLeft={backButton}
