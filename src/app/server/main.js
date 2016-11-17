@@ -160,6 +160,7 @@ Yavanna.provide('AppController', ({Odin, PostRequestBody}) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="/assets/fonts/untitled-font-3/styles.css" rel="stylesheet">
         <link href="/assets/css/markdown.css" rel="stylesheet">
+        <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
         <script src="https://www.google.com/recaptcha/api.js?onload=recaptchaLoaded&render=explicit" async defer></script>
       </head>
       <body>
