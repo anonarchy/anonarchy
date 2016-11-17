@@ -3,8 +3,8 @@ const generateToken = require('secure-random-string')
 
 Yavanna.provide('Twitter', ({PostCollection}) => {
   let twitterClient = new TwitterClient({
-    consumer_key: 'JMfDGA2JRFTib5FjQMTTVheXZ',
-    consumer_secret: 'RERYLUm5il94WEVZeOSS3FcCxfp738loKoXQjHwTu8zLmEdPBG',
+    consumer_key: process.env.TWITTER_CONSUMER_KEY,
+    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
     access_token_key: '',
     access_token_secret: ''
   });
