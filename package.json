@@ -4,6 +4,10 @@
   "description": "Experimental project for messing around with node stuff",
   "repository": "https://github.com/benchristel/test-nodejs",
   "main": "index.js",
+  "engines": {
+    "node": "6.2.1",
+    "npm": "3.9.6"
+  },
   "dependencies": {
     "@benchristel/yavanna": "^0.4.0",
     "bcrypt": "^0.8.7",
@@ -48,6 +52,9 @@
   },
   "author": "Ben Christel",
   "license": "MIT",
+  "optionalDependencies": {
+    "fsevents": "*"
+  },
   "devDependencies": {
     "async-await-jasmine": "0.0.2",
     "babel-plugin-transform-regenerator": "^6.9.0",
