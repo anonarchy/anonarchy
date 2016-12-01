@@ -193,16 +193,27 @@ Yavanna.provide('AppController', ({Odin, PostRequestBody}) => {
   })
 
   app.post('/api/comment', async function (req, res){
-    try{
-      var new_comment = await Odin.createComment(req.body.comment)
-      console.log(new_comment)
+    request.post({
+      url:'https://www.google.com/recaptcha/api/siteverify',
+      form: {secret:process.env.RECAPTCHA_SECRET, response: req.body.recaptcha}
+    }, async function(err, recaptchaRes, body) {
+      body = JSON.parse(body)
+      if (!body.success) {
+        res.status(recaptchaRes.statusCode).send({err: 'Could not verify CAPTCHA.'})
+        return
+      }
+      try{
+        var new_comment = await Odin.createComment(req.body.comment)
+        console.log(new_comment)
 
-      res.status(200).send(new_comment)
-      // return post id? some other UUID?
-    }catch(error){
-      console.log(error)
-      res.status(500).send({err: error})
-    }
+        res.status(200).send(new_comment)
+        // return post id? some other UUID?
+      }catch(error){
+        console.log(error)
+        res.status(500).send({err: error})
+      }
+    })
+
   })
 
 

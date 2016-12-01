@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Paper from 'material-ui/Paper'
 import {browserHistory} from 'react-router'
 import request from 'browser-request'
+import Recaptcha from 'react-gcaptcha'
 
 
 Yavanna.provide('CreateComment', () => {
@@ -11,12 +12,26 @@ Yavanna.provide('CreateComment', () => {
   return React.createClass({
 
     getInitialState(){
-      return {body: ""}
+      return {
+        body: "",
+        human: false,
+        recaptcha: null
+      }
     },
 
     submit(){
       var date = new Date()
-      request({method:'POST', url:'/api/comment', json: {comment: {postID: this.props.postID, body: this.state.body}}}, this.onResponse)
+      request({
+        method:'POST',
+        url:'/api/comment',
+        json: {
+          comment: {
+            postID: this.props.postID,
+            body: this.state.body
+          },
+          recaptcha: this.state.recaptcha
+        }
+      }, this.onResponse)
     },
 
     onResponse(err, response, body) {
@@ -45,6 +60,14 @@ Yavanna.provide('CreateComment', () => {
       this.setState({body: value})
     },
 
+    recaptchaVerified(res){
+      this.setState({human: true, recaptcha: res})
+    },
+
+    recaptchaExpired(){
+      this.setState({human: false})
+    },
+
     render () {
       return (
         <Paper style={{marginTop: 10}}>
@@ -58,9 +81,19 @@ Yavanna.provide('CreateComment', () => {
               fullWidth={true}
               onChange={this.updateText}
             />
-          <RaisedButton label="Submit" primary={true} style={{marginTop: 10, marginBottom: 10}}
-            onTouchTap={this.submit}
-          />
+            <div style={{display: 'block'}}>
+              <Recaptcha
+                sitekey="6LcZQAkUAAAAABnDYk8-sl2T-mU4ycGHg1LIBd4j"
+                verifyCallback={this.recaptchaVerified}
+                expiredCallback={this.recaptchaExpired}
+              />
+            </div>
+            <RaisedButton label="Submit"
+              disabled={this.state.body === '' || !this.state.human}
+              primary={true}
+              style={{marginTop: 10, marginBottom: 10}}
+              onTouchTap={this.submit}
+            />
           </div>
         </Paper>
       )
