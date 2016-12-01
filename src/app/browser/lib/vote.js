@@ -22,7 +22,6 @@ notUpVoted.opacity = 0.4
 var notDownVoted = _.clone(downVoted)
 notDownVoted.opacity = 0.4
 
-
 Yavanna.provide('Vote', () => {
 
   return React.createClass({

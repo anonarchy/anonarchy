@@ -44,7 +44,6 @@
     "gulp-plumber": "^1.1.0",
     "gulp-sane-watch": "^1.1.3",
     "gulp-sourcemaps": "^1.6.0",
-    "gulp-watch": "^4.3.6",
     "jquery": "^3.0.0",
     "jsdom": "^9.4.1",
     "knex": "^0.11.7",
@@ -86,5 +85,7 @@
   },
   "author": "Ben Christel",
   "license": "MIT",
-  "devDependencies": {}
+  "devDependencies": {
+    "gulp-watch": "^4.3.6"
+  }
 }
