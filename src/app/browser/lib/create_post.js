@@ -55,10 +55,6 @@ Yavanna.provide('CreatePost', ({AnonyBar}) => {
       this.props.route.setPathname(window.location.pathname)
     },
 
-    componentDidUpdate(){
-      this.checkLogin()
-    },
-
     componentDidMount(){
       // getLocation(this.setCoordinates)
       watchLocation(this.setCoordinates)
@@ -67,20 +63,6 @@ Yavanna.provide('CreatePost', ({AnonyBar}) => {
     componentWillUnmount(){
       navigator.geolocation.clearWatch(watchID)
       getLocation(function(){})
-    },
-
-    checkLogin(){
-      if (!this.props.route.loggedIn()){
-        let con = confirm("You need to be logged in to create a post!")
-        console.log("Location1: ", window.location.pathname)
-        if (con == true){
-          console.log("Location2: ", window.location.pathname)
-          browserHistory.push('/login')
-        }else{
-          browserHistory.push('/')
-        }
-      }
-      console.log("Location3: ", window.location.pathname)
     },
 
     setCoordinates(position){

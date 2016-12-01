@@ -109,11 +109,7 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
     },
 
     addPost () {
-      if (this.props.route.loggedIn()) {
-        this.props.history.push('/new')
-      }else{
-        this.props.history.push('/login')
-      }
+      this.props.history.push('/new')
     },
 
     saveTab(value){

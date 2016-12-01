@@ -178,17 +178,9 @@ Yavanna.provide('AppController', ({Odin, PostRequestBody}) => {
       body = JSON.parse(body)
       if (body.success) {
         try{
-          console.log(req.cookies.session)
-          var token = await Odin.exchangeToken(req.cookies.session)
-          //get user too
-          setSessionCookie(token, res)
-          if (token){
-            var new_post = await Odin.createPost(PostRequestBody(req.body.post))
-            res.status(200).send(new_post)
-            // return post id? some other UUID?
-          }else{
-            res.status(403).send({err: "User not found"})
-          }
+          var new_post = await Odin.createPost(PostRequestBody(req.body.post))
+          res.status(200).send(new_post)
+          // return post id? some other UUID?
         }catch(error){
           console.log(error)
           res.status(500).send({err: "Internal Server Error"})
@@ -201,19 +193,12 @@ Yavanna.provide('AppController', ({Odin, PostRequestBody}) => {
   })
 
   app.post('/api/comment', async function (req, res){
-    var token = await Odin.exchangeToken(req.cookies.session)
-    //get user too?
     try{
-      setSessionCookie(token, res)
-      if (token){
-        var new_comment = await Odin.createComment(req.body.comment)
-        console.log(new_comment)
+      var new_comment = await Odin.createComment(req.body.comment)
+      console.log(new_comment)
 
-        res.status(200).send(new_comment)
-        // return post id? some other UUID?
-      }else{
-        res.status(403).send({err: "User not found"})
-      }
+      res.status(200).send(new_comment)
+      // return post id? some other UUID?
     }catch(error){
       console.log(error)
       res.status(500).send({err: error})

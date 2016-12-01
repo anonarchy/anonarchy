@@ -15,13 +15,8 @@ Yavanna.provide('CreateComment', () => {
     },
 
     submit(){
-      if (this.props.loggedIn){
-        var date = new Date()
-        request({method:'POST', url:'/api/comment', json: {comment: {postID: this.props.postID, body: this.state.body}}}, this.onResponse)
-      }else{
-        browserHistory.push('/login')
-      }
-
+      var date = new Date()
+      request({method:'POST', url:'/api/comment', json: {comment: {postID: this.props.postID, body: this.state.body}}}, this.onResponse)
     },
 
     onResponse(err, response, body) {
