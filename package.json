@@ -5,8 +5,8 @@
   "repository": "https://github.com/benchristel/test-nodejs",
   "main": "index.js",
   "engines": {
-    "node": "6.2.1",
-    "npm": "3.9.6"
+    "node": "6.0.0",
+    "npm": "4.0.2"
   },
   "dependencies": {
     "@benchristel/yavanna": "^0.4.0",
