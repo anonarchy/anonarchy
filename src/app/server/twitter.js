@@ -23,7 +23,9 @@ Yavanna.provide('Twitter', ({PostCollection}) => {
 
           var posts = body.statuses
             .map(log('all'))
-            .filter(notADirectMessage)
+            .filter(notReferencingUser)
+            .map(log('not direct messages'))
+            .filter(notAJobPosting)
             .map(log('not direct messages'))
             .map(getUsefulTweetInfo)
             .map(log('transformed'))
@@ -47,8 +49,12 @@ Yavanna.provide('Twitter', ({PostCollection}) => {
   }
 })
 
-function notADirectMessage(tweet) {
+function notReferencingUser(tweet) {
   return tweet.text.indexOf('@') === -1
+}
+
+function notAJobPosting(tweet) {
+  return tweet.text.toLowerCase().indexOf('#job') === -1
 }
 
 function getUsefulTweetInfo(tweet) {
