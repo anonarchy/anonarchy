@@ -157,6 +157,7 @@ Yavanna.provide('AppController', ({Odin, PostRequestBody}) => {
     <html>
       <head>
         <title>Anonarchy</title>
+        <meta name="apple-mobile-web-app-title" content="Anonarchy" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="/assets/fonts/untitled-font-3/styles.css" rel="stylesheet">
         <link href="/assets/css/markdown.css" rel="stylesheet">
@@ -174,9 +175,12 @@ Yavanna.provide('AppController', ({Odin, PostRequestBody}) => {
         <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96x96.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16x16.png">
         <link rel="manifest" href="/assets/img/manifest.json">
+        <link rel="apple-touch-startup-image" href="/assets/img/apple-icon-180x180.png">
         <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="msapplication-TileImage" content="/assets/img/ms-icon-144x144.png">
         <meta name="theme-color" content="#ffffff">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-capable" content="yes">
         <script src="https://www.google.com/recaptcha/api.js?onload=recaptchaLoaded&render=explicit" async defer></script>
       </head>
       <body>
