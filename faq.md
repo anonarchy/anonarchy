@@ -38,4 +38,4 @@ uhhh, please tell us what and how we can remedy it.
 
 ## How can I contribute?
 
-We're [completely open-source](https://github.com/anonarchy/anonarchy) so you can write code for us and we won't pay you. You can also [donate](https://github.com/anonarchy/anonarchy)! We need money to keep the servers running. And maybe, one day, eat.
+We're [completely open-source](https://github.com/anonarchy/anonarchy) so you can write code for us and we won't pay you. You can also [donate](https://github.com/anonypost/anonypost/blob/master/donate.md)! We need money to keep the servers running. And maybe, one day, eat.
