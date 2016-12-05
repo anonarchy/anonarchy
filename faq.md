@@ -8,9 +8,9 @@ Anonymously posting to any location.
 
 Your identity is not associated on our sever with your posts and comments. In the future you will only be able to delete a post from the same device that created it (you are given a key). If you delete that key, then you will have no association whatsoever. If you vote, that vote is associated with your identity, but is encrypted. After two months, that association disappears and you can vote on the post a second time if you want.
 
-## Why do I have to make an account?
+## Do I have to make an account?
 
-We want you to prove that you are not a robot and prevent infinite voting.
+You don't need an account to post or comment. You do need one to vote because we want you to prove that you are not a robot and prevent infinite voting.
 
 ## Is there censorship?
 
