@@ -21,6 +21,9 @@ Yavanna.provide('CommentCollection', ({DB}) => {
     },
 
     create: async function(comment) {
+      if (comment.body.replace(/\n/g,'').replace(/ /g,'') === ""){
+        throw 'a comment must be non-empty and have non-whitespace'
+      }
       var newToken = generateToken()
       comment.ownerToken = newToken
       comment.upvotes = 0
