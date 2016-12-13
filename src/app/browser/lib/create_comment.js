@@ -89,7 +89,7 @@ Yavanna.provide('CreateComment', () => {
               />
             </div>
             <RaisedButton label="Submit"
-              disabled={this.state.body === '' || !this.state.human}
+              disabled={this.state.body.replace(/\n/g,'').replace(/ /g,'') === '' || !this.state.human}
               primary={true}
               style={{marginTop: 10, marginBottom: 10}}
               onTouchTap={this.submit}

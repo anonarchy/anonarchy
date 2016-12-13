@@ -3,11 +3,22 @@ const generateToken = require('secure-random-string')
 Yavanna.provide('Post', ({CurrentTimeService}) => {
   return function(data) {
     var post = {}
-
+    if (data.title && data.title.replace(/\n/g,'').replace(/ /g,'') === ""){
+      complainAbout('title')
+    }
     post.title = data.title || complainAbout('title')
-    post.body = data.body
+    if (data.body && data.body.replace(/\n/g,'').replace(/ /g,'') === ""){
+      post.body = ""
+    }else{
+      post.body = data.body
+    }
     post.timestamp = data.timestamp || CurrentTimeService.millis()
-    post.link = data.link
+    if (data.link && data.link.replace(/\n/g,'').replace(/ /g,'') === ""){
+      console.log("Empty link!")
+      post.link = ""
+    }else{
+      post.link = data.link
+    }
     post.ownerToken = generateToken()
     post.upvotes = 0
     post.netVotes = 0

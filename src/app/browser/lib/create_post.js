@@ -72,7 +72,8 @@ Yavanna.provide('CreatePost', ({AnonyBar}) => {
 
     submit(){
       console.log(this.state.postTitle)
-      request({method:'POST', url:'/api/posts', json: {recaptcha: this.state.recaptcha, post: {title: this.state.postTitle, author: this.state.author, body: this.state.body, link: this.state.link, loc: {long: this.state.long, lat: this.state.lat}}}}, this.onResponse)
+      var link = this.state.link
+      request({method:'POST', url:'/api/posts', json: {recaptcha: this.state.recaptcha, post: {title: this.state.postTitle, author: this.state.author, body: this.state.body, link: link, loc: {long: this.state.long, lat: this.state.lat}}}}, this.onResponse)
     },
 
     onResponse(err, response, body) {
@@ -109,6 +110,11 @@ Yavanna.provide('CreatePost', ({AnonyBar}) => {
     },
 
     updateLink(event, value){
+      if (value.replace(/\n/g,'').replace(/ /g,'') === ""){
+        this.setState({link: ""})
+        console.log("Empty link!")
+        return 
+      }
       let uri = parse(value)
       if (uri.pathname == ('/' + value)){
         value = "http://" + value
@@ -161,7 +167,7 @@ Yavanna.provide('CreatePost', ({AnonyBar}) => {
           />
           <br/>
           <RaisedButton label="Submit" primary={true}
-            disabled={this.state.postTitle === "" || !this.state.human}
+            disabled={this.state.postTitle.replace(/\n/g,'').replace(/ /g,'') === "" || !this.state.human}
             onTouchTap={this.submit}
           />
         </div>
