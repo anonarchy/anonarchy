@@ -4,9 +4,11 @@ An anonymous location-based posting site for links and discussion.
 
 Uses React.js, Node.js, Express.js and MongoDB
 
-
 #### [Donate](https://github.com/anonypost/anonypost/blob/master/donate.md)
 
+##FAQ
+
+[Here!](https://github.com/anonarchy/anonarchy/blob/master/faq.md)
 
 ## Development
 
@@ -29,3 +31,11 @@ export PORT=3000
 export ANONYPOST_SECRET_KEY=secret
 export MONGODB_URI='mongodb://localhost:27017/anonypost'
 ```
+
+## Regnerating SSL Certs
+
+```
+sudo certbot certonly --manual
+```
+
+When prompted to make the magic strings appear at the magic URLs, do so by changing the `ACME_VERIFICATION_*` environment variables.
