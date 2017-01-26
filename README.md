@@ -39,3 +39,12 @@ sudo certbot certonly --manual
 ```
 
 When prompted to make the magic strings appear at the magic URLs, do so by changing the `ACME_VERIFICATION_*` environment variables.
+
+After completing the verification process, certbot will save the cert and private key to `/etc/letsencrypt/live/anonarchy.com/`.
+
+Go to https://dashboard.heroku.com/apps/anonypost/settings and update the SSL cert, getting the contents of the cert and key as follows:
+
+```
+sudo cat /etc/letsencrypt/live/anonarchy.com/fullchain.pem | pbcopy
+sudo cat /etc/letsencrypt/live/anonarchy.com/privkey.pem | pbcopy
+```
