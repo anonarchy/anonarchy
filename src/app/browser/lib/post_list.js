@@ -135,11 +135,9 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
       }else if (event.deltaX < 0){
         var index = this.state.tabList.indexOf(this.state.tab)
         if (index < this.state.tabList.length - 1){
-          console.log(index)
           this.handleChange(this.state.tabList[index+1])
         }
       }
-      console.log(event)
     },
 
     render () {
