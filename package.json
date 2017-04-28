@@ -15,6 +15,7 @@
     "bookshelf": "^0.10.0",
     "browser-cookies": "^1.0.8",
     "browser-request": "^0.3.3",
+    "browserify": "https://registry.npmjs.org/browserify/-/browserify-13.1.0.tgz",
     "cookie-parser": "^1.4.3",
     "crypto": "0.0.3",
     "express": "^4.13.4",
