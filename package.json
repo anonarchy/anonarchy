@@ -34,7 +34,6 @@
     "react-dom": "^15.4.1",
     "react-fontawesome": "^1.1.0",
     "react-gcaptcha": "^3.2.0",
-    "react-hammerjs": "^0.5.0",
     "react-markdown": "^2.4.2",
     "react-marked": "^0.3.1",
     "react-recaptcha": "^2.2.0",

@@ -9,10 +9,7 @@ import request from 'browser-request'
 import FlatButton from 'material-ui/FlatButton'
 import FontAwesome from 'react-fontawesome';
 import {Tabs, Tab} from 'material-ui/Tabs';
-import Hammer from 'react-hammerjs'
 var _ = require('underscore')
-
-Hammer.DIRECTION_HORIZONTAL
 
 var posts = [{title: 'Oh baby', body: 'Food is nice', author: 'ILikeFood'}, {title: 'Suck it', body: 'ILikeFood is a dumbdumb!', author: 'Trollolol'}]
 
@@ -43,8 +40,7 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
       if (tab === null){
         tab = 'hot'
       }
-      var tabList = ["hot", "new", "top", "closest"]
-      return { open: true, tab: tab, tabList: tabList}
+      return { open: true, tab: tab}
     },
 
     getLocation: function(func) {
@@ -126,20 +122,6 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
       this.saveTab(value)
     },
 
-    handleSwipe(event){
-      if (event.deltaX > 0){
-        var index = this.state.tabList.indexOf(this.state.tab)
-        if (index > 0){
-          this.handleChange(this.state.tabList[index-1])
-        }
-      }else if (event.deltaX < 0){
-        var index = this.state.tabList.indexOf(this.state.tab)
-        if (index < this.state.tabList.length - 1){
-          this.handleChange(this.state.tabList[index+1])
-        }
-      }
-    },
-
     render () {
       var createPost = function (post) {
         return (
@@ -180,25 +162,16 @@ Yavanna.provide('PostList', ({Login, Post, AnonyBar}) => {
           <div>
             <Tabs value={this.state.tab} onChange={this.handleChange} tabItemContainerStyle={{backgroundColor: 'black'}} inkBarStyle={{backgroundColor: 'white'}} >
               <Tab label="Hot" value="hot" >
-                <Hammer onSwipe={this.handleSwipe}>
                   <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
-                </Hammer>
               </Tab>
               <Tab label="new" value="new" >
-                <Hammer onSwipe={this.handleSwipe}>
                   <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
-                </Hammer>
               </Tab>
               <Tab label="top" value="top" >
-                <Hammer onSwipe={this.handleSwipe}>
                   <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
-                </Hammer>
               </Tab>
               <Tab label="closest" value="closest" >
-                <Hammer onSwipe={this.handleSwipe}>
                   <ul style={ulStyle} >{posts.map(createPost.bind(this))}</ul>
-                </Hammer>
-
               </Tab>
             </Tabs>
           <FloatingActionButton style={{position: 'fixed', right: 24, bottom: 24}}
