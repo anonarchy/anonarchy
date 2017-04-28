@@ -19,6 +19,7 @@
     "crypto": "0.0.3",
     "express": "^4.13.4",
     "geolib": "^2.0.21",
+    "gulp": "git://github.com/gulpjs/gulp.git#c120a948a1273581a9c1503bf6d80fe628710c64",
     "jquery": "^3.0.0",
     "jsdom": "^9.4.1",
     "knex": "^0.11.7",
